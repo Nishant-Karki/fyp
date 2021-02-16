@@ -1,0 +1,14 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 400px) {
+    display: block;
+  }
+}
+root {
+  background-color: rgb(61, 55, 55);
+  margin-top: 3rem;
+}
+container {
+  padding: 4rem;
+}

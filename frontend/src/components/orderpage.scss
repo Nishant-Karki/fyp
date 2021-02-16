@@ -1,0 +1,109 @@
+.image-subText {
+  text-align: center;
+  margin-top: 1rem;
+}
+.specialist-image {
+  width: 130%;
+  height: 100%;
+}
+
+.price {
+  background-color: teal;
+  border-radius: 0.6rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
+  width: 6.3rem;
+}
+
+.icons {
+  margin-bottom: 0.2rem;
+  margin-right: 0.2rem;
+  color: green;
+}
+
+.product-info {
+  align-items: flex-end;
+  display: flex;
+}
+.price-subText {
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  min-height: 4rem;
+  padding-top: 0.3rem;
+  width: 25rem;
+  padding-left: 0.5rem;
+}
+
+.specialist-container {
+  border-radius: 0.5rem;
+  height: 13rem;
+  overflow: hidden;
+  text-align: center;
+  margin: 0.5rem;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgb(196, 195, 195);
+  }
+
+  &:hover .specialist-details {
+    transform: translateY(-5.3rem);
+    transition-duration: 0.8s;
+
+    @media (max-width: 1280px) {
+      transform: translateY(-8.5rem);
+    }
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .specialist-container:hover .specialist-details {
+    transform: translateY(-7.5rem);
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .specialist-image {
+    width: 107%;
+  }
+  .specialist-container:hover .specialist-details {
+    transform: translateY(-7.5rem);
+  }
+}
+
+@media only screen and (max-width: 1050px) {
+  .specialist-image {
+    width: 100%;
+  }
+  .specialist-container {
+    height: 17.4rem;
+    &:hover .specialist-details {
+      transform: translateY(0rem);
+    }
+  }
+}
+@media only screen and (max-width: 950px) {
+  .specialist-container:hover {
+    box-shadow: none;
+    &:hover .specialist-details {
+      transform: none;
+    }
+  }
+}
+@media only screen and (max-width: 760px) {
+  .specialist-container {
+    min-height: 19.6rem;
+  }
+}
+
+.specialist-details {
+  min-height: 5rem;
+  background-color: white;
+  opacity: 0.9;
+}
+
+.select-specialist {
+  width: 100%;
+}

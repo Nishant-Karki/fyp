@@ -1,0 +1,55 @@
+.team-container {
+  max-width: 400;
+  height: 18rem;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  background-image: url("https://images.unsplash.com/photo-1524502397800-2eeaad7c3fe5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=634&q=80");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 5px 5px 6px rgb(41, 41, 41);
+  }
+  &:hover .member-info-container {
+    height: 18rem;
+  }
+
+  &:hover .member-info {
+    display: block;
+  }
+}
+
+.member-info-container {
+  background-color: rgb(61, 55, 55);
+  height: 0rem;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 1s ease-in, height 0.5s;
+  &:hover {
+    height: 18rem;
+  }
+}
+
+.member-info {
+  display: none;
+  transition-timing-function: ease-in;
+}
+
+ul {
+  li {
+    padding-right: 1rem;
+    font-size: 20px;
+  }
+}
+
+.icon {
+  color: white;
+
+  &:hover {
+    color: white;
+    opacity: 0.6;
+  }
+}

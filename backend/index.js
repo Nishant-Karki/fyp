@@ -81,7 +81,7 @@ const verifyJWT = (req, res, next) => {
         });
       } else {
         req.user_id = decoded.id;
-        console.log(user_id);
+        console.log(req.user_id);
         next();
       }
     });

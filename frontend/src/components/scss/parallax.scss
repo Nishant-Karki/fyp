@@ -1,0 +1,40 @@
+.parallax {
+  margin-left: -50%;
+}
+
+.text-container-parallax {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  color: white;
+  &:hover {
+    color: white;
+    opacity: 0.7;
+  }
+}
+
+.mini-image-container {
+  background-image: url("https://images.unsplash.com/photo-1541533848490-bc8115cd6522");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 75% 25%;
+  height: 40rem;
+  width: 100%;
+  filter: brightness(55%);
+}
+
+.sm-text {
+  display: flex;
+  position: absolute;
+  top: 40%;
+  left: 26%;
+  margin: 0;
+  text-align: center;
+  @media (max-width: 670px) {
+    left: 5%;
+  }
+}

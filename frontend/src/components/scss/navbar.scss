@@ -1,0 +1,51 @@
+.appbar {
+  background: transparent;
+  box-shadow: none;
+}
+
+ul {
+  list-style: none;
+  text-decoration: none;
+  display: flex;
+}
+
+.nav-ul {
+  li {
+    margin-left: 5%;
+  }
+}
+
+.link {
+  color: whitesmoke;
+  &:hover {
+    text-decoration: none;
+    color: grey;
+  }
+}
+.icons-ul {
+  float: right;
+}
+
+.menu-icon {
+  float: right;
+  margin-top: -1.6rem;
+  margin-right: 1.7rem;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.drawer-navlinks {
+  display: block;
+  margin-left: 1.5rem;
+}
+
+.drawer-links {
+  text-decoration: none;
+  color: whitesmoke;
+  margin-top: 2rem;
+  &:hover {
+    text-decoration: none;
+    color: grey;
+  }
+}

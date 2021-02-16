@@ -1,0 +1,25 @@
+.quantity {
+  width: 4rem;
+  background-color: #585858;
+  height: 2.2rem;
+  border-radius: 0.4rem;
+  margin: 0 1rem 0 1rem;
+}
+
+.container-image {
+  display: flex;
+  align-items: center;
+  height: 14rem;
+  margin-top: 0.5rem;
+  border-radius: 0.6rem;
+  overflow: hidden;
+
+  &:hover .image {
+    transform: scale(1.2);
+  }
+}
+
+.image {
+  width: 100%;
+  transition: transform 0.2s ease-in;
+}
