@@ -152,6 +152,7 @@ export default function ProductTable() {
                         editPopUp={editPopUp}
                         setEditPopUp={setEditPopUp}
                         item={actionItem}
+                        imagePath="products"
                       />
                       <Typography
                         type="button"

@@ -25,17 +25,8 @@ export const addToCart = (itemID, value) => {
 };
 
 export const removeFromCart = (itemID) => {
-  return { type: actionTypes.REMOVE_FROM_CART, payload: { item: itemID } };
-};
-
-export const adjustQty = (itemID, value) => {
-  return {
-    type: actionTypes.ADJUST_QTY,
-    payload: {
-      id: itemID,
-      qty: value,
-    },
-  };
+  console.log(itemID);
+  return { type: actionTypes.REMOVE_FROM_CART, payload: { id: itemID } };
 };
 
 export const loadCurrentItem = (item) => {

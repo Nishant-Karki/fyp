@@ -1,10 +1,10 @@
-import { IS_AUTH, LOGGED_IN } from "./login-types";
+import { LOGGED_IN, USER_DATA } from "./login-types";
 
-export const isAuth = (auth = false) => {
-  console.log(auth + "auth");
+export const userData = (data) => {
+  console.log(data);
   return {
-    type: IS_AUTH,
-    payload: auth,
+    type: USER_DATA,
+    payload: data,
   };
 };
 

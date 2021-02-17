@@ -78,7 +78,9 @@ function ShowItem({ addToCart, currentItem }) {
                   onClick={() => addToCart(product_id, count)}
                   style={{ marginTop: "1.3rem", marginLeft: "1.7rem" }}
                 >
-                  <Typography variant="body1">ADD TO CART</Typography>
+                  <Typography color="teal" variant="body1">
+                    ADD TO CART
+                  </Typography>
                 </Button>
               </Box>
             </Box>

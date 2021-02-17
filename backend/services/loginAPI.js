@@ -22,23 +22,35 @@ module.exports = loginPOST = (req, res) => {
           });
           req.session.user = result;
 
-          res.json({ auth: true, token: token, result: result });
+          res.json({
+            auth: true,
+            token: token,
+            result: result,
+            message: "Welcome Back",
+            type: "success",
+          });
         } else {
-          res.json({ auth: false, message: "Wrong Email/Password" });
+          res.json({
+            auth: false,
+            message: "Wrong Email/Password",
+            type: "warning",
+          });
         }
       });
     } else {
-      res.json({ auth: false, message: "no user exists!!" });
+      res.json({
+        auth: false,
+        message: "User doesnot exists!!",
+        type: "error",
+      });
     }
   });
 };
 
 module.exports = loginGET = (req, res) => {
   if (req.session.user) {
-    res.send({ loggedIn: true, user: req.session.user });
-    console.log("true session");
+    res.json({ loggedIn: true, user: req.session.user });
   } else {
-    res.send({ loggedIn: false });
-    console.log("false session");
+    res.json({ loggedIn: false });
   }
 };

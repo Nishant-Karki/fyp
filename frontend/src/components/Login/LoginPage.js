@@ -6,7 +6,9 @@ import {
   Grid,
   Button,
   Checkbox,
+  Snackbar,
 } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
@@ -18,13 +20,14 @@ import axios from "axios";
 import GLogin from "./GLogin";
 import FLogin from "./FLogin";
 
-import { Switch, Link, Route } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Inventory from "../Inventory/Inventory";
 import OurServices from "../Home/OurServices";
 import useCustomForm from "../common/useCustomForm";
 
-import { useDispatch, useSelector } from "react-redux";
-import { isAuth, isLoggedIn } from "../../redux/Login/login-actions";
+import { useDispatch, useSelector, connect } from "react-redux";
+import { isLoggedIn, userData } from "../../redux/Login/login-actions";
+import CustomSnackbar from "../common/CustomSnackbar";
 
 const useStyles = makeStyles({
   contactContainer: { marginTop: "10%", marginBottom: "10%" },
@@ -41,9 +44,18 @@ const useStyles = makeStyles({
     textAlign: "center",
     marginTop: "1.4rem",
   },
-  checkbox: {
-    paddingLeft: "1rem",
-    marginBottom: "0.3rem",
+  signIn: {
+    marginTop: "-1rem",
+    paddingBottom: "1rem",
+    marginLeft: "18rem",
+  },
+  link: {
+    color: "inherit",
+    textDecoration: "none",
+    "&:hover": {
+      color: "inherit",
+      textDecoration: "none",
+    },
   },
 });
 
@@ -61,9 +73,14 @@ const initialValues = {
 };
 
 function LoginPage() {
+  let history = useHistory();
   const classes = useStyles();
 
-  const dispatch = useDispatch(isLoggedIn(), isAuth());
+  const [response, setResponse] = useState();
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackType, setSnackType] = useState();
+
+  // const dispatch = useDispatch(isLoggedIn(), userData());
 
   const { CustomTextField } = useCustomForm();
 
@@ -73,8 +90,12 @@ function LoginPage() {
         values,
       })
       .then((response) => {
+        console.log(response.data.result);
+        setResponse(response.data.message);
+        setSnackType(response.data.type);
         if (response.data.auth === true) {
           isLoggedIn(true);
+          userData(response.data.result);
           localStorage.setItem("token", response.data.token);
         } else {
           isLoggedIn(false);
@@ -93,8 +114,10 @@ function LoginPage() {
       "token"
     );
     axios.post("/isUserAuth").then((response) => {
-      isAuth(response.data.auth);
-      console.log(response.data.auth);
+      setTimeout(() => {
+        response.data.auth && history.push("/");
+      }, 1500);
+      console.log(response);
     });
   };
 
@@ -105,10 +128,30 @@ function LoginPage() {
       </Typography>
       <Box className={classes.box}>
         <Paper className={classes.paper}>
+          <Link to="/signup" className={classes.link}>
+            <Typography
+              align="right"
+              type="button"
+              variant="body2"
+              className={classes.signIn}
+            >
+              Create an account
+            </Typography>
+          </Link>
+          {response && response.length > 0 && (
+            <CustomSnackbar
+              snackbarOpen={snackbar}
+              setSnackbar={setSnackbar}
+              snackType={snackType}
+              snackContent={response}
+            />
+          )}
+
           <Formik
             initialValues={initialValues}
             validationSchema={LoginSchema}
             onSubmit={onSubmit}
+            enableReinitialize={false}
           >
             {({ errors, handleChange, touched, values, setFieldValue }) => (
               <Form>
@@ -150,7 +193,10 @@ function LoginPage() {
                     type="submit"
                     size="large"
                     className={classes.submitBtn}
-                    onClick={() => userAuthenticated()}
+                    onClick={() => {
+                      userAuthenticated();
+                      setSnackbar(true);
+                    }}
                   >
                     Login
                   </Button>
@@ -170,4 +216,11 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    isLoggedIn: (message) => dispatch(isLoggedIn(message)),
+    userData: (message) => dispatch(userData(message)),
+  };
+};
+
+export default connect(mapDispatchToProps)(LoginPage);

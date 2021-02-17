@@ -14,7 +14,7 @@ export default function useTableActions() {
   const { CustomTextField } = useCustomForm();
 
   const EditItem = (props) => {
-    const { editPopUp, setEditPopUp, item } = props;
+    const { editPopUp, setEditPopUp, item, imagePath } = props;
 
     const onSubmit = (values) => {
       //to delete selected row
@@ -75,7 +75,9 @@ export default function useTableActions() {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <ImageUploader prevImageValue={item.image} />
+                    <ImageUploader
+                      prevImageValue={`${imagePath}/${item.image}`}
+                    />
                   </Grid>
                   <Typography variant="button" color="error">
                     Note : Provided Data will only be updated.

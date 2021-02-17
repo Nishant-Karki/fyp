@@ -1,2 +1,2 @@
-const IS_AUTH = "IS_AUTH";
 const LOGGED_IN = "LOGGED_IN";
+const USER_DATA = "USER_DATA";

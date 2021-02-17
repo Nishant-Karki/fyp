@@ -1,22 +1,33 @@
-import { IS_AUTH, LOGGED_IN } from "./login-types";
+import { LOGGED_IN, USER_DATA } from "./login-types";
 
 const INITIAL_STATE = {
-  isAuth: false,
   loggedIn: false,
+  userData: [
+    {
+      user_id: 1,
+      name: "Kaizoku Nish",
+      email: "karkinishant14@gmail.com",
+      phone: "312312",
+      gender: "Male",
+      dob: "2000-08-03",
+      contact: "9840209779",
+    },
+  ],
 };
 
 const loginReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case IS_AUTH:
+    case LOGGED_IN:
+      console.log(action.payload + "dasdsa");
+      return {
+        ...state,
+        loggedIn: action.payload,
+      };
+    case USER_DATA:
       console.log(action.payload);
       return {
         ...state,
-        isAuth: action.payload,
-      };
-    case LOGGED_IN:
-      return {
-        isAuth: true,
-        loggedIn: action.payload,
+        userData: action.payload,
       };
     default:
       return state;

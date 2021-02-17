@@ -24,7 +24,7 @@ import "../scss/navbar.scss";
 function Navbar({ cart }) {
   const [open, setOpen] = useState(false);
   const [change, setChange] = useState(false);
-  const changePosition = 180;
+  const changePosition = 80;
 
   //for showing navbar on slide
   let position = useWindowScrollPosition();
@@ -79,16 +79,17 @@ function Navbar({ cart }) {
 
   return (
     <>
-      <AppBar sticky style={appBarStyle}>
+      <AppBar sticky="true" style={appBarStyle}>
         <Container>
           <Grid container component="div" style={{ paddingTop: "1.3rem" }}>
             <Grid item xs={3} sm={2}>
               <Link to="/">
                 <Box>
                   <img
-                    src={require("../../images/other/logo.png").default}
+                    src={require("../../images/other/logo-white.png").default}
                     alt="logo"
                     width="100%"
+                    style={{ marginTop: "-0.4rem", paddingBottom: "0.4rem" }}
                   />
                 </Box>
               </Link>
@@ -103,7 +104,7 @@ function Navbar({ cart }) {
             </Grid>
             <Grid item xs={2} sm={2} className="d-none d-sm-flex">
               <ul className="icons-ul ">
-                <NavLink path="/login">
+                <NavLink path="/user">
                   <HiOutlineUserCircle size={22} />
                 </NavLink>
                 <NavLink path="/cart">
@@ -137,23 +138,23 @@ function Navbar({ cart }) {
             />
             <ul className="drawer-navlinks">
               <li>
-                <Link path="/home" className="drawer-links">
-                  <Typography variant="h6">HOME</Typography>
+                <Link path="/#" className="drawer-links">
+                  <Typography variant="body1">HOME</Typography>
                 </Link>
               </li>
               <li>
-                <Link path="/service" className="drawer-links">
-                  <Typography variant="h6">SERVICES</Typography>
+                <Link path="/#services" className="drawer-links">
+                  <Typography variant="body1">SERVICES</Typography>
                 </Link>
               </li>
               <li>
                 <Link path="/store" className="drawer-links">
-                  <Typography variant="h6">STORE</Typography>
+                  <Typography variant="body1">STORE</Typography>
                 </Link>
               </li>
               <li>
-                <Link path="/contact" className="drawer-links">
-                  <Typography variant="h6">CONTACT</Typography>
+                <Link path="/#contact" className="drawer-links">
+                  <Typography variant="body1">CONTACT</Typography>
                 </Link>
               </li>
             </ul>

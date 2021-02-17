@@ -34,10 +34,17 @@ function Inventory({ products, fetchProducts, loadCurrentItem }) {
   }, []);
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: "10rem" }}>
+    <Container maxWidth="lg" style={{ marginTop: "8rem" }}>
       <Grid container spacing={2}>
         {products.map((item) => (
-          <Grid key={item.product_id} item xs={12} sm={6} md={3}>
+          <Grid
+            key={item.product_id}
+            item
+            xs={12}
+            sm={6}
+            md={3}
+            style={{ marginTop: "1.5rem" }}
+          >
             <Paper className="product-container">
               <Box className="image-container">
                 <img

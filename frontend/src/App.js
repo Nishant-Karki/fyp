@@ -27,6 +27,7 @@ import { useState } from "react";
 import { isAuth } from "./redux/Login/login-actions";
 import UserRoles from "./components/Admin/UserRoles";
 import BookService from "./components/Booking/BookService";
+import Payment from "./components/Payment/Payment";
 
 function App() {
   const isAuth = useSelector((state) => state.login.isAuth);
@@ -35,27 +36,39 @@ function App() {
   // useEffect(() => {
   //   setAuth(isAuth);
   // }, [isAuth]);
+  const Routes = () => (
+    <div>
+      <Navbar />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/store" component={Inventory} />
+        <Route exact path="/roles" component={UserRoles} />
+        <Route exact path="/order" component={OrderPage} />
+        <Route exact path="/store/:id" component={ShowItem} />
+        {/* <Route exact path="/map" component={} /> */}
+        {/* <Route exact path="/user" component={UserProfile} /> */}
+        <ProtectedRoute path="/staff" isAuth={token} component={StaffProfile} />
+
+        {/* <ProtectedRoute path="/profile" component={UserProfile} isAuth={} /> */}
+        {/* <Footer /> */}
+        <Route exact path="/booking/:id" component={OrderPage} />
+        <Route exact path="/cart" component={Cart} />
+        <Route exact path="/items" component={BookService} />
+        <ProtectedRoute path="/user" isAuth={token} component={UserProfile} />
+      </Switch>
+    </div>
+  );
+
   return (
-    <Switch>
-      <Route exact path="/login" component={LoginPage} />
-      <Route exact path="/signup" component={SignUpPage} />
-      <Route exact path="/admin" component={Admin} />
-      <Route exact path="/nav" component={Navbar} />
-      <Route exact path="/" component={Home} />
-      <Route exact path="/store" component={Inventory} />
-      <Route exact path="/roles" component={UserRoles} />
-      <Route exact path="/order" component={OrderPage} />
-      <Route exact path="/store/:id" component={ShowItem} />
-      {/* <Route exact path="/map" component={} /> */}
-      {/* <Route exact path="/user" component={UserProfile} /> */}
-      <Route exact path="/staff" component={StaffProfile} />
-      {/* <ProtectedRoute path="/profile" component={UserProfile} isAuth={} /> */}
-      {/* <Footer /> */}
-      <Route exact path="/booking/:id" component={OrderPage} />
-      <Route exact path="/cart" component={Cart} />
-      <Route exact path="/items" component={BookService} />
-      <ProtectedRoute path="/user" isAuth={token} component={UserProfile} />
-    </Switch>
+    <>
+      <Switch>
+        <Route exact path="/login" component={LoginPage} />
+        <Route exact path="/signup" component={SignUpPage} />
+        <ProtectedRoute path="/admin" isAuth={token} component={Admin} />
+        <ProtectedRoute path="/payment" isAuth={token} component={Payment} />
+        <Routes /> {/* works inside switch only */}
+      </Switch>
+    </>
   );
 }
 

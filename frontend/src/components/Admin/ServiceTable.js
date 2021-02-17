@@ -151,6 +151,7 @@ export default function AddService() {
                         editPopUp={editPopUp}
                         setEditPopUp={setEditPopUp}
                         item={actionItem}
+                        imagePath="services"
                       />
                       <Typography
                         type="button"

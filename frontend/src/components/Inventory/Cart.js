@@ -6,12 +6,13 @@ import {
   Grid,
   Paper,
   makeStyles,
+  Button,
 } from "@material-ui/core";
 import React from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import { removeFromCart } from "../../redux/Ecommerce/eStore-actions";
 import { useEffect, useState } from "react";
 
@@ -23,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2rem",
     maxHeight: "10rem",
   },
-  deleteBtn: {},
   link: {
     textDecoration: "none",
     color: "white",
@@ -34,16 +34,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Cart() {
+function Cart({ cart, removeFromCart }) {
   const classes = useStyles();
-  const [btnClick, setBtnClick] = useState(false);
-  const cart = useSelector((state) => state.store.cart);
-  const dispatch = useDispatch(removeFromCart());
-  const [cartItem, setCartItem] = useState(cart);
 
-  useEffect(() => {
-    setCartItem(cart);
-  }, [btnClick, cartItem]);
+  // const [btnClick, setBtnClick] = useState(false);
+
+  // const cart = useSelector((state) => state.store.cart);
+  // const dispatch = useDispatch(removeFromCart(item));
+
+  // const handleDelete = (item) => {
+  //   setBtnClick(true);
+
+  // };
 
   return (
     <Container maxWidth="md" className={classes.container}>
@@ -52,9 +54,9 @@ function Cart() {
           <Typography variant="body1">CART SUMMARY</Typography>
         </Toolbar>
       </Paper>
-      {cartItem.length > 0 ? (
-        cartItem.map((item) => (
-          <Grid container spacing={3}>
+      <Grid container spacing={3}>
+        {cart.length > 0 ? (
+          cart.map((item) => (
             <Grid key={item.product_id} item xs={12} sm={8}>
               <Paper className={classes.paper}>
                 <Grid container spacing={2} style={{ padding: "1rem" }}>
@@ -92,10 +94,7 @@ function Cart() {
                       color="error"
                       variant="body2"
                       className={classes.deleteBtn}
-                      onClick={() => {
-                        removeFromCart(item.product_id);
-                        setBtnClick(!btnClick);
-                      }}
+                      onClick={() => removeFromCart(item.product_id)}
                     >
                       Remove
                       <AiFillDelete
@@ -107,33 +106,78 @@ function Cart() {
                 </Grid>
               </Paper>
             </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <Paper>
-                <Box padding="1.2rem" marginTop="1.5rem">
-                  <Typography variant="body2">Price : {}</Typography>
-                  <Typography variant="body2">VAT : {}</Typography>
-                  <br />
-                  <Typography variant="body2">Total Amount: {}</Typography>
-                </Box>
-              </Paper>
-            </Grid>
+          ))
+        ) : (
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <Box padding="0.5rem" textAlign="center">
+                <Typography variant="body2" style={{ color: "lightGrey" }}>
+                  No items in the cart.{" "}
+                  <Link className={classes.link} to="/store">
+                    VISIT STORE
+                  </Link>
+                </Typography>
+              </Box>
+            </Paper>
           </Grid>
-        ))
-      ) : (
-        <Paper className={classes.paper}>
-          <Box padding="1rem" textAlign="center">
-            <Typography variant="body2" style={{ color: "lightGrey" }}>
-              No items in the cart.{" "}
-              <Link className={classes.link} to="/store">
-                VISIT STORE
-              </Link>
-            </Typography>
-          </Box>
-        </Paper>
-      )}
+        )}
+        {cart.length > 0 && (
+          <Grid item xs={12} sm={4}>
+            <Paper>
+              <Box padding="1.2rem" marginTop="1.5rem">
+                <Grid container spacing={1}>
+                  <Grid item xs={8}>
+                    <Typography variant="body2">Price : {}</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="body2">Price : {}</Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography align="left" variant="body2">
+                      VAT
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    {" "}
+                    <Typography align="left" variant="body2">
+                      13%
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography variant="body2">Total Amount: {}</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="body2"> sa{}</Typography>
+                  </Grid>
+                </Grid>
+                <Box
+                  marginTop="0.5rem"
+                  marginBottom="-0.4rem"
+                  textAlign="center"
+                >
+                  <Link className={classes.link} to="/payment">
+                    <Button style={{ backgroundColor: "teal" }}>
+                      Checkout
+                    </Button>
+                  </Link>
+                </Box>
+              </Box>
+            </Paper>
+          </Grid>
+        )}
+      </Grid>
     </Container>
   );
 }
 
-export default Cart;
+const mapStateToProps = (state) => {
+  return {
+    cart: state.store.cart,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeFromCart: (item) => dispatch(removeFromCart(item)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

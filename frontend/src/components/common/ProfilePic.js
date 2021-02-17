@@ -35,13 +35,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfilePic() {
+export default function ProfilePic({ source }) {
   const classes = useStyles();
 
   const { ImageInput } = useCustomForm();
 
   const [icon, setIcon] = useState(<AiFillCamera size={18} />);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(source);
 
   const BadgeComponent = () => {
     const addImage = (e) => {
@@ -60,7 +60,7 @@ export default function ProfilePic() {
               styling={{ marginTop: "0.5rem" }}
               onChange={(e) => addImage(e)}
             >
-              <Typography variant="body2" style={{ padding: "1rem" }}>
+              <Typography variant="caption" style={{ padding: "1rem" }}>
                 Change
               </Typography>
             </ImageInput>

@@ -62,10 +62,6 @@ app.get("/", (req, res) => {
   res.json({ result: "Working fine" });
 });
 
-app.get("/test", (req, res) => {
-  res.json({ result: "Working fine" });
-});
-
 const verifyJWT = (req, res, next) => {
   const token = req.headers["authorization"];
   // const token = req.body.token;
@@ -81,7 +77,6 @@ const verifyJWT = (req, res, next) => {
         });
       } else {
         req.user_id = decoded.id;
-        console.log(req.user_id);
         next();
       }
     });

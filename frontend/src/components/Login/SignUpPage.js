@@ -20,6 +20,7 @@ import * as Yup from "yup";
 
 import axios from "axios";
 import useCustomForm from "../common/useCustomForm";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   contactContainer: { marginTop: "10%", marginBottom: "10%" },
@@ -39,6 +40,19 @@ const useStyles = makeStyles({
   radioButton: {
     paddingLeft: "1.4rem",
     marginTop: "0.7rem",
+  },
+  login: {
+    marginTop: "-1rem",
+    paddingBottom: "1rem",
+    marginLeft: "18rem",
+  },
+  link: {
+    color: "inherit",
+    textDecoration: "none",
+    "&:hover": {
+      color: "inherit",
+      textDecoration: "none",
+    },
   },
 });
 
@@ -94,6 +108,16 @@ function SignUpPage() {
       </Typography>
       <Box className={classes.box}>
         <Paper className={classes.paper}>
+          <Link to="/login" className={classes.link}>
+            <Typography
+              align="right"
+              type="button"
+              variant="body2"
+              className={classes.login}
+            >
+              Login Instead
+            </Typography>
+          </Link>
           <Formik
             initialValues={initialValues}
             validationSchema={SignUpSchema}
