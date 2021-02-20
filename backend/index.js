@@ -58,6 +58,15 @@ app.use(deleteServiceRouter);
 const updateServiceRouter = require("./routes/updateService");
 app.use(updateServiceRouter);
 
+const userRoleRouter = require("./routes/userRole");
+app.use(userRoleRouter);
+
+const updateRoleRouter = require("./routes/updateRole");
+app.use(updateRoleRouter);
+
+const updateUserRouter = require("./routes/updateUser");
+app.use(updateUserRouter);
+
 app.get("/", (req, res) => {
   res.json({ result: "Working fine" });
 });

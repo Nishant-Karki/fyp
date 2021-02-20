@@ -30,7 +30,6 @@ import BookService from "./components/Booking/BookService";
 import Payment from "./components/Payment/Payment";
 
 function App() {
-  const isAuth = useSelector((state) => state.login.isAuth);
   const token = localStorage.getItem("token");
   // const [auth, setAuth] = useState();
   // useEffect(() => {

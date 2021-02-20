@@ -90,7 +90,6 @@ function LoginPage() {
         values,
       })
       .then((response) => {
-        console.log(response.data.result);
         setResponse(response.data.message);
         setSnackType(response.data.type);
         if (response.data.auth === true) {

@@ -9,6 +9,7 @@ export default function CustomSnackbar(props) {
       open={snackbarOpen}
       autoHideDuration={3000}
       onClose={() => setSnackbar(false)}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
     >
       <Alert
         variant="filled"

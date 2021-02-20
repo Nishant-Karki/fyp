@@ -84,12 +84,16 @@ function Navbar({ cart }) {
           <Grid container component="div" style={{ paddingTop: "1.3rem" }}>
             <Grid item xs={3} sm={2}>
               <Link to="/">
-                <Box>
+                <Box
+                  height="3rem"
+                  display="flex"
+                  justifyContent="center"
+                  marginTop="-0.8rem"
+                  marginLeft="1.5rem"
+                >
                   <img
                     src={require("../../images/other/logo-white.png").default}
                     alt="logo"
-                    width="100%"
-                    style={{ marginTop: "-0.4rem", paddingBottom: "0.4rem" }}
                   />
                 </Box>
               </Link>

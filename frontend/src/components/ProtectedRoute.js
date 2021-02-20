@@ -4,7 +4,7 @@ import { Route, Redirect } from "react-router-dom";
 export default function ProtectedRoute(props) {
   const {
     isAuth: isAuth,
-    // permission = "C",
+    permission = "C",
     component: Component,
     ...rest
   } = props;
@@ -12,7 +12,6 @@ export default function ProtectedRoute(props) {
     <Route
       {...rest}
       render={(props) => {
-        console.log(isAuth);
         if (isAuth) {
           return <Component />;
         } else {

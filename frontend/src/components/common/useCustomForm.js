@@ -80,33 +80,33 @@ export default function useCustomForm() {
     );
   };
 
-  const SearchBox = (props) => {
-    const { label, type, placeholder, value, onChange } = props;
-    return (
-      <TextField
-        label={label}
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-        {...props}
-        variant="outlined"
-        size="small"
-        color="secondary"
-        fullWidth
-        inputProps={{
-          maxLength: 15,
-        }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <BsSearch />
-            </InputAdornment>
-          ),
-        }}
-      />
-    );
-  };
+  // const SearchBox = (props) => {
+  //   const { label, type, placeholder, value, onChange } = props;
+  //   return (
+  //     <TextField
+  //       label={label}
+  //       type={type}
+  //       value={value}
+  //       placeholder={placeholder}
+  //       onChange={onChange}
+  //       {...props}
+  //       variant="outlined"
+  //       size="small"
+  //       color="secondary"
+  //       fullWidth
+  //       inputProps={{
+  //         maxLength: 15,
+  //       }}
+  //       InputProps={{
+  //         startAdornment: (
+  //           <InputAdornment position="start">
+  //             <BsSearch />
+  //           </InputAdornment>
+  //         ),
+  //       }}
+  //     />
+  //   );
+  // };
 
   const CustomDatePicker = (props) => {
     const { name, value, label, error, onChange } = props;
@@ -211,7 +211,7 @@ export default function useCustomForm() {
   return {
     CustomTextField,
     ImageInput,
-    SearchBox,
+    // SearchBox,
     CustomDatePicker,
     CustomDateTime,
     DropdownSelect,

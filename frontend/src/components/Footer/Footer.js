@@ -10,14 +10,14 @@ import "../scss/footer.scss";
 
 function Footer() {
   return (
-    <div className="root">
-      <Container className="container">
-        <Typography align="center">
+    <Container className="container">
+      <div className="root">
+        <Box display="flex" justifyContent="center" height="3rem">
           <img
-            src={require("../../images/other/logo.png").default}
+            src={require("../../images/other/logo-white.png").default}
             alt="logo"
           />
-        </Typography>
+        </Box>
         <hr style={{ backgroundColor: "white" }} />
         <Box className="footer">
           <Typography>
@@ -47,8 +47,8 @@ function Footer() {
             </li>
           </ul>
         </Box>
-      </Container>
-    </div>
+      </div>
+    </Container>
   );
 }
 

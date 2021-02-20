@@ -9,7 +9,9 @@ import {
   Box,
   Grid,
   Dialog,
+  InputAdornment,
   Container,
+  TextField,
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import useCustomForm from "../common/useCustomForm";
@@ -17,6 +19,7 @@ import useTable from "../common/useTable";
 
 import axios from "axios";
 
+import { BsSearch } from "react-icons/bs";
 import { AiFillDelete } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 import useTableActions from "../common/useTableActions";
@@ -87,7 +90,6 @@ export default function ProductTable() {
   //custom hooks
   const { ItemSalon } = useAddItem();
   const { DeleteItem, EditItem } = useTableActions();
-  const { SearchBox } = useCustomForm();
   const {
     TblContainer,
     TblHead,
@@ -101,12 +103,26 @@ export default function ProductTable() {
         <Toolbar>
           <Grid container component="span">
             <Grid item xs={9}>
-              <SearchBox
+              <TextField
                 label="Search Products"
+                variant="outlined"
                 value={value}
                 type="text"
                 placeholder="Hair Gel"
-                onChange={handleSearch}
+                onChange={(e) => handleSearch(e)}
+                size="small"
+                color="secondary"
+                fullWidth
+                inputProps={{
+                  maxLength: 15,
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <BsSearch />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={3}>

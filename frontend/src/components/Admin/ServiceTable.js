@@ -8,6 +8,8 @@ import {
   Typography,
   Box,
   Grid,
+  TextField,
+  InputAdornment,
   Dialog,
   Container,
 } from "@material-ui/core";
@@ -17,6 +19,7 @@ import useTable from "../common/useTable";
 
 import axios from "axios";
 
+import { BsSearch } from "react-icons/bs";
 import { AiFillDelete } from "react-icons/ai";
 import { MdEdit } from "react-icons/md";
 import useTableActions from "../common/useTableActions";
@@ -100,12 +103,26 @@ export default function AddService() {
         <Toolbar>
           <Grid container component="span">
             <Grid item xs={9}>
-              <SearchBox
-                label="Search Services"
+              <TextField
+                variant="outlined"
                 value={value}
                 type="text"
+                label="Search Services"
                 placeholder="Haircut"
-                onChange={handleSearch}
+                onChange={(e) => handleSearch(e)}
+                size="small"
+                color="secondary"
+                fullWidth
+                inputProps={{
+                  maxLength: 15,
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <BsSearch />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={3}>
