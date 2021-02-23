@@ -1,18 +1,20 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 
 export default function ProtectedRoute(props) {
-  const {
-    isAuth: isAuth,
-    permission = "C",
-    component: Component,
-    ...rest
-  } = props;
+  const role = useSelector((state) => state.login.role);
+
+  const { isAuth: isAuth, permission, component: Component, ...rest } = props;
   return (
     <Route
       {...rest}
       render={(props) => {
         if (isAuth) {
+          // if (permission === role) {
+          // } else {
+          //   <div>SHOW ERROR PAGE</div>;
+          // }
           return <Component />;
         } else {
           return (

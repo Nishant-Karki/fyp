@@ -35,3 +35,9 @@ export const loadCurrentItem = (item) => {
     payload: item,
   };
 };
+
+export const deleteProduct = (item) => {
+  const id = item.product_id;
+  axios.post("/deleteProduct", { items: item });
+  return { type: actionTypes.DELETE_PRODUCT, payload: { id: id } };
+};

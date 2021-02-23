@@ -3,6 +3,7 @@ import {
   DELETE_APPOINTMENT,
   LOAD_CURRENT_SERVICE,
   FETCH_SERVICES,
+  DELETE_SERVICE,
 } from "./booking-types";
 
 const INITIAL_STATE = {
@@ -61,6 +62,14 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         currentItem: action.payload,
+      };
+
+    case DELETE_SERVICE:
+      return {
+        ...state,
+        services: state.services.filter(
+          (item) => item.service_id !== action.payload.id
+        ),
       };
     default:
       return state;

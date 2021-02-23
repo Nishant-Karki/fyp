@@ -56,6 +56,14 @@ const shopReducer = (state = INITIAL_STATE, action) => {
         ...state,
         currentItem: action.payload,
       };
+
+    case actionTypes.DELETE_PRODUCT:
+      return {
+        ...state,
+        products: state.products.filter(
+          (item) => item.product_id !== action.payload.id
+        ),
+      };
     default:
       return state;
   }

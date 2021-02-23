@@ -30,11 +30,8 @@ import BookService from "./components/Booking/BookService";
 import Payment from "./components/Payment/Payment";
 
 function App() {
-  const token = localStorage.getItem("token");
-  // const [auth, setAuth] = useState();
-  // useEffect(() => {
-  //   setAuth(isAuth);
-  // }, [isAuth]);
+  const token = useSelector((state) => state.login.authToken);
+
   const Routes = () => (
     <div>
       <Navbar />

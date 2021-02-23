@@ -26,7 +26,7 @@ import OurServices from "../Home/OurServices";
 import useCustomForm from "../common/useCustomForm";
 
 import { useDispatch, useSelector, connect } from "react-redux";
-import { isLoggedIn, userData } from "../../redux/Login/login-actions";
+import { userData, authToken } from "../../redux/Login/login-actions";
 import CustomSnackbar from "../common/CustomSnackbar";
 
 const useStyles = makeStyles({
@@ -80,7 +80,8 @@ function LoginPage() {
   const [snackbar, setSnackbar] = useState(false);
   const [snackType, setSnackType] = useState();
 
-  // const dispatch = useDispatch(isLoggedIn(), userData());
+  const dispatch = useDispatch();
+  const Token = useSelector((state) => state.login.authToken);
 
   const { CustomTextField } = useCustomForm();
 
@@ -93,31 +94,37 @@ function LoginPage() {
         setResponse(response.data.message);
         setSnackType(response.data.type);
         if (response.data.auth === true) {
-          isLoggedIn(true);
-          userData(response.data.result);
-          localStorage.setItem("token", response.data.token);
-        } else {
-          isLoggedIn(false);
+          dispatch(userData(response.data.result));
+          dispatch(authToken(response.data.token));
         }
       });
   };
 
   useEffect(() => {
     axios.get("/login").then((response) => {
-      response.data.loggedIn === true && isLoggedIn(true);
+      if (response.data.loggedIn === true && Token != null) {
+        setSnackbar(true);
+        setResponse(response.data.message);
+        setSnackType(response.data.type);
+        setTimeout(() => {
+          history.push("/");
+        }, 1500);
+      }
     });
   }, []);
 
-  const userAuthenticated = () => {
-    axios.defaults.headers.common["authorization"] = localStorage.getItem(
-      "token"
-    );
-    axios.post("/isUserAuth").then((response) => {
-      setTimeout(() => {
-        response.data.auth && history.push("/");
-      }, 1500);
-      console.log(response);
-    });
+  const userAuthenticated = async () => {
+    await axios
+      .post("/isUserAuth")
+      .then((response) => {
+        response.data.auth === true &&
+          setTimeout(() => {
+            history.push("/");
+          }, 1500);
+      })
+      .catch((err) => console.log(err));
+
+    axios.defaults.headers.common["authorization"] = Token;
   };
 
   return (
@@ -206,7 +213,11 @@ function LoginPage() {
 
           <hr style={{ backgroundColor: "white" }} />
           <Box textAlign="center">
-            <GLogin />
+            <GLogin
+              setSnackbar={setSnackbar}
+              setResponse={setResponse}
+              setSnackType={setSnackType}
+            />
             {/* <FLogin /> */}
           </Box>
         </Paper>
@@ -215,11 +226,11 @@ function LoginPage() {
   );
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    isLoggedIn: (message) => dispatch(isLoggedIn(message)),
-    userData: (message) => dispatch(userData(message)),
-  };
-};
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     isLoggedIn: (message) => dispatch(isLoggedIn(message)),
+//     userData: (message) => dispatch(userData(message)),
+//   };
+// };
 
-export default connect(mapDispatchToProps)(LoginPage);
+export default LoginPage;

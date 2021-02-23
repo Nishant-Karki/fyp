@@ -4,6 +4,8 @@ import { Formik, Form } from "formik";
 import React from "react";
 import PopUp from "../common/PopUp";
 import useCustomForm from "../common/useCustomForm";
+import { useDispatch } from "react-redux";
+import { deleteAccount } from "../../redux/Login/login-actions";
 
 export default function useSettings() {
   const { CustomTextField } = useCustomForm();
@@ -57,7 +59,9 @@ export default function useSettings() {
   };
 
   const DeleteAccount = (props) => {
-    const { deletePopUp, setDeletePopUp } = props;
+    const { deletePopUp, setDeletePopUp, userId } = props;
+
+    const dispatch = useDispatch();
     return (
       <PopUp
         title="Alert"
@@ -70,7 +74,12 @@ export default function useSettings() {
           </Typography>
 
           <Box style={{ marginTop: "1rem" }}>
-            <Button>
+            <Button
+              onClick={() => {
+                setDeletePopUp(false);
+                dispatch(deleteAccount(userId));
+              }}
+            >
               <Typography color="error">Proceed</Typography>
             </Button>
             <Button>

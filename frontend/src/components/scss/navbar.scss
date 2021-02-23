@@ -49,3 +49,23 @@ ul {
     color: grey;
   }
 }
+
+.dropdown-icon {
+  &:hover .dropdown-content-profile {
+    display: block;
+  }
+}
+
+.dropdown-content-profile {
+  display: none;
+  position: absolute;
+  margin-left: -4rem;
+  width: 10rem;
+  height: 5.4rem;
+  z-index: 1;
+}
+
+.icon-styless {
+  color: white;
+  font-weight: bold;
+}

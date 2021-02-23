@@ -52,7 +52,7 @@ app.use(addServicesRouter);
 const addProductsRouter = require("./routes/addProducts");
 app.use(addProductsRouter);
 
-const deleteServiceRouter = require("./routes/deleteItem");
+const deleteServiceRouter = require("./routes/deleteItems");
 app.use(deleteServiceRouter);
 
 const updateServiceRouter = require("./routes/updateService");
@@ -66,6 +66,12 @@ app.use(updateRoleRouter);
 
 const updateUserRouter = require("./routes/updateUser");
 app.use(updateUserRouter);
+
+const profileImageRouter = require("./routes/profileImage");
+app.use(profileImageRouter);
+
+const accountDeleteRouter = require("./routes/accountDelete");
+app.use(accountDeleteRouter);
 
 app.get("/", (req, res) => {
   res.json({ result: "Working fine" });

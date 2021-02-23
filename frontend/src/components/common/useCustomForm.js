@@ -122,8 +122,7 @@ export default function useCustomForm() {
             {...props}
             fullWidth
             color="secondary"
-            inputVariant="outlined"
-            format="MM/dd/yyyy"
+            format="yyyy-dd-MM"
             size="small"
             onChange={onChange}
             error={error}

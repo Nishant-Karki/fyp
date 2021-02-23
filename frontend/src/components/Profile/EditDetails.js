@@ -6,25 +6,37 @@ import PopUp from "../common/PopUp";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
+import Moment from "moment";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().optional(),
-  dob: Yup.date().optional(),
-  contact: Yup.number().min(10).optional(),
+  firstname: Yup.string().required(),
+  lastname: Yup.string().required(),
 });
-export default function EditDetails({ detailPopUp, setDetailPopUp }) {
+export default function EditDetails({
+  detailPopUp,
+  setDetailPopUp,
+  setSnackType,
+  setSnackbar,
+  setResponse,
+}) {
   const [userId, setUserId] = useState(null);
 
-  const { CustomTextField } = useCustomForm();
+  const { CustomTextField, CustomDatePicker } = useCustomForm();
 
   const userData = useSelector((state) => state.login.userData);
 
   const submitHandler = (values) => {
-    axios
-      .post("/updateUser", { values: values, id: userId })
-      .then((res) => console.log(res));
+    axios.post("/updateUser", { values: values, id: userId }).then((res) => {
+      console.log(res.data.type);
+      console.log(res.data.message);
+
+      setDetailPopUp(false);
+      setSnackbar(true);
+      setResponse(res.data.message);
+      setSnackType(res.data.type);
+    });
   };
 
   return (
@@ -39,35 +51,59 @@ export default function EditDetails({ detailPopUp, setDetailPopUp }) {
           userData.map((item) => (
             <Box width="21rem" key={item.user_id}>
               <Formik
-                initialValues={{ username: "", dob: "", contact: "" }}
+                initialValues={{
+                  firstname: item.fname,
+                  lastname: item.lname,
+                  dob: item.dob,
+                  contact: item.phone,
+                }}
                 validationSchema={validationSchema}
                 onSubmit={submitHandler}
               >
-                {({ touched, errors, handleChange }) => (
+                {({ touched, errors, handleChange, values, setFieldValue }) => (
                   <Form>
                     <Grid container component="span" spacing={2}>
                       <Grid item xs={3}>
                         <Typography
-                          style={{ marginTop: "1.2rem" }}
+                          style={{ marginTop: "0.5rem" }}
                           variant="body2"
                         >
-                          Name
+                          Firstame
                         </Typography>
                       </Grid>
                       <Grid item xs={8}>
                         <CustomTextField
                           variant="standard"
-                          label={item.name}
-                          name="username"
+                          value={values.firstname}
+                          name="firstname"
                           type="text"
-                          error={errors.username && touched.username}
+                          error={errors.firstname && touched.firstname}
                           onChange={handleChange}
-                          errortext={errors.username}
+                          errortext={errors.firstname}
                         />
                       </Grid>
                       <Grid item xs={3}>
                         <Typography
-                          style={{ marginTop: "1.2rem" }}
+                          style={{ marginTop: "0.5rem" }}
+                          variant="body2"
+                        >
+                          Last Name
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <CustomTextField
+                          variant="standard"
+                          name="lastname"
+                          type="text"
+                          value={values.lastname}
+                          error={errors.lastname && touched.lastname}
+                          onChange={handleChange}
+                          errortext={errors.lastname}
+                        />
+                      </Grid>
+                      <Grid item xs={3}>
+                        <Typography
+                          style={{ marginTop: "0.5rem" }}
                           variant="body2"
                         >
                           Email
@@ -75,7 +111,7 @@ export default function EditDetails({ detailPopUp, setDetailPopUp }) {
                       </Grid>
                       <Grid item xs={8}>
                         <Typography
-                          style={{ marginTop: "1.2rem" }}
+                          style={{ marginTop: "0.5rem" }}
                           variant="body2"
                         >
                           {item.email}
@@ -83,26 +119,29 @@ export default function EditDetails({ detailPopUp, setDetailPopUp }) {
                       </Grid>
                       <Grid item xs={3}>
                         <Typography
-                          style={{ marginTop: "1.2rem" }}
+                          style={{ marginTop: "0.5rem" }}
                           variant="body2"
                         >
                           Birthday
                         </Typography>
                       </Grid>
                       <Grid item xs={8}>
-                        <CustomTextField
-                          variant="standard"
-                          label={item.dob}
+                        <CustomDatePicker
                           name="dob"
-                          type="text"
-                          error={errors.username && touched.username}
-                          onChange={handleChange}
-                          errortext={errors.username}
+                          disableFuture
+                          minDate={new Date("1950-01-01")}
+                          value={values.dob}
+                          onChange={(value) =>
+                            setFieldValue(
+                              "dob",
+                              Moment(value).format("YYYY-MM-DD")
+                            )
+                          }
                         />
                       </Grid>
                       <Grid item xs={3}>
                         <Typography
-                          style={{ marginTop: "1.2rem" }}
+                          style={{ marginTop: "0.6rem" }}
                           variant="body2"
                         >
                           Contact
@@ -111,12 +150,12 @@ export default function EditDetails({ detailPopUp, setDetailPopUp }) {
                       <Grid item xs={8}>
                         <CustomTextField
                           variant="standard"
-                          label={item.contact}
+                          value={values.contact}
                           name="contact"
-                          type="text"
-                          error={errors.username && touched.username}
+                          type="number"
+                          error={errors.contact && touched.contact}
                           onChange={handleChange}
-                          errortext={errors.username}
+                          errortext={errors.contact}
                         />
                       </Grid>
                     </Grid>

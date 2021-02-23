@@ -3,23 +3,23 @@ import {
   DELETE_APPOINTMENT,
   LOAD_CURRENT_SERVICE,
   FETCH_SERVICES,
+  DELETE_SERVICE,
 } from "./booking-types";
 import axios from "axios";
 
 export const fetchServices = () => async (dispatch) => {
   try {
     const res = await axios.get("/addServices");
-    console.log(res + "sdasd");
+    console.log(res);
     dispatch({
       type: FETCH_SERVICES,
-      payload: [{ s: "asdas", a: "sadsad" }],
+      payload: res.data.result,
       // payload: res,
     });
   } catch (err) {
     console.log(err);
   }
 };
-fetchServices();
 
 export const bookAppointment = (itemID, value) => {
   return {
@@ -34,6 +34,12 @@ export const bookAppointment = (itemID, value) => {
 export const deleteAppointment = (itemID) => {
   console.log(itemID);
   return { type: DELETE_APPOINTMENT, payload: { id: itemID } };
+};
+
+export const deleteService = (item) => {
+  const id = item.service_id;
+  axios.post("/deleteService", { items: item });
+  return { type: DELETE_SERVICE, payload: { id: id } };
 };
 
 export const loadCurrentService = (item) => {

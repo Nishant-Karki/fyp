@@ -39,8 +39,7 @@ export default function useAddItem() {
       data.append("description", values.description);
       data.append("price", values.price);
       data.append("image", values.image);
-      console.log(data);
-      console.log(postRoute);
+
       axios.post(`/${postRoute}`, data).then((res) => console.log(res));
     };
     return (

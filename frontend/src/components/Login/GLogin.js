@@ -2,25 +2,57 @@ import React from "react";
 import { GoogleLogin } from "react-google-login";
 import { Button } from "@material-ui/core";
 
+import { connect, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import {
+  authToken,
+  isLoggedIn,
+  userData,
+} from "../../redux/Login/login-actions";
+
 import { FaGoogle } from "react-icons/fa";
 import axios from "axios";
 
-function GLogin() {
+function GLogin({ setResponse, setSnackType, setSnackbar }) {
+  let history = useHistory();
+
+  const dispatch = useDispatch();
   const successResponse = (response) => {
-    const { name, email, googleId } = response.profileObj;
+    const {
+      givenName,
+      familyName,
+      email,
+      googleId,
+      imageUrl,
+    } = response.profileObj;
+    dispatch(authToken(response.tokenObj.access_token));
     axios
-      .post("/social-login", { name: name, email: email, googleId: googleId })
-      .then((res) =>
-        localStorage.setItem("token", response.tokenObj.access_token)
-      );
-    // (response) => {
-    //   console.log(result);
-    // }
-    // );
+      .post("/social-login", {
+        givenName,
+        familyName,
+        email,
+        googleId,
+        imageUrl,
+      })
+      .then((res) => {
+        console.log(res);
+        setResponse(res.data.message);
+        setSnackType(res.data.type);
+        setSnackbar(true);
+        dispatch(userData(res.data.result));
+
+        // setTimeout(() => {
+        //   history.push("/");
+        // }, 1500);
+
+        // localStorage.setItem("token", response.tokenObj.access_token);
+      });
   };
 
-  const failureResponse = (response) => {
-    console.log("Failed to login");
+  const failureResponse = (res) => {
+    setResponse("Failed to Login");
+    setSnackType("info");
+    setSnackbar(true);
   };
 
   return (
@@ -43,5 +75,12 @@ function GLogin() {
     </>
   );
 }
+
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     isLoggedIn: (message) => dispatch(isLoggedIn(message)),
+//     userData: (message) => dispatch(userData(message)),
+//   };
+// };
 
 export default GLogin;

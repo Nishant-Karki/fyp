@@ -12,15 +12,18 @@ import {
   Button,
 } from "@material-ui/core";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { useSelector } from "react-redux";
+import Moment from "moment";
 
 import axios from "axios";
 import useCustomForm from "../common/useCustomForm";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import CustomSnackbar from "../common/CustomSnackbar";
 
 const useStyles = makeStyles({
   contactContainer: { marginTop: "10%", marginBottom: "10%" },
@@ -84,7 +87,14 @@ const initialValues = {
 function SignUpPage() {
   const classes = useStyles();
 
+  let history = useHistory();
   const { CustomTextField, CustomDatePicker } = useCustomForm();
+
+  const token = useSelector((state) => state.login.authToken);
+
+  const [response, setResponse] = useState();
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackType, setSnackType] = useState();
 
   const radioData = [
     { label: "Male", value: "Male" },
@@ -92,17 +102,43 @@ function SignUpPage() {
     { label: "Other", value: "Other" },
   ];
 
+  useEffect(() => {
+    if (token != null) {
+      setSnackbar(true);
+      setResponse("Already logged in");
+      setSnackType("warning");
+
+      setTimeout(() => {
+        history.push("/");
+      }, 1500);
+    }
+  }, []);
+
   const onSubmit = (values) => {
-    console.log(values);
     axios
       .post("/register", {
         values,
       })
-      .then((response) => console.log(response));
+      .then((response) => {
+        setResponse(response.data.message);
+        setSnackType(response.data.type);
+
+        setTimeout(() => {
+          response.data.type === "success" && history.push("/login");
+        }, 1500);
+      });
   };
 
   return (
     <Container className={classes.contactContainer}>
+      {response && response.length > 0 && (
+        <CustomSnackbar
+          snackbarOpen={snackbar}
+          setSnackbar={setSnackbar}
+          snackType={snackType}
+          snackContent={response}
+        />
+      )}
       <Typography variant="h4" style={{ textAlign: "center" }}>
         JOIN US
       </Typography>
@@ -200,10 +236,11 @@ function SignUpPage() {
                         value={values.dob}
                         setFieldValue={setFieldValue}
                         error={errors.dob && touched.dob}
+                        inputVariant="outlined"
                         onChange={(value) =>
                           setFieldValue(
                             "dob",
-                            new Date(value).toLocaleDateString()
+                            Moment(value).format("YYYY-MM-DD")
                           )
                         }
                       />
@@ -240,6 +277,7 @@ function SignUpPage() {
                     type="submit"
                     size="large"
                     className={classes.submitBtn}
+                    onClick={() => setSnackbar(true)}
                   >
                     Sign Up
                   </Button>

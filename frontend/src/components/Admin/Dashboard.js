@@ -15,7 +15,6 @@ import {
 import { List } from "@material-ui/core";
 import { ListItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
-import DashboardI from "./DashboardI";
 
 const useStyles = makeStyles((theme) => ({
   title: {

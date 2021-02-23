@@ -49,7 +49,12 @@ module.exports = loginPOST = (req, res) => {
 
 module.exports = loginGET = (req, res) => {
   if (req.session.user) {
-    res.json({ loggedIn: true, user: req.session.user });
+    res.json({
+      loggedIn: true,
+      user: req.session.user,
+      message: "Already logged In",
+      type: "info",
+    });
   } else {
     res.json({ loggedIn: false });
   }

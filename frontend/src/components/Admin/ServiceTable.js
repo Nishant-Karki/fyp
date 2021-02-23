@@ -184,6 +184,7 @@ export default function AddService() {
                         DeletePopUp={DeletePopUp}
                         setDeletePopUp={setDeletePopUp}
                         item={actionItem}
+                        route={"deleteService"}
                       />
                     </Box>
                   </TableCell>

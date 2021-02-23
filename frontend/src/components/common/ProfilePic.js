@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Avatar, makeStyles, Badge, Box } from "@material-ui/core";
 
 import { AiFillCamera } from "react-icons/ai";
 import useCustomForm from "../common/useCustomForm";
 import { Typography } from "@material-ui/core";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { updateProfile } from "../../redux/Login/login-actions";
 
 const useStyles = makeStyles((theme) => ({
   imgSize: {
@@ -35,13 +38,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProfilePic({ source }) {
+export default function ProfilePic({ source, userId }) {
   const classes = useStyles();
 
   const { ImageInput } = useCustomForm();
 
+  const dispatch = useDispatch();
+
   const [icon, setIcon] = useState(<AiFillCamera size={18} />);
-  const [image, setImage] = useState(source);
+  const [image, setImage] = useState(
+    source != null ? require(`../../images/profile/${source}`).default : null
+  );
 
   const BadgeComponent = () => {
     const addImage = (e) => {
@@ -49,6 +56,13 @@ export default function ProfilePic({ source }) {
       const url = URL.createObjectURL(target);
       setImage(url);
       setIcon(<AiFillCamera size={18} />);
+      let data = new FormData();
+
+      data.append("profile", target);
+      data.append("id", userId);
+
+      // axios.post(`/profileImage`, data).then((res) => console.log(res));
+      dispatch(updateProfile(data));
     };
     return (
       <Box

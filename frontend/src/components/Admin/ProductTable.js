@@ -184,6 +184,7 @@ export default function ProductTable() {
                         DeletePopUp={DeletePopUp}
                         setDeletePopUp={setDeletePopUp}
                         item={actionItem}
+                        route={"deleteProduct"}
                       />
                     </Box>
                   </TableCell>

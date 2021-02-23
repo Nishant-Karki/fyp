@@ -1,14 +1,14 @@
-import { Button } from "@material-ui/core";
-import { Box } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
+import { Box, Grid, Typography, Button } from "@material-ui/core";
 import React, { useState } from "react";
 import PopUp from "./PopUp";
 
 import axios from "axios";
 import { Form, Formik } from "formik";
 import useCustomForm from "./useCustomForm";
-import { Grid } from "@material-ui/core";
 import ImageUploader from "./ImageUploader";
+import { useDispatch } from "react-redux";
+import { deleteService } from "../../redux/Booking/booking-actions";
+import { deleteProduct } from "../../redux/Ecommerce/eStore-actions";
 
 export default function useTableActions() {
   const { CustomTextField } = useCustomForm();
@@ -33,8 +33,15 @@ export default function useTableActions() {
         setOpenPopup={setEditPopUp}
       >
         <Box width="26rem">
-          <Formik initialValues={{ name: "" }} onSubmit={onSubmit}>
-            {({ errors, handleChange, touched, setFieldValue }) => (
+          <Formik
+            initialValues={{
+              name: item.name,
+              price: item.price,
+              description: item.description,
+            }}
+            onSubmit={onSubmit}
+          >
+            {({ errors, handleChange, values, setFieldValue }) => (
               <Form>
                 <Grid container spacing={1} component="span">
                   <Grid item xs={4}>
@@ -44,7 +51,7 @@ export default function useTableActions() {
                     <CustomTextField
                       name="name"
                       variant="standard"
-                      placeholder={item.name}
+                      value={values.name}
                       type="text"
                       onChange={handleChange}
                     />
@@ -56,7 +63,7 @@ export default function useTableActions() {
                     <CustomTextField
                       name="price"
                       variant="standard"
-                      placeholder={item.price}
+                      value={values.price}
                       type="number"
                       onChange={handleChange}
                     />
@@ -69,7 +76,7 @@ export default function useTableActions() {
                       name="description"
                       variant="standard"
                       multiline
-                      placeholder={item.description}
+                      value={values.description}
                       type="text"
                       onChange={handleChange}
                     />
@@ -96,14 +103,17 @@ export default function useTableActions() {
   };
 
   const DeleteItem = (props) => {
-    const { DeletePopUp, setDeletePopUp, item } = props;
+    const { DeletePopUp, setDeletePopUp, item, route } = props;
 
+    const dispatch = useDispatch();
     //to delete selected row
     const DeleteData = (item) => {
       setDeletePopUp(false);
-      axios
-        .post("/deleteService", { items: item })
-        .then((res) => console.log(res));
+      if (route === "deleteService") {
+        dispatch(deleteService(item));
+      } else {
+        dispatch(deleteProduct(item));
+      }
     };
 
     return (
