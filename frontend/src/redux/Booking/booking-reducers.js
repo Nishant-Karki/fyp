@@ -4,6 +4,7 @@ import {
   LOAD_CURRENT_SERVICE,
   FETCH_SERVICES,
   DELETE_SERVICE,
+  UPDATE_SERVICE,
 } from "./booking-types";
 
 const INITIAL_STATE = {
@@ -71,6 +72,13 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
           (item) => item.service_id !== action.payload.id
         ),
       };
+
+    case UPDATE_SERVICE: {
+      return {
+        ...state,
+      };
+    }
+
     default:
       return state;
   }

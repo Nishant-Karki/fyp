@@ -64,6 +64,11 @@ const shopReducer = (state = INITIAL_STATE, action) => {
           (item) => item.product_id !== action.payload.id
         ),
       };
+
+    case actionTypes.UPDATE_PRODUCT:
+      return {
+        ...state,
+      };
     default:
       return state;
   }

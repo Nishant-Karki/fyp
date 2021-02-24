@@ -7,24 +7,28 @@ import { Form, Formik } from "formik";
 import useCustomForm from "./useCustomForm";
 import ImageUploader from "./ImageUploader";
 import { useDispatch } from "react-redux";
-import { deleteService } from "../../redux/Booking/booking-actions";
-import { deleteProduct } from "../../redux/Ecommerce/eStore-actions";
+import {
+  deleteService,
+  updateService,
+} from "../../redux/Booking/booking-actions";
+import {
+  deleteProduct,
+  updateProduct,
+} from "../../redux/Ecommerce/eStore-actions";
 
 export default function useTableActions() {
   const { CustomTextField } = useCustomForm();
+  const dispatch = useDispatch();
 
   const EditItem = (props) => {
-    const { editPopUp, setEditPopUp, item, imagePath } = props;
+    const { editPopUp, setEditPopUp, item, imagePath, route } = props;
 
     const onSubmit = (values) => {
-      //to delete selected row
-      console.log(values);
-      // axios
-      //   .post("./updateService", {
-      //     service_id: item.service_id,
-      //     values: values,
-      //   })
-      //   .then((res) => console.log(res));
+      if (route === "updateService") {
+        dispatch(updateService(values, item.service_id));
+      } else {
+        dispatch(updateProduct(values, item.product_id));
+      }
     };
     return (
       <PopUp
@@ -105,7 +109,6 @@ export default function useTableActions() {
   const DeleteItem = (props) => {
     const { DeletePopUp, setDeletePopUp, item, route } = props;
 
-    const dispatch = useDispatch();
     //to delete selected row
     const DeleteData = (item) => {
       setDeletePopUp(false);

@@ -41,3 +41,13 @@ export const deleteProduct = (item) => {
   axios.post("/deleteProduct", { items: item });
   return { type: actionTypes.DELETE_PRODUCT, payload: { id: id } };
 };
+
+export const updateProduct = (values, id) => {
+  axios.post("./updateProduct", {
+    product_id: id,
+    values: values,
+  });
+  return {
+    type: actionTypes.UPDATE_PRODUCT,
+  };
+};

@@ -16,6 +16,7 @@ import { RadioGroup } from "@material-ui/core";
 import { FormControlLabel } from "@material-ui/core";
 import { Radio } from "@material-ui/core";
 import CustomSnackbar from "../common/CustomSnackbar";
+import AdminDashboard from "./AdminDashboard";
 
 export default function UserRoles() {
   //state for snackbar
@@ -44,7 +45,6 @@ export default function UserRoles() {
     });
   };
 
-  console.log(response);
   const updateUser = (id) => {
     axios.post("/updateRole", { id: id, role: role }).then((res) => {
       setSnackbar(true);
@@ -57,7 +57,7 @@ export default function UserRoles() {
     setOpenPopUp(false);
   };
   return (
-    <Container maxWidth="md" style={{ marginTop: "10rem" }}>
+    <AdminDashboard>
       {response && response.length > 0 && (
         <CustomSnackbar
           snackbarOpen={snackbar}
@@ -198,6 +198,6 @@ export default function UserRoles() {
             </PopUp>
           </Box>
         ))}
-    </Container>
+    </AdminDashboard>
   );
 }

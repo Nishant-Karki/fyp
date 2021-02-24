@@ -4,6 +4,7 @@ import {
   LOAD_CURRENT_SERVICE,
   FETCH_SERVICES,
   DELETE_SERVICE,
+  UPDATE_SERVICE,
 } from "./booking-types";
 import axios from "axios";
 
@@ -46,5 +47,15 @@ export const loadCurrentService = (item) => {
   return {
     type: LOAD_CURRENT_SERVICE,
     payload: item,
+  };
+};
+
+export const updateService = (values, id) => {
+  axios.post("./updateService", {
+    service_id: id,
+    values: values,
+  });
+  return {
+    type: UPDATE_SERVICE,
   };
 };

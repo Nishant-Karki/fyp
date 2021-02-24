@@ -44,7 +44,16 @@ export default function useAddItem() {
     };
     return (
       <Container>
-        <Button onClick={() => setOpenPopup(true)}>{title}</Button>
+        <Button
+          onClick={() => setOpenPopup(true)}
+          style={{
+            backgroundColor: "teal",
+            marginBottom: "1rem",
+            width: "13rem",
+          }}
+        >
+          {title}
+        </Button>
         <PopUp title={title} openPopup={openPopup} setOpenPopup={setOpenPopup}>
           <Formik
             initialValues={initialValues}

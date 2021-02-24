@@ -52,11 +52,11 @@ app.use(addServicesRouter);
 const addProductsRouter = require("./routes/addProducts");
 app.use(addProductsRouter);
 
-const deleteServiceRouter = require("./routes/deleteItems");
-app.use(deleteServiceRouter);
+const deleteItemsRouter = require("./routes/deleteItems");
+app.use(deleteItemsRouter);
 
-const updateServiceRouter = require("./routes/updateService");
-app.use(updateServiceRouter);
+const updateItemsRouter = require("./routes/updateItems");
+app.use(updateItemsRouter);
 
 const userRoleRouter = require("./routes/userRole");
 app.use(userRoleRouter);
