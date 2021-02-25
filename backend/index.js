@@ -55,8 +55,11 @@ app.use(addProductsRouter);
 const deleteItemsRouter = require("./routes/deleteItems");
 app.use(deleteItemsRouter);
 
-const updateItemsRouter = require("./routes/updateItems");
-app.use(updateItemsRouter);
+const updateServiceRouter = require("./routes/updateService");
+app.use(updateServiceRouter);
+
+const updateProductRouter = require("./routes/updateProduct");
+app.use(updateProductRouter);
 
 const userRoleRouter = require("./routes/userRole");
 app.use(userRoleRouter);

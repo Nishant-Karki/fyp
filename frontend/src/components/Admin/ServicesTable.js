@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import axios from "axios";
 import { forwardRef } from "react";
-import useAddItem from "../common/useAddItem";
+import AddItem from "../common/AddItem";
 import useTableActions from "../common/useTableActions";
 
 import AddBox from "@material-ui/icons/AddBox";
@@ -20,8 +20,11 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+
 import AdminDashboard from "./AdminDashboard";
-import { Button } from "@material-ui/core";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchServices } from "../../redux/Booking/booking-actions";
+import { BiSleepy } from "react-icons/bi";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -56,26 +59,36 @@ export default function ProductsTable() {
   //to send the item to edit or delete
   const [actionItem, setActionItem] = useState({});
 
-  //store array from database
-  const [records, setRecords] = useState([]);
-  useEffect(() => {
-    const response = async () => {
-      await axios.get("/addServices").then((res) => {
-        setRecords(res.data.result);
-        console.log(res.data.result);
-      });
-    };
-    response();
-  }, []);
+  const loading = useSelector((state) => state.booking.loading);
 
-  const { ItemSalon } = useAddItem();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const services = useSelector((state) => state.booking.services);
+  const dispatch = useDispatch();
+  //store array from database
+  const [records, setRecords] = useState(services);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      dispatch(fetchServices());
+      setIsLoading(false);
+    }, 1500);
+  }, [records]);
+
   const { DeleteItem, EditItem } = useTableActions();
   return (
     <AdminDashboard>
-      <ItemSalon title="Add Service" postRoute="addServices" />
+      <AddItem
+        title="Add Service"
+        postRoute="addServices"
+        setRecords={setRecords}
+        setIsLoading={setIsLoading}
+      />
       <MaterialTable
         title="Service Table"
         icons={tableIcons}
+        isLoading={isLoading}
         columns={[
           { field: "service_id", title: "ID" },
           { field: "name", title: " Service Name" },
@@ -87,7 +100,7 @@ export default function ProductsTable() {
             render: (rowData) => (
               <img
                 src={require(`../../images/services/${rowData.image}`).default}
-                style={{ width: 50, height: 60, borderRadius: "0.3rem" }}
+                style={{ width: 90, height: 60, borderRadius: "0.3rem" }}
                 alt="product"
               />
             ),
@@ -123,12 +136,17 @@ export default function ProductsTable() {
         item={actionItem}
         imagePath="services"
         route="updateService"
+        setRecords={setRecords}
+        setIsLoading={setIsLoading}
       />
       <DeleteItem
         DeletePopUp={DeletePopUp}
         setDeletePopUp={setDeletePopUp}
         item={actionItem}
         route={"deleteService"}
+        setRecords={setRecords}
+        setIsLoading={setIsLoading}
+        c
       />
     </AdminDashboard>
   );

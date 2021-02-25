@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import axios from "axios";
 import { forwardRef } from "react";
-import useAddItem from "../common/useAddItem";
+import AddItem from "../common/AddItem";
 import useTableActions from "../common/useTableActions";
 
 import AddBox from "@material-ui/icons/AddBox";
@@ -20,9 +20,9 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import { makeStyles } from "@material-ui/core";
-import { Container } from "@material-ui/core";
 import AdminDashboard from "./AdminDashboard";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../../redux/Ecommerce/eStore-actions";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -58,25 +58,35 @@ export default function ProductsTable() {
   //to send the item to edit or delete
   const [actionItem, setActionItem] = useState({});
 
-  //store array from database
-  const [records, setRecords] = useState([]);
-  useEffect(() => {
-    const response = async () => {
-      await axios.get("/addProducts").then((res) => {
-        setRecords(res.data.result);
-      });
-    };
-    response();
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { ItemSalon } = useAddItem();
+  const products = useSelector((state) => state.store.products);
+
+  //store array from database
+  const [records, setRecords] = useState(products);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsLoading(true);
+    setTimeout(() => {
+      dispatch(fetchProducts());
+      setIsLoading(false);
+    }, 1500);
+  }, [records]);
+
   const { DeleteItem, EditItem } = useTableActions();
   return (
     <AdminDashboard>
-      <ItemSalon title="Add Product" postRoute="addProducts" />
+      <AddItem
+        title="Add Product"
+        postRoute="addProducts"
+        setIsLoading={setIsLoading}
+        setRecords={setRecords}
+      />
       <MaterialTable
         title="Product Table"
         icons={tableIcons}
+        isLoading={isLoading}
         columns={[
           { field: "product_id", title: "ID" },
           { field: "name", title: " Product Name" },
@@ -124,12 +134,16 @@ export default function ProductsTable() {
         item={actionItem}
         imagePath="products"
         route="updateProduct"
+        setIsLoading={setIsLoading}
+        setRecords={setRecords}
       />
       <DeleteItem
         DeletePopUp={DeletePopUp}
         setDeletePopUp={setDeletePopUp}
         item={actionItem}
         route={"deleteProduct"}
+        setIsLoading={setIsLoading}
+        setRecords={setRecords}
       />
     </AdminDashboard>
   );

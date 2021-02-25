@@ -5,6 +5,7 @@ import {
   FETCH_SERVICES,
   DELETE_SERVICE,
   UPDATE_SERVICE,
+  ADD_SERVICE,
 } from "./booking-types";
 
 const INITIAL_STATE = {
@@ -16,10 +17,11 @@ const INITIAL_STATE = {
 const bookingReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case FETCH_SERVICES:
-      console.log(action.payload);
+      // console.log(action.payload);
       return {
         ...state,
         services: action.payload,
+        loading: false,
       };
     case BOOK_APPOINTMENT:
       //Get the items data from the services array
@@ -68,16 +70,21 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
     case DELETE_SERVICE:
       return {
         ...state,
-        services: state.services.filter(
-          (item) => item.service_id !== action.payload.id
-        ),
+        // services: state.services.filter(
+        //   (item) => item.service_id !== action.payload.id
+        // ),
       };
 
-    case UPDATE_SERVICE: {
+    case UPDATE_SERVICE:
       return {
         ...state,
+        // services: action.payload,
       };
-    }
+    case ADD_SERVICE:
+      return {
+        ...state,
+        services: action.payload,
+      };
 
     default:
       return state;

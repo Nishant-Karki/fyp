@@ -30,16 +30,16 @@ export default function Routes() {
       />
       <ProtectedRoute path="/payment" isAuth={token} component={Payment} />
       <ProtectedRoute
+        path="/admin/service"
+        isAuth={token}
+        component={ProductsTable}
+      />
+      <ProtectedRoute
         path="/admin/product"
         isAuth={token}
         component={ServicesTable}
       />
       <ProtectedRoute path="/admin" isAuth={token} component={Admin} />
-      <ProtectedRoute
-        path="/admin/service"
-        isAuth={token}
-        component={ProductsTable}
-      />
 
       <RoutesWithNavbar />
     </Switch>

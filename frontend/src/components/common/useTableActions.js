@@ -1,33 +1,70 @@
 import { Box, Grid, Typography, Button } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import PopUp from "./PopUp";
 
-import axios from "axios";
 import { Form, Formik } from "formik";
 import useCustomForm from "./useCustomForm";
 import ImageUploader from "./ImageUploader";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   deleteService,
+  fetchServices,
   updateService,
 } from "../../redux/Booking/booking-actions";
 import {
   deleteProduct,
+  fetchProducts,
   updateProduct,
 } from "../../redux/Ecommerce/eStore-actions";
+import axios from "axios";
 
 export default function useTableActions() {
   const { CustomTextField } = useCustomForm();
   const dispatch = useDispatch();
+  const updatedService = useSelector((state) => state.booking.services);
+  const updatedProduct = useSelector((state) => state.store.products);
 
   const EditItem = (props) => {
-    const { editPopUp, setEditPopUp, item, imagePath, route } = props;
+    const {
+      editPopUp,
+      setEditPopUp,
+      item,
+      imagePath,
+      route,
+      setRecords,
+      setIsLoading,
+    } = props;
 
     const onSubmit = (values) => {
+      // console.log(values.image);
+      let data = new FormData();
+      data.append("name", values.name);
+      data.append("price", values.price);
+      data.append("description", values.description);
+      data.append("id", item.service_id);
+      data.append("image", values.image);
+
+      setEditPopUp(false);
+      setIsLoading(true);
       if (route === "updateService") {
-        dispatch(updateService(values, item.service_id));
+        // dispatch(updateService(data, item.service_id));
+        axios.post("/updateService", data);
+        // dispatch(fetchServices());
+        // setRecords(updatedService);
+        setTimeout(() => {
+          axios.get("/addServices").then((res) => setRecords(res.data.result));
+          setIsLoading(false);
+          //  setRecords(updatedService);
+        }, 1500);
       } else {
         dispatch(updateProduct(values, item.product_id));
+        setTimeout(() => {
+          axios.get("/addProducts").then((res) => setRecords(res.data.result));
+          setIsLoading(false);
+          //  setRecords(updatedService);
+        }, 1500);
+        // dispatch(fetchProducts());
+        // setRecords(updatedProduct);
       }
     };
     return (
@@ -42,6 +79,7 @@ export default function useTableActions() {
               name: item.name,
               price: item.price,
               description: item.description,
+              image: null,
             }}
             onSubmit={onSubmit}
           >
@@ -88,12 +126,11 @@ export default function useTableActions() {
                   <Grid item xs={12}>
                     <ImageUploader
                       prevImageValue={`${imagePath}/${item.image}`}
+                      setFieldValue={setFieldValue}
                     />
                   </Grid>
-                  <Typography variant="button" color="error">
-                    Note : Provided Data will only be updated.
-                  </Typography>
-                  <Box display="flex" marginTop="1rem">
+
+                  <Box display="flex">
                     <Button type="submit">Save</Button>
                     <Button onClick={() => setEditPopUp(false)}>Cancel</Button>
                   </Box>
@@ -107,15 +144,36 @@ export default function useTableActions() {
   };
 
   const DeleteItem = (props) => {
-    const { DeletePopUp, setDeletePopUp, item, route } = props;
+    const {
+      DeletePopUp,
+      setDeletePopUp,
+      item,
+      route,
+      setRecords,
+      setIsLoading,
+    } = props;
 
     //to delete selected row
     const DeleteData = (item) => {
       setDeletePopUp(false);
       if (route === "deleteService") {
         dispatch(deleteService(item));
+        setIsLoading(true);
+        setTimeout(() => {
+          axios.get("/addServices").then((res) => setRecords(res.data.result));
+          setIsLoading(false);
+          //  setRecords(updatedService);
+        }, 1500);
+        // dispatch(fetchServices());
       } else {
         dispatch(deleteProduct(item));
+        setIsLoading(true);
+        setTimeout(() => {
+          axios.get("/addProducts").then((res) => setRecords(res.data.result));
+          setIsLoading(false);
+          //  setRecords(updatedService);
+        }, 1500);
+        // setRecords(updatedProduct);
       }
     };
 

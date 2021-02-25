@@ -6,11 +6,9 @@ const dbQueryPOST =
 const dbQueryGET = "SELECT * FROM service";
 
 module.exports = addServicePOST = (req, res) => {
-  console.log("service added");
-  const { destination, filename } = req.file;
+  const { filename } = req.file;
   const { name, description, price } = req.body;
 
-  console.log(req.body);
   // to pass the path to the database
   const image_path = `${filename}`;
 
@@ -20,13 +18,12 @@ module.exports = addServicePOST = (req, res) => {
       message = "Error while image upload";
       res.send({ message: message, status: "danger" });
     } else {
-      console.log("file received");
       db.query(
         dbQueryPOST,
         [name, price, description, image_path],
         (err, result) => {
           err && console.log(err);
-          result && res.send({ message: "successfully added to database" });
+          result && res.send({ image: image_path, result: result });
         }
       );
     }

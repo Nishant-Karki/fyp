@@ -43,7 +43,7 @@ export const deleteProduct = (item) => {
 };
 
 export const updateProduct = (values, id) => {
-  axios.post("./updateProduct", {
+  axios.post("/updateProduct", {
     product_id: id,
     values: values,
   });

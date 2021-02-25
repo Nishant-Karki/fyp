@@ -7,7 +7,7 @@ const dbQueryGET = "SELECT * FROM product";
 
 module.exports = addProductPOST = (req, res) => {
   console.log("product added");
-  const { destination, filename } = req.file;
+  const { filename } = req.file;
   const { name, description, price } = req.body;
 
   console.log(req.body);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -19,7 +19,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { AiFillShop } from "react-icons/ai";
 import { SiProducthunt } from "react-icons/si";
 import { FaUserCircle } from "react-icons/fa";
-import ProductsTable from "./ProductsTable";
 import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -90,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AdminDashboard({ children }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);

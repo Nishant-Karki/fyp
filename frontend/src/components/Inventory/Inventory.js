@@ -18,17 +18,6 @@ import {
 } from "../../redux/Ecommerce/eStore-actions";
 
 function Inventory({ products, fetchProducts, loadCurrentItem }) {
-  // useEffect(() => {
-  //   const response = async () => {
-  //     console.log(records);
-  //     await axios.get("/addProducts").then((res) => {
-  //       setRecords(res.data.result);
-  //       console.log(res.data.result);
-  //     });
-  //   };
-  //   response();
-  // }, []);
-
   useEffect(() => {
     fetchProducts();
   }, []);

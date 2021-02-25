@@ -5,10 +5,7 @@ import {
   makeStyles,
   Grid,
   Button,
-  Checkbox,
-  Snackbar,
 } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
@@ -21,11 +18,9 @@ import GLogin from "./GLogin";
 import FLogin from "./FLogin";
 
 import { useHistory, Link } from "react-router-dom";
-import Inventory from "../Inventory/Inventory";
-import OurServices from "../Home/OurServices";
 import useCustomForm from "../common/useCustomForm";
 
-import { useDispatch, useSelector, connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userData, authToken } from "../../redux/Login/login-actions";
 import CustomSnackbar from "../common/CustomSnackbar";
 

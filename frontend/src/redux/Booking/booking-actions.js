@@ -5,18 +5,30 @@ import {
   FETCH_SERVICES,
   DELETE_SERVICE,
   UPDATE_SERVICE,
+  ADD_SERVICE,
 } from "./booking-types";
 import axios from "axios";
 
 export const fetchServices = () => async (dispatch) => {
   try {
     const res = await axios.get("/addServices");
-    console.log(res);
     dispatch({
       type: FETCH_SERVICES,
       payload: res.data.result,
       // payload: res,
     });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const addService = (item, image) => async (dispatch) => {
+  try {
+    const res = await axios.get("/addServices");
+    return {
+      type: ADD_SERVICE,
+      payload: res.data.result,
+    };
   } catch (err) {
     console.log(err);
   }
@@ -37,10 +49,17 @@ export const deleteAppointment = (itemID) => {
   return { type: DELETE_APPOINTMENT, payload: { id: itemID } };
 };
 
-export const deleteService = (item) => {
+export const deleteService = (item) => async (dispatch) => {
   const id = item.service_id;
-  axios.post("/deleteService", { items: item });
-  return { type: DELETE_SERVICE, payload: { id: id } };
+  axios.post("/deleteService", { items: item, id: id });
+  // const res = await axios.get("/addServices");
+  // console.log(res);
+  // console.log(id);
+  // return { type: DELETE_SERVICE, payload: id };
+  return {
+    type: DELETE_SERVICE,
+    payload: { id: id },
+  };
 };
 
 export const loadCurrentService = (item) => {
@@ -50,12 +69,19 @@ export const loadCurrentService = (item) => {
   };
 };
 
-export const updateService = (values, id) => {
-  axios.post("./updateService", {
-    service_id: id,
-    values: values,
-  });
+export const updateService = (data) => async (dispatch) => {
+  console.log(data);
+  axios.post("/updateService", data);
   return {
     type: UPDATE_SERVICE,
   };
+  // const res = await axios.get("/addServices");
+  // console.log(res);
+  // return{
+  //   type:UPDATE_SERVICE,payload
+  // }
+  // dispatch({
+  //   type: UPDATE_SERVICE,
+  //   payload: res.data.result,
+  // });
 };

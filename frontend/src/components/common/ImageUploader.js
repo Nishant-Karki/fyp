@@ -15,6 +15,7 @@ export default function ImageUploader({
     try {
       const file = e.currentTarget.files[0];
       const result = URL.createObjectURL(file);
+      console.log(file);
       setPrevImage(null);
       setUrl(result);
       setFieldValue("image", file);
