@@ -11,14 +11,16 @@ import {
 import { FaCheckCircle } from "react-icons/fa";
 import { SiCashapp } from "react-icons/si";
 
-import image from "./girl.jpg";
-import "./orderpage.scss";
-import useCustomForm from "./common/useCustomForm";
+import "../scss/orderpage.scss";
+import useCustomForm from "../common/useCustomForm";
 
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import { useSelector } from "react-redux";
 
 function OrderPage() {
   const { CustomDatePicker, DropdownSelect, CustomDateTime } = useCustomForm();
+
+  const item = useSelector((state) => state.booking.currentItem);
 
   const [specialist, setSpecialist] = useState("");
 
@@ -41,7 +43,11 @@ function OrderPage() {
                 overflow: "hidden",
               }}
             >
-              <img src={image} alt="container" width="100%" />
+              <img
+                src={require(`../../images/services/${item.image}`).default}
+                alt="container"
+                className="itemImage"
+              />
             </Box>
             <Box className="image-subText">
               <Typography>
@@ -61,16 +67,16 @@ function OrderPage() {
           <Grid item sm={5} md={6}>
             <Box>
               <Typography variant="h4" style={{ fontWeight: "bold" }}>
-                Service Name
+                {item.name}
               </Typography>
               <Box className="product-info">
-                <Box className="price">Rs. 120</Box>
+                <Box className="price">Rs. {item.price}</Box>
                 <Typography variant="subtitle2" className="price-subText">
                   Exclusive of taxes
                 </Typography>
               </Box>
               <Box className="description">
-                <Typography>lorem ipsum</Typography>
+                <Typography>{item.description}</Typography>
               </Box>
 
               <DropdownSelect

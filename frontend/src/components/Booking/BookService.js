@@ -25,7 +25,6 @@ function BookService() {
 
   useEffect(() => {
     dispatch(fetchServices());
-    fetchServices();
   }, []);
   return (
     <>

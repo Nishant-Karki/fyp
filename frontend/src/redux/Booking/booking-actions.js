@@ -69,11 +69,11 @@ export const loadCurrentService = (item) => {
   };
 };
 
-export const updateService = (data) => async (dispatch) => {
-  console.log(data);
-  axios.post("/updateService", data);
+export const updateService = (image, id) => {
+  // axios.post("/updateService", );
   return {
     type: UPDATE_SERVICE,
+    payload: { image: image, id: id },
   };
   // const res = await axios.get("/addServices");
   // console.log(res);

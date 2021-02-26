@@ -37,8 +37,8 @@ export const deleteAccount = (id) => {
 export const updateProfile = (data) => async (dispatch) => {
   const res = await axios.post(`/profileImage`, data);
   console.log(res);
-  return {
+  dispatch({
     type: UPDATE_PROFILE,
     payload: res.data.result,
-  };
+  });
 };

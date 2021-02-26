@@ -2,7 +2,6 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import Home from "../components/Home";
-import OrderPage from "../components/OrderPage";
 import Inventory from "../components/Inventory/Inventory";
 import ShowItem from "../components/Inventory/ShowItem";
 
@@ -14,6 +13,7 @@ import Cart from "../components/Inventory/Cart";
 import { useSelector } from "react-redux";
 import UserRoles from "../components/Admin/UserRoles";
 import BookService from "../components/Booking/BookService";
+import OrderPage from "../components/Booking/OrderPage";
 
 export default function RoutesWithNavbar() {
   const token = useSelector((state) => state.login.authToken);
@@ -25,7 +25,6 @@ export default function RoutesWithNavbar() {
         <Route exact path="/" component={Home} />
         <Route exact path="/store" component={Inventory} />
         <Route exact path="/roles" component={UserRoles} />
-        <Route exact path="/order" component={OrderPage} />
         <Route exact path="/store/:id" component={ShowItem} />
         {/* <Route exact path="/map" component={} /> */}
         {/* <Route exact path="/user" component={UserProfile} /> */}

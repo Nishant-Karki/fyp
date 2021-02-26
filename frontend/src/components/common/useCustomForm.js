@@ -193,11 +193,18 @@ export default function useCustomForm() {
             value={specialist}
             onChange={handleSpecialist}
             fullWidth
-            style={{ marginBottom: "1rem", minWidth: "5rem" }}
+            style={{
+              marginBottom: "1rem",
+              minWidth: "5rem",
+            }}
             {...rest}
           >
             {values.map((value) => (
-              <MenuItem key={value.id} value={value.id}>
+              <MenuItem
+                key={value.id}
+                value={value.id}
+                style={{ display: "flex", flexDirection: "column" }}
+              >
                 {value.name}
               </MenuItem>
             ))}

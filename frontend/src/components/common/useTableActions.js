@@ -37,33 +37,38 @@ export default function useTableActions() {
 
     const onSubmit = (values) => {
       // console.log(values.image);
+      console.log(values.image);
+      let image_value = values.image === null ? "old" : values.image;
       let data = new FormData();
       data.append("name", values.name);
       data.append("price", values.price);
       data.append("description", values.description);
       data.append("id", item.service_id);
-      data.append("image", values.image);
+      data.append("image", image_value);
 
       setEditPopUp(false);
       setIsLoading(true);
       if (route === "updateService") {
-        // dispatch(updateService(data, item.service_id));
-        axios.post("/updateService", data);
-        // dispatch(fetchServices());
         // setRecords(updatedService);
+        axios
+          .post("/updateService", data)
+          .then((res) => dispatch(updateService(res.data.image, res.data.id)));
+        // dispatch(fetchServices());
+        axios.get("/addServices").then((res) => {
+          setRecords(res.data.result);
+        });
         setTimeout(() => {
-          axios.get("/addServices").then((res) => setRecords(res.data.result));
           setIsLoading(false);
           //  setRecords(updatedService);
         }, 1500);
       } else {
         dispatch(updateProduct(values, item.product_id));
+        axios.get("/addProducts").then((res) => setRecords(res.data.result));
+        dispatch(fetchProducts());
         setTimeout(() => {
-          axios.get("/addProducts").then((res) => setRecords(res.data.result));
           setIsLoading(false);
           //  setRecords(updatedService);
         }, 1500);
-        // dispatch(fetchProducts());
         // setRecords(updatedProduct);
       }
     };
@@ -156,20 +161,19 @@ export default function useTableActions() {
     //to delete selected row
     const DeleteData = (item) => {
       setDeletePopUp(false);
+      setIsLoading(true);
       if (route === "deleteService") {
         dispatch(deleteService(item));
-        setIsLoading(true);
+        axios.get("/addServices").then((res) => setRecords(res.data.result));
         setTimeout(() => {
-          axios.get("/addServices").then((res) => setRecords(res.data.result));
           setIsLoading(false);
           //  setRecords(updatedService);
         }, 1500);
         // dispatch(fetchServices());
       } else {
         dispatch(deleteProduct(item));
-        setIsLoading(true);
+        axios.get("/addProducts").then((res) => setRecords(res.data.result));
         setTimeout(() => {
-          axios.get("/addProducts").then((res) => setRecords(res.data.result));
           setIsLoading(false);
           //  setRecords(updatedService);
         }, 1500);

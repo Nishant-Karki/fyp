@@ -70,15 +70,23 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
     case DELETE_SERVICE:
       return {
         ...state,
-        // services: state.services.filter(
-        //   (item) => item.service_id !== action.payload.id
-        // ),
+        services: state.services.filter(
+          (item) => item.service_id !== action.payload.id
+        ),
       };
 
     case UPDATE_SERVICE:
       return {
         ...state,
-        // services: action.payload,
+        services:
+          (action.payload.id !== null) & (action.payload.image !== null) &&
+          state.services.map(
+            (item) =>
+              item.service_id === action.payload.id && {
+                ...item,
+                image: action.payload.image,
+              }
+          ),
       };
     case ADD_SERVICE:
       return {
