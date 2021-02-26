@@ -16,6 +16,7 @@ import useCustomForm from "../common/useCustomForm";
 
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useSelector } from "react-redux";
+import { MenuItem } from "@material-ui/core";
 
 function OrderPage() {
   const { CustomDatePicker, DropdownSelect, CustomDateTime } = useCustomForm();
@@ -31,10 +32,17 @@ function OrderPage() {
     { id: 4, name: "Zoro" },
     { id: 5, name: "Sanji" },
   ];
+  const TimeAvailable = [
+    { id: 1, name: "8-9" },
+    { id: 2, name: "9-10" },
+    { id: 3, name: "10-11" },
+    { id: 4, name: "11-12" },
+    { id: 5, name: "12-13" },
+  ];
 
   return (
     <>
-      <Container style={{ paddingTop: "4rem" }}>
+      <Container style={{ paddingTop: "8rem" }}>
         <Grid container spacing={4}>
           <Grid item sm={7} md={6}>
             <Box
@@ -79,16 +87,43 @@ function OrderPage() {
                 <Typography>{item.description}</Typography>
               </Box>
 
-              <DropdownSelect
-                specialist={specialist}
-                setSpecialist={setSpecialist}
-                values={SpecialistsAvailable}
-              />
-              <CustomDateTime
-                name="date"
-                label="Choose Date & Time"
-                disablePast
-              />
+              <select
+                style={{
+                  backgroundColor: "#424242",
+                  border: "none",
+                  color: "white",
+                  width: "10rem",
+                  height: "2rem",
+                  borderRadius: "0.4rem",
+                  marginTop: "1rem",
+                  marginBottom: "1rem",
+                }}
+              >
+                {SpecialistsAvailable.map((item) => (
+                  <option style={{ color: "white", border: "none" }}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                style={{
+                  backgroundColor: "#424242",
+                  border: "none",
+                  color: "white",
+                  width: "10rem",
+                  height: "2rem",
+                  borderRadius: "0.4rem",
+                  marginTop: "1rem",
+                  marginBottom: "1rem",
+                }}
+              >
+                {TimeAvailable.map((item) => (
+                  <option style={{ color: "white", border: "none" }}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
 
               <Button
                 style={{

@@ -15,6 +15,7 @@ import Admin from "../components/Admin/Admin";
 import UserRoles from "../components/Admin/UserRoles";
 import ProductsTable from "../components/Admin/ProductsTable";
 import ServicesTable from "../components/Admin/ServicesTable";
+import Inventory from "../components/Inventory/Inventory";
 
 export default function Routes() {
   const token = useSelector((state) => state.login.authToken);
@@ -40,7 +41,6 @@ export default function Routes() {
         component={ServicesTable}
       />
       <ProtectedRoute path="/admin" isAuth={token} component={Admin} />
-
       <RoutesWithNavbar />
     </Switch>
   );

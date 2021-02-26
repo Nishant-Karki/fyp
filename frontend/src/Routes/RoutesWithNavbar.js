@@ -34,7 +34,7 @@ export default function RoutesWithNavbar() {
         {/* <Footer /> */}
         <Route exact path="/booking/:id" component={OrderPage} />
         <Route exact path="/cart" component={Cart} />
-        <Route exact path="/items" component={BookService} />
+        <Route exact path="/booking" component={BookService} />
         <ProtectedRoute path="/user" isAuth={token} component={UserProfile} />
       </Switch>
     </div>

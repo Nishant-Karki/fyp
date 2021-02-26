@@ -22,6 +22,7 @@ import FormControl from "@material-ui/core/FormControl";
 import { BsSearch } from "react-icons/bs";
 import { Select } from "@material-ui/core";
 import { Menu } from "@material-ui/core";
+import { List } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -188,6 +189,17 @@ export default function useCustomForm() {
         <FormControl>
           <InputLabel id="dropdown">Specialist</InputLabel>
           <Select
+            MenuProps={{
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "left",
+              },
+              transformOrigin: {
+                vertical: "top",
+                horizontal: "left",
+              },
+              getContentAnchorEl: null,
+            }}
             labelId="Specialist"
             id="specialist-id"
             value={specialist}
@@ -196,18 +208,22 @@ export default function useCustomForm() {
             style={{
               marginBottom: "1rem",
               minWidth: "5rem",
+              display: "flex",
+              flexDirection: "column",
             }}
             {...rest}
           >
+            {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
             {values.map((value) => (
               <MenuItem
                 key={value.id}
                 value={value.id}
-                style={{ display: "flex", flexDirection: "column" }}
+                onChange={handleSpecialist}
               >
                 {value.name}
               </MenuItem>
             ))}
+            {/* </div> */}
           </Select>
         </FormControl>
       </MuiThemeProvider>
