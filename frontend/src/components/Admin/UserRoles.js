@@ -7,22 +7,36 @@ import {
   InputAdornment,
   TextField,
   Grid,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  MenuItem,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BsSearch } from "react-icons/bs";
 import axios from "axios";
 import PopUp from "../common/PopUp";
-import { RadioGroup } from "@material-ui/core";
-import { FormControlLabel } from "@material-ui/core";
-import { Radio } from "@material-ui/core";
 import CustomSnackbar from "../common/CustomSnackbar";
 import AdminDashboard from "./AdminDashboard";
+import CustomToolbar from "../common/CustomToolbar";
+import { useDispatch, useSelector } from "react-redux";
+import { AiFillDelete } from "react-icons/ai";
+import { ListItem } from "@material-ui/core";
+import {
+  fetchStaffs,
+  demoteStaff,
+  fetchAdmin,
+  demoteAdmin,
+} from "../../redux/Booking/booking-actions";
 
 export default function UserRoles() {
   //state for snackbar
   const [response, setResponse] = useState();
   const [snackbar, setSnackbar] = useState(false);
   const [snackType, setSnackType] = useState();
+
+  //popup for demoting staff
+  const [deletePopUp, setDeletePopUp] = useState(false);
 
   //for popup
   const [openPopUp, setOpenPopUp] = useState(false);
@@ -35,6 +49,18 @@ export default function UserRoles() {
 
   //data from backend
   const [userData, setUserData] = useState(null);
+  const [userId, setUserId] = useState(null);
+  // const [prevRole, setPrevRole] = useState(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchStaffs());
+    dispatch(fetchAdmin());
+  }, []);
+
+  const staffsAvailable = useSelector((state) => state.booking.staffs);
+  const adminsAvailable = useSelector((state) => state.booking.admins);
 
   const fetchUser = () => {
     axios.post("/userRole", { email: value }).then((res) => {
@@ -43,6 +69,10 @@ export default function UserRoles() {
       setResponse(res.data.message);
       setSnackType(res.data.type);
     });
+    setTimeout(() => {
+      dispatch(fetchStaffs());
+      dispatch(fetchAdmin());
+    }, 1000);
   };
 
   const updateUser = (id) => {
@@ -55,6 +85,34 @@ export default function UserRoles() {
         .then((res) => setUserData(res.data.result));
     });
     setOpenPopUp(false);
+    setTimeout(() => {
+      dispatch(fetchStaffs());
+      dispatch(fetchAdmin());
+    }, 1000);
+  };
+  const demoteAdmins = () => {
+    setDeletePopUp(false);
+    console.log(userId);
+    dispatch(demoteAdmin(userId));
+    setTimeout(() => {
+      dispatch(fetchStaffs());
+      dispatch(fetchAdmin());
+    }, 1000);
+  };
+
+  const demoteStaffs = () => {
+    dispatch(demoteStaff(userId));
+    setDeletePopUp(false);
+    // console.log(prevRole);
+    // axios.post("/demoteStaff", { id: id }).then((res) => {
+    setTimeout(() => {
+      dispatch(fetchStaffs());
+      dispatch(fetchAdmin());
+    }, 1000);
+    // setSnackbar(true);
+    // setResponse(res.data.message);
+    // setSnackType(res.data.type);
+    // });
   };
   return (
     <AdminDashboard>
@@ -126,7 +184,9 @@ export default function UserRoles() {
                   <Typography variant="body1">Username</Typography>
                 </Grid>
                 <Grid item xs={7}>
-                  <Typography variant="body1">{item.name}</Typography>
+                  <Typography variant="body1">
+                    {item.fname} {item.lname}
+                  </Typography>
                 </Grid>
                 <Grid item xs={5}>
                   <Typography variant="body1">Email id</Typography>
@@ -198,6 +258,102 @@ export default function UserRoles() {
             </PopUp>
           </Box>
         ))}
+      <Grid container spacing={3} style={{ marginTop: "4rem" }}>
+        <Grid item xs={12} md={6}>
+          <Paper>
+            <CustomToolbar variant="regular" title="Staffs Available" />
+            {!staffsAvailable > 0 && (
+              <ListItem>
+                <Typography variant="body2" style={{ padding: "0.5rem" }}>
+                  No Records Available
+                </Typography>
+              </ListItem>
+            )}
+            {staffsAvailable.map((staff) => (
+              <ListItem
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <Typography variant="body2">
+                  {staff.fname} {staff.lname}
+                </Typography>
+                <Typography
+                  type="button"
+                  variant="body2"
+                  color="error"
+                  onClick={() => {
+                    setUserId(staff.user_id);
+                    // setPrevRole(staff.role);
+                    setDeletePopUp(true);
+                  }}
+                >
+                  <AiFillDelete size="20" style={{ marginBottom: "0.4rem" }} />
+                </Typography>
+                <PopUp
+                  title="Demote Staff"
+                  openPopup={deletePopUp}
+                  setOpenPopup={setDeletePopUp}
+                >
+                  <Typography color="error">
+                    Note : Staff will be demoted to client and will be unable to
+                    use features available for staffs.
+                  </Typography>
+                  <Box marginTop="1rem">
+                    <Button onClick={() => demoteStaffs()}>Procceed</Button>
+                    <Button onClick={() => setDeletePopUp(false)}>Abort</Button>
+                  </Box>
+                </PopUp>
+              </ListItem>
+            ))}
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Paper>
+            {!adminsAvailable > 0 && (
+              <ListItem>
+                <Typography variant="body2" style={{ padding: "0.5rem" }}>
+                  No Records Available
+                </Typography>
+              </ListItem>
+            )}
+            <CustomToolbar variant="regular" title="Admins" />
+            {adminsAvailable.map((admin) => (
+              <ListItem
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <Typography variant="body2">
+                  {admin.fname} {admin.lname}
+                </Typography>
+                <Typography
+                  type="button"
+                  variant="body2"
+                  color="error"
+                  onClick={() => {
+                    setUserId(admin.user_id);
+                    setDeletePopUp(true);
+                  }}
+                >
+                  <AiFillDelete size="20" style={{ marginBottom: "0.4rem" }} />
+                </Typography>
+                <PopUp
+                  title="Demote Admin"
+                  openPopup={deletePopUp}
+                  setOpenPopup={setDeletePopUp}
+                >
+                  <Typography color="error">
+                    Note : Admin will be demoted to client and will be unable to
+                    use features available for Admins.
+                  </Typography>
+                  <Box marginTop="1rem">
+                    <Button onClick={() => demoteAdmins()}>Procceed</Button>
+                    <Button onClick={() => setDeletePopUp(false)}>Abort</Button>
+                  </Box>
+                </PopUp>
+              </ListItem>
+            ))}
+          </Paper>
+        </Grid>
+      </Grid>
     </AdminDashboard>
   );
 }

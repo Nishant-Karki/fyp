@@ -6,6 +6,12 @@ import {
   DELETE_SERVICE,
   UPDATE_SERVICE,
   ADD_SERVICE,
+  FETCH_STAFFS,
+  DEMOTE_STAFFS,
+  FETCH_ADMIN,
+  DEMOTE_ADMIN,
+  FETCH_APPOINTMENT,
+  FETCH_USER_APPOINTMENTS,
 } from "./booking-types";
 import axios from "axios";
 
@@ -17,6 +23,86 @@ export const fetchServices = () => async (dispatch) => {
       payload: res.data.result,
       // payload: res,
     });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const fetchStaffs = () => async (dispatch) => {
+  try {
+    const res = await axios.get("/getStaffs");
+
+    dispatch({
+      type: FETCH_STAFFS,
+      payload: res.data.result,
+      // payload: res,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const demoteStaff = (id) => async (dispatch) => {
+  try {
+    await axios.post("/demoteStaff", { id: id });
+    dispatch({
+      type: DEMOTE_STAFFS,
+      payload: id,
+      // payload: res,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const fetchAdmin = () => async (dispatch) => {
+  try {
+    const res = await axios.get("/getAdmin");
+    dispatch({
+      type: FETCH_ADMIN,
+      payload: res.data.result,
+      // payload: res,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const demoteAdmin = (id) => async (dispatch) => {
+  try {
+    await axios.post("/demoteAdmin", { id: id });
+    dispatch({
+      type: DEMOTE_ADMIN,
+      payload: id,
+      // payload: res,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const fetchAppointment = () => async (dispatch) => {
+  try {
+    const res = await axios.get("/getAppointment");
+    dispatch({
+      type: FETCH_APPOINTMENT,
+      payload: res.data.result,
+      // payload: res,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const fetchUserAppointment = (id) => async (dispatch) => {
+  try {
+    if (id !== undefined) {
+      const res = await axios.post("/getAppointment", { id: id });
+      console.log(res);
+      dispatch({
+        type: FETCH_USER_APPOINTMENTS,
+        payload: res.data.result,
+      });
+    }
   } catch (err) {
     console.log(err);
   }
@@ -34,13 +120,16 @@ export const addService = (item, image) => async (dispatch) => {
   }
 };
 
-export const bookAppointment = (itemID, value) => {
+export const bookAppointment = (serviceId, userId, time, specialist) => {
+  // axios.post("/bookAppointment", {
+  //   serviceId: serviceId,
+  //   userId: userId,
+  //   time: time,
+  //   specialist: specialist,
+  // });
   return {
     type: BOOK_APPOINTMENT,
-    payload: {
-      id: itemID,
-      qty: value,
-    },
+    payload: {},
   };
 };
 
@@ -69,11 +158,11 @@ export const loadCurrentService = (item) => {
   };
 };
 
-export const updateService = (image, id) => {
-  // axios.post("/updateService", );
+export const updateService = () => async (dispatch) => {
+  const res = await axios.get("/addServices");
   return {
     type: UPDATE_SERVICE,
-    payload: { image: image, id: id },
+    payload: res.data.result,
   };
   // const res = await axios.get("/addServices");
   // console.log(res);

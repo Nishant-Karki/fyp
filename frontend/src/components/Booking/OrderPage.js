@@ -1,50 +1,124 @@
-import React, { useState } from "react";
-import {
-  Container,
-  Grid,
-  Box,
-  Typography,
-  Button,
-  TextField,
-} from "@material-ui/core";
-
+import React, { useEffect, useState } from "react";
+import { Container, Grid, Box, Typography, Button } from "@material-ui/core";
 import { FaCheckCircle } from "react-icons/fa";
 import { SiCashapp } from "react-icons/si";
 
 import "../scss/orderpage.scss";
 import useCustomForm from "../common/useCustomForm";
+import CustomSnackbar from "../common/CustomSnackbar";
 
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { useSelector } from "react-redux";
-import { MenuItem } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStaffs } from "../../redux/Booking/booking-actions";
+import axios from "axios";
+import moment from "moment";
 
 function OrderPage() {
-  const { CustomDatePicker, DropdownSelect, CustomDateTime } = useCustomForm();
+  const { DropdownSelect, CustomDatePicker } = useCustomForm();
+
+  useEffect(() => {
+    dispatch(fetchStaffs());
+  }, []);
 
   const item = useSelector((state) => state.booking.currentItem);
+  const userData = useSelector((state) => state.login.userData);
 
-  const [specialist, setSpecialist] = useState("");
+  const [choosenTime, setChoosenTime] = useState(null);
+  const [choosenSpecialist, setChoosenSpecialist] = useState(null);
 
-  const SpecialistsAvailable = [
-    { id: 1, name: "Luffy" },
-    { id: 2, name: "Chopper" },
-    { id: 3, name: "Nami" },
-    { id: 4, name: "Zoro" },
-    { id: 5, name: "Sanji" },
-  ];
+  const appointments = useSelector((state) => state.booking.appointments);
+
+  const [response, setResponse] = useState();
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackType, setSnackType] = useState();
+
+  const dispatch = useDispatch();
+
+  const staffs = useSelector((state) => state.booking.staffs);
+  const specialist = staffs.map((item) => ({
+    value: item.fname,
+    id: item.user_id,
+  }));
+
+  //to get tommorows date
+  const todayMoment = moment();
+  const tommorowMoment = todayMoment.clone().add(1, "days");
+  const tommorowDate = moment.utc(tommorowMoment._d).format("YYYY-MM-DD");
+
+  const [appointmentDate, setappointmentDate] = useState(tommorowDate);
+
+  // const SpecialistsAvailable = [
+  //   { id: 1, name: "Luffy" },
+  //   { id: 2, name: "Chopper" },
+  //   { id: 3, name: "Nami" },
+  //   { id: 4, name: "Zoro" },
+  //   { id: 5, name: "Sanji" },
+  // ];
+
   const TimeAvailable = [
-    { id: 1, name: "8-9" },
-    { id: 2, name: "9-10" },
-    { id: 3, name: "10-11" },
-    { id: 4, name: "11-12" },
-    { id: 5, name: "12-13" },
+    { value: "9:00-10:00", id: "9-10" },
+    { value: "10:00-11:00", id: "10-11" },
+    { value: "11:00-12:00", id: "11-12" },
+    { value: "2:00-3:00", id: "2-3" },
+    { value: "3:00-4:00", id: "3-4" },
+    { value: "4:00-5:00", id: "4-5" },
   ];
+  let history = useHistory();
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    let userId;
+    let timeId;
+
+    // TimeAvailable.map((item) => (timeId = item.id));
+
+    if (userData.length > 0) {
+      if (choosenSpecialist !== null) {
+        userData.map((user) => (userId = user.user_id));
+        axios
+          .post("/bookAppointment", {
+            serviceId: item.service_id,
+            userId: userId,
+            time: choosenTime,
+            date: appointmentDate,
+            specialist: choosenSpecialist,
+          })
+          .then((res) => {
+            setSnackbar(true);
+            setResponse(res.data.message);
+            setSnackType(res.data.type);
+            if (res.data.type === "success") {
+              setTimeout(() => {
+                history.goBack();
+              }, 2000);
+            }
+          });
+        // dispatch(
+        //   bookAppointment(item.service_id, userId, time, choosenSpecialist)
+        // );
+      } else {
+        setSnackbar(true);
+        setResponse("Please provide all the Details");
+        setSnackType("error");
+      }
+    } else {
+      history.push("/login");
+    }
+  };
 
   return (
     <>
+      {response && response.length > 0 && (
+        <CustomSnackbar
+          snackbarOpen={snackbar}
+          setSnackbar={setSnackbar}
+          snackType={snackType}
+          snackContent={response}
+        />
+      )}
       <Container style={{ paddingTop: "8rem" }}>
         <Grid container spacing={4}>
-          <Grid item sm={7} md={6}>
+          <Grid item sm={12} md={6} style={{ marginTop: "3rem" }}>
             <Box
               style={{
                 borderRadius: "0.7rem",
@@ -72,60 +146,67 @@ function OrderPage() {
               </Typography>
             </Box>
           </Grid>
-          <Grid item sm={5} md={6}>
+          <Grid item sm={12} md={6}>
             <Box>
-              <Typography variant="h4" style={{ fontWeight: "bold" }}>
+              <Typography
+                variant="h4"
+                style={{ fontWeight: "bold", marginBottom: "1rem" }}
+              >
                 {item.name}
               </Typography>
+
               <Box className="product-info">
                 <Box className="price">Rs. {item.price}</Box>
-                <Typography variant="subtitle2" className="price-subText">
+                <Typography variant="caption" className="price-subText">
                   Exclusive of taxes
                 </Typography>
               </Box>
               <Box className="description">
                 <Typography>{item.description}</Typography>
               </Box>
+              <Box marginBottom="1rem" marginTop="1rem">
+                <Typography htmlFor="date-picker" variant="caption">
+                  Choose Date
+                </Typography>
+                <br />
+                <CustomDatePicker
+                  name="date"
+                  id="date-picker"
+                  disablePast
+                  style={{ width: "18rem" }}
+                  value={appointmentDate}
+                  onChange={(value) => setappointmentDate(value)}
+                />
+              </Box>
 
-              <select
-                style={{
-                  backgroundColor: "#424242",
-                  border: "none",
-                  color: "white",
-                  width: "10rem",
-                  height: "2rem",
-                  borderRadius: "0.4rem",
-                  marginTop: "1rem",
-                  marginBottom: "1rem",
-                }}
-              >
-                {SpecialistsAvailable.map((item) => (
-                  <option style={{ color: "white", border: "none" }}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                style={{
-                  backgroundColor: "#424242",
-                  border: "none",
-                  color: "white",
-                  width: "10rem",
-                  height: "2rem",
-                  borderRadius: "0.4rem",
-                  marginTop: "1rem",
-                  marginBottom: "1rem",
-                }}
-              >
-                {TimeAvailable.map((item) => (
-                  <option style={{ color: "white", border: "none" }}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
+              {specialist && (
+                <DropdownSelect
+                  title="Choose Specialist"
+                  name="specialist"
+                  id="specialist"
+                  value={choosenSpecialist}
+                  array={specialist}
+                  // defaultValue="Random"
+                  onChange={(e) => {
+                    setChoosenSpecialist(e.target.value);
+                  }}
+                />
+              )}
+              {TimeAvailable && (
+                <DropdownSelect
+                  title="Time Available"
+                  name="time"
+                  id="time"
+                  value={choosenTime}
+                  array={TimeAvailable}
+                  onChange={(e) => {
+                    setChoosenTime(e.target.value);
+                  }}
+                />
+              )}
 
               <Button
+                onClick={onSubmit}
                 style={{
                   backgroundColor: "teal",
                   color: "white",
@@ -133,11 +214,11 @@ function OrderPage() {
                   padding: "0.6rem",
                   borderRadius: "0.7rem",
                   margin: "0.5rem",
+                  marginLeft: "2rem",
                 }}
               >
                 Book Appointment
               </Button>
-              <Typography></Typography>
             </Box>
           </Grid>
         </Grid>

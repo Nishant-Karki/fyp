@@ -23,6 +23,8 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import AdminDashboard from "./AdminDashboard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../redux/Ecommerce/eStore-actions";
+import { fetchAppointment } from "../../redux/Booking/booking-actions";
+import { moment } from "moment";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -50,41 +52,28 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export default function ProductsTable() {
-  //state for delete and edit popup for selected row
-  const [DeletePopUp, setDeletePopUp] = useState(false);
-  const [editPopUp, setEditPopUp] = useState(false);
-
-  //to send the item to edit or delete
-  const [actionItem, setActionItem] = useState({});
-
+export default function AppointmentTable() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const products = useSelector((state) => state.store.products);
-
+  const services = useSelector((state) => state.booking.services);
   //store array from database
-  const [records, setRecords] = useState(products);
+  const [records, setRecords] = useState(services);
   const dispatch = useDispatch();
 
+  console.log(services);
   useEffect(() => {
     setIsLoading(true);
+    dispatch(fetchAppointment());
     setTimeout(() => {
       dispatch(fetchProducts());
       setIsLoading(false);
     }, 1500);
   }, [records]);
 
-  const { DeleteItem, EditItem } = useTableActions();
   return (
     <AdminDashboard>
-      <AddItem
-        title="Add Product"
-        postRoute="addProducts"
-        setIsLoading={setIsLoading}
-        setRecords={setRecords}
-      />
       <MaterialTable
-        title="Product Table"
+        title="Appointment Table"
         icons={tableIcons}
         isLoading={isLoading}
         columns={[
@@ -95,61 +84,14 @@ export default function ProductsTable() {
               return <p>{rowData.tableData.id + 1}</p>;
             },
           },
-          { field: "name", title: " Product Name" },
-          { field: "price", title: "Price" },
-          {
-            field: "image",
-            title: "Image",
-            sorting: false,
-            render: (rowData) => (
-              <img
-                src={require(`../../images/products/${rowData.image}`).default}
-                style={{ width: 50, height: 60, borderRadius: "0.3rem" }}
-                alt="product"
-              />
-            ),
-          },
-          { field: "description", title: "Description", sorting: false },
+          { field: "serviceName", title: "Service Name" },
+          { field: "servicePrice", title: "Price" },
+          { field: "staff_name", title: "Staff" },
+          { field: "date", title: "Date" },
+          { field: "time", title: "Time" },
+          { field: "client", title: "Client" },
         ]}
         data={records}
-        actions={[
-          {
-            icon: Edit,
-            tooltip: "Edit Product",
-            onClick: (event, rowData) => {
-              setActionItem(rowData);
-              setEditPopUp(true);
-            },
-          },
-          {
-            icon: DeleteOutline,
-            tooltip: "Delete Product",
-            onClick: (event, rowData) => {
-              setActionItem(rowData);
-              setDeletePopUp(true);
-            },
-          },
-        ]}
-        options={{
-          actionsColumnIndex: -1,
-        }}
-      />
-      <EditItem
-        editPopUp={editPopUp}
-        setEditPopUp={setEditPopUp}
-        item={actionItem}
-        imagePath="products"
-        route="updateProduct"
-        setIsLoading={setIsLoading}
-        setRecords={setRecords}
-      />
-      <DeleteItem
-        DeletePopUp={DeletePopUp}
-        setDeletePopUp={setDeletePopUp}
-        item={actionItem}
-        route={"deleteProduct"}
-        setIsLoading={setIsLoading}
-        setRecords={setRecords}
       />
     </AdminDashboard>
   );

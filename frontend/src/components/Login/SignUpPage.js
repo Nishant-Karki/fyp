@@ -232,6 +232,7 @@ function SignUpPage() {
                         label="Date of Birth"
                         name="dob"
                         disableFuture
+                        fullWidth
                         minDate={new Date("1950-01-01")}
                         value={values.dob}
                         setFieldValue={setFieldValue}

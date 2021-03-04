@@ -136,6 +136,7 @@ function Navbar({ cart, userData }) {
                           {userData.length > 0 ? (
                             userData.map((item) => (
                               <Avatar
+                                key={item.user_id}
                                 style={{ width: "1.7rem", height: "1.7rem" }}
                                 src={
                                   item.image != null
@@ -170,26 +171,44 @@ function Navbar({ cart, userData }) {
                         </Box>
                       </Link>
                       <Divider />
-                      <Link to="/" className="link">
-                        <Box
-                          component="div"
-                          padding="0.5rem"
-                          display="flex"
-                          className="icon-styless"
-                          onClick={() => dispatch(logout())}
-                        >
-                          <AiOutlineLogout size={22} />
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            style={{
-                              marginLeft: "0.8rem",
-                            }}
-                          >
-                            Logout
-                          </Typography>
-                        </Box>
-                      </Link>
+                      <Box
+                        component="div"
+                        padding="0.3rem"
+                        marginLeft="0.4rem"
+                        display="flex"
+                        className="icon-styless"
+                        onClick={() => dispatch(logout())}
+                      >
+                        {userData.length > 0 ? (
+                          userData.map((item) => (
+                            <Link to="" key={item.user_id} className="link">
+                              <AiOutlineLogout size={22} />
+                              <Typography
+                                component="span"
+                                variant="body2"
+                                style={{
+                                  marginLeft: "0.8rem",
+                                }}
+                              >
+                                Logout
+                              </Typography>
+                            </Link>
+                          ))
+                        ) : (
+                          <Link to="/login" className="link">
+                            <AiOutlineLogout size={22} />
+                            <Typography
+                              component="span"
+                              variant="body2"
+                              style={{
+                                marginLeft: "0.8rem",
+                              }}
+                            >
+                              LogIn
+                            </Typography>
+                          </Link>
+                        )}
+                      </Box>
                     </Paper>
                   </Box>
                 </li>

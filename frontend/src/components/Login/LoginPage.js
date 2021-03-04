@@ -23,6 +23,7 @@ import useCustomForm from "../common/useCustomForm";
 import { useDispatch, useSelector } from "react-redux";
 import { userData, authToken } from "../../redux/Login/login-actions";
 import CustomSnackbar from "../common/CustomSnackbar";
+import { fetchUserAppointment } from "../../redux/Booking/booking-actions";
 
 const useStyles = makeStyles({
   contactContainer: { marginTop: "10%", marginBottom: "10%" },
@@ -77,7 +78,7 @@ function LoginPage() {
 
   const dispatch = useDispatch();
   const Token = useSelector((state) => state.login.authToken);
-
+  const userData = useSelector((state) => state.login.userData);
   const { CustomTextField } = useCustomForm();
 
   const onSubmit = (values) => {
@@ -89,32 +90,42 @@ function LoginPage() {
         setResponse(response.data.message);
         setSnackType(response.data.type);
         if (response.data.auth === true) {
+          setTimeout(() => {
+            history.goBack();
+          }, 1500);
           dispatch(userData(response.data.result));
           dispatch(authToken(response.data.token));
         }
       });
+    let id;
+    userData !== undefined && userData.map((item) => (id = item.user_id));
+    dispatch(fetchUserAppointment(id));
   };
 
   useEffect(() => {
     axios.get("/login").then((response) => {
+      let id;
+      userData !== undefined && userData.map((item) => (id = item.user_id));
+      dispatch(fetchUserAppointment(id));
       if (response.data.loggedIn === true && Token != null) {
         setSnackbar(true);
         setResponse(response.data.message);
         setSnackType(response.data.type);
-        setTimeout(() => {
-          history.push("/");
-        }, 1500);
+        response.data.type === "info" &&
+          setTimeout(() => {
+            history.goBack();
+          }, 1500);
       }
     });
   }, []);
 
   const userAuthenticated = async () => {
     await axios
-      .post("/isUserAuth")
+      .get("/isUserAuth")
       .then((response) => {
         response.data.auth === true &&
           setTimeout(() => {
-            history.push("/");
+            history.goBack();
           }, 1500);
       })
       .catch((err) => console.log(err));

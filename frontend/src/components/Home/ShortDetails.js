@@ -52,8 +52,8 @@ function ShortDetails() {
                 <Typography>Saturday:</Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography>8:00 - 20:00</Typography>
-                <Typography>9:00 - 18:00</Typography>
+                <Typography>9:00 - 17:00</Typography>
+                <Typography>9:00 - 17:00</Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -78,7 +78,6 @@ function ShortDetails() {
           <Grid item xs={12} sm={6} md={3} className={classes.gridTop}>
             <Typography variant="h6">LOCATION</Typography>
             <hr className={classes.hrow} />
-            <Typography>Jagati, Bhaktapur</Typography>
             <Typography>Jagati, Bhaktapur</Typography>
           </Grid>
         </Grid>

@@ -5,6 +5,7 @@ import {
   MuiThemeProvider,
   TextField,
   Typography,
+  Box,
   InputAdornment,
 } from "@material-ui/core";
 
@@ -121,7 +122,6 @@ export default function useCustomForm() {
             value={value}
             autoOk
             {...props}
-            fullWidth
             color="secondary"
             format="yyyy-dd-MM"
             size="small"
@@ -179,54 +179,44 @@ export default function useCustomForm() {
   };
 
   const DropdownSelect = (props) => {
-    const { values, setSpecialist, specialist, ...rest } = props;
-
-    const handleSpecialist = (e) => {
-      setSpecialist(e.target.value);
-    };
+    const { array, id, title, defaultValue, name, onChange, ...rest } = props;
     return (
-      <MuiThemeProvider theme={customTheme}>
-        <FormControl>
-          <InputLabel id="dropdown">Specialist</InputLabel>
-          <Select
-            MenuProps={{
-              anchorOrigin: {
-                vertical: "bottom",
-                horizontal: "left",
-              },
-              transformOrigin: {
-                vertical: "top",
-                horizontal: "left",
-              },
-              getContentAnchorEl: null,
-            }}
-            labelId="Specialist"
-            id="specialist-id"
-            value={specialist}
-            onChange={handleSpecialist}
-            fullWidth
-            style={{
-              marginBottom: "1rem",
-              minWidth: "5rem",
-              display: "flex",
-              flexDirection: "column",
-            }}
-            {...rest}
-          >
-            {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
-            {values.map((value) => (
-              <MenuItem
-                key={value.id}
-                value={value.id}
-                onChange={handleSpecialist}
-              >
-                {value.name}
-              </MenuItem>
-            ))}
-            {/* </div> */}
-          </Select>
-        </FormControl>
-      </MuiThemeProvider>
+      <Box>
+        <Typography variant="caption">{title}</Typography>
+        <br />
+        <select
+          name={name}
+          htmlFor={id}
+          onChange={onChange}
+          {...rest}
+          style={{
+            backgroundColor: "#424242",
+            border: "none",
+            color: "white",
+            width: "18rem",
+            height: "2.3rem",
+            borderRadius: "0.4rem",
+            marginBottom: "1rem",
+          }}
+        >
+          <option
+            id={id}
+            value=""
+            label="- - - - - - - "
+            style={{ color: "white", border: "none" }}
+          />
+
+          {array.map((item) => (
+            <option
+              id={id}
+              value={item.value}
+              key={item.id}
+              style={{ color: "white", border: "none" }}
+              label={item.value}
+            />
+          ))}
+        </select>
+      </Box>
     );
   };
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import LoginPage from "../components/Login/LoginPage";
 
@@ -15,7 +15,8 @@ import Admin from "../components/Admin/Admin";
 import UserRoles from "../components/Admin/UserRoles";
 import ProductsTable from "../components/Admin/ProductsTable";
 import ServicesTable from "../components/Admin/ServicesTable";
-import Inventory from "../components/Inventory/Inventory";
+import AppointmentTable from "../components/Admin/AppointmentTable";
+import EcommerceTable from "../components/Admin/EcommerceTable";
 
 export default function Routes() {
   const token = useSelector((state) => state.login.authToken);
@@ -39,6 +40,16 @@ export default function Routes() {
         path="/admin/product"
         isAuth={token}
         component={ServicesTable}
+      />
+      <ProtectedRoute
+        path="/admin/appointment"
+        isAuth={token}
+        component={AppointmentTable}
+      />
+      <ProtectedRoute
+        path="/admin/ecommerce"
+        isAuth={token}
+        component={EcommerceTable}
       />
       <ProtectedRoute path="/admin" isAuth={token} component={Admin} />
       <RoutesWithNavbar />

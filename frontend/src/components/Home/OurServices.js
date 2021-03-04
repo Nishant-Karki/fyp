@@ -34,7 +34,7 @@ function OurServices() {
             </Typography>
             <Grid container spacing={6} className={classes.gridContainer}>
               <Grid item xs={12} md={6}>
-                <Link to="/items" className={classes.link}>
+                <Link to="/booking" className={classes.link}>
                   <Box textAlign="center">
                     <img
                       src={

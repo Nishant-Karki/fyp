@@ -75,7 +75,6 @@ export default function ProductsTable() {
       setIsLoading(false);
     }, 1500);
   }, [records]);
-
   const { DeleteItem, EditItem } = useTableActions();
   return (
     <AdminDashboard>
@@ -90,7 +89,13 @@ export default function ProductsTable() {
         icons={tableIcons}
         isLoading={isLoading}
         columns={[
-          { field: "service_id", title: "ID" },
+          {
+            field: "tableData.id + 1",
+            title: "Id",
+            render: (rowData) => {
+              return <p>{rowData.tableData.id + 1}</p>;
+            },
+          },
           { field: "name", title: " Service Name" },
           { field: "price", title: "Price" },
           {
@@ -146,7 +151,6 @@ export default function ProductsTable() {
         route={"deleteService"}
         setRecords={setRecords}
         setIsLoading={setIsLoading}
-        c
       />
     </AdminDashboard>
   );

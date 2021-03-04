@@ -16,11 +16,17 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
-import { AiFillShop } from "react-icons/ai";
-import { SiProducthunt } from "react-icons/si";
-import { FaUserCircle } from "react-icons/fa";
+import { AiFillShop, AiOutlineHome } from "react-icons/ai";
+import { SiProducthunt, SiGooglecalendar } from "react-icons/si";
+import { BsBag } from "react-icons/bs";
+import {
+  RiScissors2Fill,
+  RiMapPinUserLine,
+  RiCalendarCheckLine,
+} from "react-icons/ri";
+import { FaUserCircle, FaShoppingBag } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
+import { GiShoppingCart } from "react-icons/gi";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -164,25 +170,30 @@ export default function AdminDashboard({ children }) {
         <Divider />
         <List style={{ display: "flex", flexDirection: "column" }}>
           <ListItemWithLink path="/admin" title="Dashboard">
-            <SiProducthunt size={20} />
+            <AiOutlineHome size={20} />
           </ListItemWithLink>
 
-          <ListItemWithLink path="/admin/service" title="Services">
-            <SiProducthunt size={20} />
+          <ListItemWithLink path="/admin/userRole" title="User Role">
+            <RiMapPinUserLine size={20} />
           </ListItemWithLink>
+        </List>
 
-          <ListItemWithLink path="/admin/product" title="Products">
-            <AiFillShop size={20} />
+        <Divider />
+        <List style={{ display: "flex", flexDirection: "column" }}>
+          <ListItemWithLink path="/admin/product" title="Services">
+            <RiScissors2Fill size={20} />
+          </ListItemWithLink>
+          <ListItemWithLink path="/admin/service" title="Products">
+            <BsBag size={20} />
           </ListItemWithLink>
         </List>
         <Divider />
         <List style={{ display: "flex", flexDirection: "column" }}>
-          <ListItemWithLink path="/admin/userRole" title="User Role">
-            <FaUserCircle size={20} />
+          <ListItemWithLink path="/admin/appointment" title="Appointments">
+            <RiCalendarCheckLine size={20} />
           </ListItemWithLink>
-
-          <ListItemWithLink path="/admin/product" title="Products">
-            <FaUserCircle size={20} />
+          <ListItemWithLink path="/admin/ecommerce" title="Ecommerce">
+            <GiShoppingCart size={20} />
           </ListItemWithLink>
         </List>
       </Drawer>

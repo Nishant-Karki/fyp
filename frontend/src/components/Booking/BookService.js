@@ -13,19 +13,27 @@ import { Link } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
+  fetchAppointment,
   fetchServices,
+  fetchStaffs,
+  fetchUserAppointment,
   loadCurrentService,
 } from "../../redux/Booking/booking-actions";
 
 function BookService() {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.login.userData);
+  useEffect(() => {
+    let id;
+    userData !== undefined && userData.map((item) => (id = item.user_id));
+    dispatch(fetchUserAppointment(id));
+    dispatch(fetchServices());
+    dispatch(fetchStaffs());
+    dispatch(fetchAppointment());
+  }, []);
 
   const services = useSelector((state) => state.booking.services);
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchServices());
-  }, []);
   return (
     <>
       <Container maxWidth="lg" style={{ marginTop: "10rem" }}>

@@ -76,6 +76,24 @@ app.use(profileImageRouter);
 const accountDeleteRouter = require("./routes/accountDelete");
 app.use(accountDeleteRouter);
 
+const demoteStaffRotuer = require("./routes/demoteStaff");
+app.use(demoteStaffRotuer);
+
+const staffsDetailsRouter = require("./routes/staffDetails");
+app.use(staffsDetailsRouter);
+
+const demoteAdminRotuer = require("./routes/demoteAdmin");
+app.use(demoteAdminRotuer);
+
+const adminDetailsRouter = require("./routes/adminDetail");
+app.use(adminDetailsRouter);
+
+const bookAppointmentRouter = require("./routes/bookAppointment");
+app.use(bookAppointmentRouter);
+
+const appointmentDetailsRouter = require("./routes/appointmentDetails");
+app.use(appointmentDetailsRouter);
+
 app.get("/", (req, res) => {
   res.json({ result: "Working fine" });
 });

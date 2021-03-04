@@ -36,6 +36,7 @@ export default function useTableActions() {
     } = props;
 
     const onSubmit = (values) => {
+      setIsLoading(true);
       // console.log(values.image);
       console.log(values.image);
       let image_value = values.image === null ? "old" : values.image;
@@ -46,13 +47,10 @@ export default function useTableActions() {
       data.append("id", item.service_id);
       data.append("image", image_value);
 
-      setEditPopUp(false);
-      setIsLoading(true);
       if (route === "updateService") {
         // setRecords(updatedService);
-        axios
-          .post("/updateService", data)
-          .then((res) => dispatch(updateService(res.data.image, res.data.id)));
+        axios.post("/updateService", data);
+        // .then((res) => dispatch(updateService()));
         // dispatch(fetchServices());
         axios.get("/addServices").then((res) => {
           setRecords(res.data.result);
@@ -62,15 +60,17 @@ export default function useTableActions() {
           //  setRecords(updatedService);
         }, 1500);
       } else {
-        dispatch(updateProduct(values, item.product_id));
+        axios.post("/updateService", data);
+
         axios.get("/addProducts").then((res) => setRecords(res.data.result));
-        dispatch(fetchProducts());
+        // dispatch(fetchProducts());
         setTimeout(() => {
           setIsLoading(false);
           //  setRecords(updatedService);
         }, 1500);
         // setRecords(updatedProduct);
       }
+      setEditPopUp(false);
     };
     return (
       <PopUp

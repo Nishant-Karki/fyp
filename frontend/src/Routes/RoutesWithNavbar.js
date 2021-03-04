@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import UserRoles from "../components/Admin/UserRoles";
 import BookService from "../components/Booking/BookService";
 import OrderPage from "../components/Booking/OrderPage";
+import BookingCart from "../components/Booking/BookingCart";
 
 export default function RoutesWithNavbar() {
   const token = useSelector((state) => state.login.authToken);
@@ -28,11 +29,12 @@ export default function RoutesWithNavbar() {
         <Route exact path="/store/:id" component={ShowItem} />
         {/* <Route exact path="/map" component={} /> */}
         {/* <Route exact path="/user" component={UserProfile} /> */}
-        <ProtectedRoute path="/staff" isAuth={token} component={StaffProfile} />
+        {/* <ProtectedRoute path="/staff" isAuth={token} component={StaffProfile} /> */}
 
         {/* <ProtectedRoute path="/profile" component={UserProfile} isAuth={} /> */}
         {/* <Footer /> */}
         <Route exact path="/booking/:id" component={OrderPage} />
+        <Route exact path="/bookingCart" component={BookingCart} />
         <Route exact path="/cart" component={Cart} />
         <Route exact path="/booking" component={BookService} />
         <ProtectedRoute path="/user" isAuth={token} component={UserProfile} />
