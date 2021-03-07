@@ -68,10 +68,10 @@ export default function ProductsTable() {
 
   useEffect(() => {
     setIsLoading(true);
-    setTimeout(() => {
-      dispatch(fetchProducts());
-      setIsLoading(false);
-    }, 1500);
+    dispatch(fetchProducts());
+    setIsLoading(false);
+    // setTimeout(() => {
+    // }, 1500);
   }, [records]);
 
   const { DeleteItem, EditItem } = useTableActions();

@@ -139,10 +139,10 @@ function Navbar({ cart, userData }) {
                                 key={item.user_id}
                                 style={{ width: "1.7rem", height: "1.7rem" }}
                                 src={
-                                  item.image != null
-                                    ? require(`../../images/profile/${item.image}`)
-                                        .default
-                                    : null
+                                  // item.image != null
+                                  //   ? require(`../../images/profile/${item.image}`)
+                                  //       .default:
+                                  null
                                 }
                               />
                             ))

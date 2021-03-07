@@ -64,16 +64,18 @@ export default function ProductsTable() {
   const [isLoading, setIsLoading] = useState(false);
 
   const services = useSelector((state) => state.booking.services);
+
   const dispatch = useDispatch();
   //store array from database
   const [records, setRecords] = useState(services);
 
   useEffect(() => {
     setIsLoading(true);
-    setTimeout(() => {
-      dispatch(fetchServices());
-      setIsLoading(false);
-    }, 1500);
+    dispatch(fetchServices());
+    setIsLoading(false);
+    // setTimeout(() => {
+    //   console.log(services);
+    // }, 1500);
   }, [records]);
   const { DeleteItem, EditItem } = useTableActions();
   return (

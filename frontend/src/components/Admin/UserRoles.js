@@ -55,8 +55,8 @@ export default function UserRoles() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchStaffs());
     dispatch(fetchAdmin());
+    dispatch(fetchStaffs());
   }, []);
 
   const staffsAvailable = useSelector((state) => state.booking.staffs);
@@ -262,7 +262,7 @@ export default function UserRoles() {
         <Grid item xs={12} md={6}>
           <Paper>
             <CustomToolbar variant="regular" title="Staffs Available" />
-            {!staffsAvailable > 0 && (
+            {staffsAvailable && !staffsAvailable > 0 && (
               <ListItem>
                 <Typography variant="body2" style={{ padding: "0.5rem" }}>
                   No Records Available
@@ -317,7 +317,7 @@ export default function UserRoles() {
               </ListItem>
             )}
             <CustomToolbar variant="regular" title="Admins" />
-            {adminsAvailable.map((admin) => (
+            {adminsAvailable?.map((admin) => (
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >

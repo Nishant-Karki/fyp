@@ -94,6 +94,12 @@ app.use(bookAppointmentRouter);
 const appointmentDetailsRouter = require("./routes/appointmentDetails");
 app.use(appointmentDetailsRouter);
 
+const ecommerceDetailsRouter = require("./routes/ecommerceDetails");
+app.use(ecommerceDetailsRouter);
+
+const cancelAppointmentRouter = require("./routes/cancelAppointment");
+app.use(cancelAppointmentRouter);
+
 app.get("/", (req, res) => {
   res.json({ result: "Working fine" });
 });

@@ -81,8 +81,8 @@ function LoginPage() {
   const userData = useSelector((state) => state.login.userData);
   const { CustomTextField } = useCustomForm();
 
-  const onSubmit = (values) => {
-    axios
+  const onSubmit = async (values) => {
+    await axios
       .post("/login", {
         values,
       })
@@ -96,14 +96,14 @@ function LoginPage() {
           dispatch(userData(response.data.result));
           dispatch(authToken(response.data.token));
         }
+        let id;
+        userData !== undefined && userData.map((item) => (id = item.user_id));
+        dispatch(fetchUserAppointment(id));
       });
-    let id;
-    userData !== undefined && userData.map((item) => (id = item.user_id));
-    dispatch(fetchUserAppointment(id));
   };
 
-  useEffect(() => {
-    axios.get("/login").then((response) => {
+  const loginCheck = async () => {
+    await axios.get("/login").then((response) => {
       let id;
       userData !== undefined && userData.map((item) => (id = item.user_id));
       dispatch(fetchUserAppointment(id));
@@ -117,6 +117,9 @@ function LoginPage() {
           }, 1500);
       }
     });
+  };
+  useEffect(() => {
+    loginCheck();
   }, []);
 
   const userAuthenticated = async () => {

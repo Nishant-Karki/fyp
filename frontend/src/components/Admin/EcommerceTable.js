@@ -4,6 +4,7 @@ import axios from "axios";
 import { forwardRef } from "react";
 import AddItem from "../common/AddItem";
 import useTableActions from "../common/useTableActions";
+import moment from "moment";
 
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
@@ -56,6 +57,9 @@ export default function EcommerceTable() {
 
   const appointments = useSelector((state) => state.booking.appointments);
   //store array from database
+  // let appointments = appointment.map(
+  //   (item) => (item.date = moment(item.date).format("YYYY-MM-DD"))
+  // );
   const [records, setRecords] = useState(appointments);
   const dispatch = useDispatch();
 
@@ -83,9 +87,11 @@ export default function EcommerceTable() {
               return <p>{rowData.tableData.id + 1}</p>;
             },
           },
-          { field: "serviceName", title: "Product Name" },
-          { field: "servicePrice", title: "Price" },
+          { field: "productName", title: "Product Name" },
+          { field: "productPrice", title: "Price" },
+          { field: "date", title: "Date" },
           { field: "client", title: "Client" },
+          { field: "payment", title: "Payment" },
         ]}
         data={records}
       />

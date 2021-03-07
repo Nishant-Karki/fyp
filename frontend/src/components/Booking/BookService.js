@@ -24,10 +24,10 @@ function BookService() {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.login.userData);
   useEffect(() => {
+    dispatch(fetchServices());
     let id;
     userData !== undefined && userData.map((item) => (id = item.user_id));
     dispatch(fetchUserAppointment(id));
-    dispatch(fetchServices());
     dispatch(fetchStaffs());
     dispatch(fetchAppointment());
   }, []);
@@ -39,7 +39,7 @@ function BookService() {
       <Container maxWidth="lg" style={{ marginTop: "10rem" }}>
         <Box>
           <Grid container spacing={2}>
-            {services.map((item) => (
+            {services?.map((item) => (
               <Grid key={item.product_id} item xs={12} sm={6} md={3}>
                 <Paper className="product-container">
                   <Box className="image-container">

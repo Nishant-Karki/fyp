@@ -40,6 +40,7 @@ const shopReducer = (state = INITIAL_STATE, action) => {
                 ...item,
                 qty: action.payload.qty,
                 total: item.qty * item.price,
+                userId: action.payload.userId,
               },
             ],
       };
@@ -68,6 +69,7 @@ const shopReducer = (state = INITIAL_STATE, action) => {
     case actionTypes.UPDATE_PRODUCT:
       return {
         ...state,
+        products: action.payload,
       };
     default:
       return state;

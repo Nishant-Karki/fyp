@@ -35,42 +35,50 @@ export default function useTableActions() {
       setIsLoading,
     } = props;
 
-    const onSubmit = (values) => {
+    const onSubmit = async (values) => {
       setIsLoading(true);
       // console.log(values.image);
-      console.log(values.image);
-      let image_value = values.image === null ? "old" : values.image;
-      let data = new FormData();
-      data.append("name", values.name);
-      data.append("price", values.price);
-      data.append("description", values.description);
-      data.append("id", item.service_id);
-      data.append("image", image_value);
+      console.log(item);
+      // let image_value = values.image === null ? "old" : values.image;
+      // let data = new FormData();
+      // data.append("name", values.name);
+      // data.append("price", values.price);
+      // data.append("description", values.description);
+      // data.append("id", item.service_id);
+      // data.append("image", image_value);
 
       if (route === "updateService") {
+        // axios.post("/updateService", data);
         // setRecords(updatedService);
-        axios.post("/updateService", data);
         // .then((res) => dispatch(updateService()));
-        // dispatch(fetchServices());
-        axios.get("/addServices").then((res) => {
+        dispatch(updateService(values, item.service_id));
+        await axios.get("/addServices").then((res) => {
           setRecords(res.data.result);
         });
         setTimeout(() => {
           setIsLoading(false);
-          //  setRecords(updatedService);
-        }, 1500);
-      } else {
-        axios.post("/updateService", data);
 
-        axios.get("/addProducts").then((res) => setRecords(res.data.result));
-        // dispatch(fetchProducts());
+          // setRecords(dispatch(fetchServices()));
+          //  setRecords(updatedService);
+        }, 2000);
+        setEditPopUp(false);
+      } else {
+        // axios.post("/updateProduct", data);
+        console.log("there");
+
+        dispatch(updateProduct(values, item.product_id));
+        await axios
+          .get("/addProducts")
+          .then((res) => setRecords(res.data.result));
+
         setTimeout(() => {
           setIsLoading(false);
           //  setRecords(updatedService);
-        }, 1500);
+        }, 2000);
+        setEditPopUp(false);
+
         // setRecords(updatedProduct);
       }
-      setEditPopUp(false);
     };
     return (
       <PopUp
@@ -84,7 +92,7 @@ export default function useTableActions() {
               name: item.name,
               price: item.price,
               description: item.description,
-              image: null,
+              // image: null,
             }}
             onSubmit={onSubmit}
           >
@@ -129,12 +137,19 @@ export default function useTableActions() {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <ImageUploader
-                      prevImageValue={`${imagePath}/${item.image}`}
-                      setFieldValue={setFieldValue}
+                    <img
+                      src={
+                        require(`../../images/${imagePath}/${item.image}`)
+                          .default
+                      }
+                      width="300rem"
+                      style={{ padding: "2rem", marginLeft: "3.5rem" }}
+                      alt="preview"
                     />
+                    {/* <ImageUploader
+                      setFieldValue={setFieldValue}
+                    /> */}
                   </Grid>
-
                   <Box display="flex">
                     <Button type="submit">Save</Button>
                     <Button onClick={() => setEditPopUp(false)}>Cancel</Button>

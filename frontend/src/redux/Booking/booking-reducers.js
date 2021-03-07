@@ -12,6 +12,7 @@ import {
   DEMOTE_ADMIN,
   FETCH_APPOINTMENT,
   FETCH_USER_APPOINTMENTS,
+  HANDLE_PAYMENT,
 } from "./booking-types";
 
 const INITIAL_STATE = {
@@ -50,50 +51,52 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
       // console.log(action.payload);
       return {
         ...state,
-        // admins: action.payload,
+        admins: action.payload,
       };
     case DEMOTE_ADMIN:
       // console.log(action.payload);
       return {
         ...state,
-        admins: [],
+        // admins: [],
       };
     case BOOK_APPOINTMENT:
       //Get the items data from the services array
-      // const item = state.services.find(
-      //   (item) => item.service_id === action.payload.id
+      // const item = state.bookingCart.find(
+      //   (item) => item.service_id === action.payload.serviceId
       // );
       // //Check if item is in the cart already
-      // const inCart = state.cart.find((item) =>
-      //   item.service_id === action.payload.id ? true : false
-      // );
-      // return {
-      //   ...state,
-      //   cart: inCart
-      //     ? state.cart.map((item) =>
-      //         item.service_id === action.payload.id
-      //           ? {
-      //               ...item,
-      //               qty: item.qty + action.payload.qty,
-      //               total: action.payload.qty * item.price,
-      //             }
-      //           : item
-      //       )
-      //     : [
-      //         ...state.cart,
-      //         {
-      //           ...item,
-      //           qty: action.payload.qty,
-      //           total: item.qty * item.price,
-      //         },
-      //       ],
-      return { ...state };
-    // };
-    case DELETE_APPOINTMENT:
+      const inBookingCart = state.bookingCart?.find((item) =>
+        item.service_id === action.payload.serviceId ? true : false
+      );
       return {
         ...state,
-        cart: state.cart.filter(
-          (item) => item.product_id !== action.payload.id
+        bookingCart: !inBookingCart && [...state.bookingCart, action.payload],
+
+        // bookingCart: inBookingCart
+        //   ? state.bookingCart.map((item) =>
+        //       item.service_id === action.payload.serviceId
+        //         ? {
+        //             ...item,
+        //             qty: item.qty + action.payload.qty,
+        //             total: action.payload.qty * item.price,
+        //           }
+        //         : item
+        //     )
+        //   : [
+        //       ...state.bookingCart,
+        //       {
+        //         ...item,
+        //         qty: action.payload.qty,
+        //         total: item.qty * item.price,
+        //       },
+        //     ],
+      };
+    case DELETE_APPOINTMENT:
+      console.log(state.bookingCart);
+      return {
+        ...state,
+        bookingCart: state.bookingCart.filter(
+          (item) => item.serviceId !== action.payload.id
         ),
       };
 
@@ -114,7 +117,16 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
     case UPDATE_SERVICE:
       return {
         ...state,
-        services: action.payload.data,
+        services: action.payload,
+        // services: state.services.map(
+        //   (item) =>
+        //     item.service_id === action.payload.id && {
+        //       ...item,
+        //       name: action.payload.values.name,
+        //       description: action.payload.values.description,
+        //       price: action.payload.values.price,
+        //     }
+        // ),
         // (action.payload.id !== null) & (action.payload.image !== null) &&
         // state.services.map(
         //   (item) =>
@@ -138,7 +150,7 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
     case FETCH_USER_APPOINTMENTS:
       return {
         ...state,
-        bookingCart: action.payload,
+        // bookingCart: action.payload,
       };
     default:
       return state;

@@ -10,9 +10,9 @@ const appointmentQuery =
 
 module.exports = router.post("/bookAppointment", (req, res) => {
   const { serviceId, userId, time, date, specialist } = req.body;
-  console.log(specialist, time);
   let booked;
-  if (specialist.length > 0 && time.length > 0) {
+  let reminder;
+  if (specialist !== null && time !== null) {
     db.query(checkStaff, userId, (err, result) => {
       if (result.length > 0) {
         res.json({
@@ -39,15 +39,35 @@ module.exports = router.post("/bookAppointment", (req, res) => {
             });
             if (!booked === true) {
               db.query(
-                appointmentQuery,
-                [userId, serviceId, specialist, date, time],
+                "SELECT service_id,user_id FROM appointment",
                 (err, result) => {
-                  if (!err) {
+                  result.map((item) => {
+                    if (
+                      item.service_id === serviceId &&
+                      item.user_id === userId
+                    ) {
+                      reminder = true;
+                    }
+                  });
+                  if (reminder === true) {
                     res.json({
-                      message: "Appointment is booked.",
-                      type: "success",
-                      result: result,
+                      message: "Sorry! You can't book the same service twice!",
+                      type: "info",
                     });
+                  } else {
+                    db.query(
+                      appointmentQuery,
+                      [userId, serviceId, specialist, date, time],
+                      (err, result) => {
+                        if (!err) {
+                          res.json({
+                            message: "Appointment is booked.",
+                            type: "success",
+                            result: result,
+                          });
+                        }
+                      }
+                    );
                   }
                 }
               );

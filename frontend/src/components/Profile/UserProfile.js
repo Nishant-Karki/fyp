@@ -39,7 +39,9 @@ function UserProfile() {
 
   const [deletePopUp, setDeletePopUp] = useState(false);
 
-  const userData = useSelector((state) => state.login.userData);
+  const data = useSelector((state) => state.login.userData);
+
+  const [userData, setUserData] = useState(data);
 
   const [response, setResponse] = useState();
   const [snackbar, setSnackbar] = useState(false);
@@ -89,7 +91,10 @@ function UserProfile() {
       {userData &&
         userData.map((item) => (
           <div key={item.user_id}>
-            <ProfilePic source={item.image} userId={item.user_id} />
+            <ProfilePic
+            // source={item.image}
+            // userId={item.user_id}
+            />
             <Typography
               variant="h6"
               className={classes.profileName}

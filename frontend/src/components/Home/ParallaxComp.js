@@ -4,6 +4,7 @@ import "../scss/parallax.scss";
 import { Parallax, Background } from "react-parallax";
 
 import { Typography, Button, Box } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 function ParallaxComp() {
   return (
@@ -34,7 +35,11 @@ function ParallaxComp() {
         <Box textAlign="center">
           <Typography variant="h4">Make Time For Yourself</Typography>
           <Typography variant="body2">Get Glowing and Natural looks</Typography>
-          <Button>BOOK APPOINTMENT</Button>
+          <Button>
+            <Link to="/booking" className="link">
+              BOOK APPOINTMENT
+            </Link>
+          </Button>
         </Box>
       </Box>
     </>

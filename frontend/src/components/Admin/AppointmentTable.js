@@ -24,7 +24,6 @@ import AdminDashboard from "./AdminDashboard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../redux/Ecommerce/eStore-actions";
 import { fetchAppointment } from "../../redux/Booking/booking-actions";
-import { moment } from "moment";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -52,15 +51,17 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export default function AppointmentTable() {
+export default function EcommerceTable() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const services = useSelector((state) => state.booking.services);
+  const appointments = useSelector((state) => state.booking.appointments);
   //store array from database
-  const [records, setRecords] = useState(services);
+  const [records, setRecords] = useState(appointments);
   const dispatch = useDispatch();
 
-  console.log(services);
+  console.log(records);
+
+  console.log(appointments);
   useEffect(() => {
     setIsLoading(true);
     dispatch(fetchAppointment());
@@ -73,7 +74,7 @@ export default function AppointmentTable() {
   return (
     <AdminDashboard>
       <MaterialTable
-        title="Appointment Table"
+        title="Appointment Overview"
         icons={tableIcons}
         isLoading={isLoading}
         columns={[
@@ -90,6 +91,7 @@ export default function AppointmentTable() {
           { field: "date", title: "Date" },
           { field: "time", title: "Time" },
           { field: "client", title: "Client" },
+          { field: "payment", title: "Payment" },
         ]}
         data={records}
       />

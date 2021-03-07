@@ -12,6 +12,7 @@ import {
   DEMOTE_ADMIN,
   FETCH_APPOINTMENT,
   FETCH_USER_APPOINTMENTS,
+  HANDLE_PAYMENT,
 } from "./booking-types";
 import axios from "axios";
 
@@ -120,7 +121,16 @@ export const addService = (item, image) => async (dispatch) => {
   }
 };
 
-export const bookAppointment = (serviceId, userId, time, specialist) => {
+export const bookAppointment = (
+  serviceId,
+  name,
+  image,
+  price,
+  userId,
+  time,
+  date,
+  specialist
+) => {
   // axios.post("/bookAppointment", {
   //   serviceId: serviceId,
   //   userId: userId,
@@ -129,13 +139,25 @@ export const bookAppointment = (serviceId, userId, time, specialist) => {
   // });
   return {
     type: BOOK_APPOINTMENT,
-    payload: {},
+    payload: {
+      serviceId: serviceId,
+      name: name,
+      image: image,
+      price: price,
+      userId: userId,
+      time: time,
+      date: date,
+      specialist: specialist,
+    },
   };
 };
 
-export const deleteAppointment = (itemID) => {
-  console.log(itemID);
-  return { type: DELETE_APPOINTMENT, payload: { id: itemID } };
+export const deleteAppointment = (itemID, userId) => async (dispatch) => {
+  await axios.post("/cancelAppointment", { service: itemID, user: userId });
+  dispatch({
+    type: DELETE_APPOINTMENT,
+    payload: { id: itemID },
+  });
 };
 
 export const deleteService = (item) => async (dispatch) => {
@@ -158,10 +180,15 @@ export const loadCurrentService = (item) => {
   };
 };
 
-export const updateService = () => async (dispatch) => {
+export const updateService = (values, serviceId) => async (dispatch) => {
+  // console.log(data);
+
+  await axios.post("/updateService", { values: values, id: serviceId });
+
   const res = await axios.get("/addServices");
   return {
     type: UPDATE_SERVICE,
+    // payload: { values: values, id: serviceId },
     payload: res.data.result,
   };
   // const res = await axios.get("/addServices");
@@ -173,4 +200,10 @@ export const updateService = () => async (dispatch) => {
   //   type: UPDATE_SERVICE,
   //   payload: res.data.result,
   // });
+};
+
+export const handlePayment = (id, option) => async (dispatch) => {
+  console.log(id);
+  await axios.post("/payment", { id: id, option: option });
+  return { type: HANDLE_PAYMENT };
 };

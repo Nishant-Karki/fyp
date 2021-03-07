@@ -15,6 +15,8 @@ import UserRoles from "../components/Admin/UserRoles";
 import BookService from "../components/Booking/BookService";
 import OrderPage from "../components/Booking/OrderPage";
 import BookingCart from "../components/Booking/BookingCart";
+import { Typography } from "@material-ui/core";
+import BookingHover from "../components/common/BookingHover";
 
 export default function RoutesWithNavbar() {
   const token = useSelector((state) => state.login.authToken);
@@ -22,6 +24,7 @@ export default function RoutesWithNavbar() {
   return (
     <div>
       <Navbar />
+      <BookingHover />
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/store" component={Inventory} />

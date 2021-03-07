@@ -60,12 +60,12 @@ export default function Admin() {
       <Container maxWidth="md">
         <Grid container spacing={4}>
           <GridContainer
-            number={appointments.length}
+            number={appointments && appointments.length}
             title="Appointment Count"
           />
-          <GridContainer number={staffs.length} title="Staff Count" />
+          <GridContainer number={staffs && staffs.length} title="Staff Count" />
           <GridContainer
-            number={appointments.length}
+            number={appointments && appointments.length}
             title="Total Appointment"
           />
         </Grid>

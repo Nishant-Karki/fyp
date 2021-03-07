@@ -68,21 +68,21 @@ export default function ProfilePic({ source, userId }) {
       <Box
         type="button"
         className={classes.changeImg}
-        onMouseEnter={() => {
-          setIcon(
-            <ImageInput
-              styling={{ marginTop: "0.5rem" }}
-              onChange={(e) => addImage(e)}
-            >
-              <Typography variant="caption" style={{ padding: "1rem" }}>
-                Change
-              </Typography>
-            </ImageInput>
-          );
-        }}
-        onMouseLeave={() => {
-          setIcon(<AiFillCamera size={18} />);
-        }}
+        // onMouseEnter={() => {
+        //   setIcon(
+        //     <ImageInput
+        //       styling={{ marginTop: "0.5rem" }}
+        //       onChange={(e) => addImage(e)}
+        //     >
+        //       <Typography variant="caption" style={{ padding: "1rem" }}>
+        //         Change
+        //       </Typography>
+        //     </ImageInput>
+        //   );
+        // }}
+        // onMouseLeave={() => {
+        //   setIcon(<AiFillCamera size={18} />);
+        // }}
       >
         {icon}
       </Box>
@@ -91,13 +91,13 @@ export default function ProfilePic({ source, userId }) {
   return (
     <div>
       <Box className={classes.box} display="flex" justifyContent="center">
-        <Badge
+        {/* <Badge
           overlap="circle"
           badgeContent={<BadgeComponent />}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        >
-          <Avatar alt="profile" src={image} className={classes.imgSize} />
-        </Badge>
+        > */}
+        <Avatar alt="profile" src={image} className={classes.imgSize} />
+        {/* </Badge> */}
       </Box>
     </div>
   );

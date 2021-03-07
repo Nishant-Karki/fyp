@@ -14,12 +14,13 @@ export const fetchProducts = () => async (dispatch) => {
   }
 };
 
-export const addToCart = (itemID, value) => {
+export const addToCart = (itemID, value, userId) => {
   return {
     type: actionTypes.ADD_TO_CART,
     payload: {
-      id: itemID,
+      itemId: itemID,
       qty: value,
+      userId: userId,
     },
   };
 };
@@ -42,12 +43,15 @@ export const deleteProduct = (item) => {
   return { type: actionTypes.DELETE_PRODUCT, payload: { id: id } };
 };
 
-export const updateProduct = (values, id) => {
+export const updateProduct = (values, productId) => async (dispatch) => {
+  console.log(values);
   axios.post("/updateProduct", {
-    product_id: id,
+    id: productId,
     values: values,
   });
+  const res = await axios.get("/addServices");
   return {
     type: actionTypes.UPDATE_PRODUCT,
+    payload: res.data.result,
   };
 };

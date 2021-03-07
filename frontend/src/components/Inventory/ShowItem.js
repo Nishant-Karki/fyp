@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 
 //ui
-import { Grid, Box, Typography, Button, makeStyles } from "@material-ui/core";
-import { Container } from "react-bootstrap";
-import Navbar from "../Navbar/Navbar";
+import {
+  Grid,
+  Box,
+  Typography,
+  Button,
+  makeStyles,
+  Container,
+} from "@material-ui/core";
 
 //redux
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { addToCart } from "../../redux/Ecommerce/eStore-actions";
 
 //sass
@@ -25,6 +30,9 @@ function ShowItem({ addToCart, currentItem }) {
 
   const [count, setCount] = useState(1);
 
+  const userData = useSelector((state) => state.login.userData);
+  const [userId] = userData.map((item) => item.user_id);
+
   const handleAdd = () => {
     setCount(count + 1);
   };
@@ -36,8 +44,7 @@ function ShowItem({ addToCart, currentItem }) {
   };
   return (
     <>
-      <Navbar />
-      <Container className={classes.container}>
+      <Container maxWidth="md" className={classes.container}>
         <Grid container spacing={4}>
           <Grid item xs={12} sm={5}>
             <Box className="container-image">
@@ -75,7 +82,7 @@ function ShowItem({ addToCart, currentItem }) {
               </Box>
               <Box>
                 <Button
-                  onClick={() => addToCart(product_id, count)}
+                  onClick={() => addToCart(product_id, count, userId)}
                   style={{ marginTop: "1.3rem", marginLeft: "1.7rem" }}
                 >
                   <Typography color="teal" variant="body1">

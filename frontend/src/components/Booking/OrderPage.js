@@ -9,7 +9,10 @@ import CustomSnackbar from "../common/CustomSnackbar";
 
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStaffs } from "../../redux/Booking/booking-actions";
+import {
+  bookAppointment,
+  fetchStaffs,
+} from "../../redux/Booking/booking-actions";
 import axios from "axios";
 import moment from "moment";
 
@@ -27,6 +30,8 @@ function OrderPage() {
   const [choosenSpecialist, setChoosenSpecialist] = useState(null);
 
   const appointments = useSelector((state) => state.booking.appointments);
+
+  const authToken = useSelector((state) => state.login.authToken);
 
   const [response, setResponse] = useState();
   const [snackbar, setSnackbar] = useState(false);
@@ -71,10 +76,11 @@ function OrderPage() {
     let timeId;
 
     // TimeAvailable.map((item) => (timeId = item.id));
-
+    // if (authToken !== null) {
     if (userData.length > 0) {
       if (choosenSpecialist !== null) {
         userData.map((user) => (userId = user.user_id));
+
         axios
           .post("/bookAppointment", {
             serviceId: item.service_id,
@@ -87,12 +93,26 @@ function OrderPage() {
             setSnackbar(true);
             setResponse(res.data.message);
             setSnackType(res.data.type);
+
             if (res.data.type === "success") {
               setTimeout(() => {
+                dispatch(
+                  bookAppointment(
+                    item.service_id,
+                    item.name,
+                    item.image,
+                    item.price,
+                    userId,
+                    choosenTime,
+                    appointmentDate,
+                    choosenSpecialist
+                  )
+                );
                 history.goBack();
-              }, 2000);
+              }, 1234);
             }
           });
+
         // dispatch(
         //   bookAppointment(item.service_id, userId, time, choosenSpecialist)
         // );
@@ -104,6 +124,12 @@ function OrderPage() {
     } else {
       history.push("/login");
     }
+    // }
+  };
+
+  const filterTime = (e) => {
+    setChoosenSpecialist(e.target.value);
+    // axios.get("/getAppointment").then((res) => console.log("sadasd"));
   };
 
   return (
@@ -116,7 +142,7 @@ function OrderPage() {
           snackContent={response}
         />
       )}
-      <Container style={{ paddingTop: "8rem" }}>
+      <Container style={{ paddingTop: "8rem" }} maxWidth="md">
         <Grid container spacing={4}>
           <Grid item sm={12} md={6} style={{ marginTop: "3rem" }}>
             <Box
@@ -175,7 +201,7 @@ function OrderPage() {
                   disablePast
                   style={{ width: "18rem" }}
                   value={appointmentDate}
-                  onChange={(value) => setappointmentDate(value)}
+                  onChange={(value) => console.log(value)}
                 />
               </Box>
 
@@ -188,7 +214,7 @@ function OrderPage() {
                   array={specialist}
                   // defaultValue="Random"
                   onChange={(e) => {
-                    setChoosenSpecialist(e.target.value);
+                    filterTime(e);
                   }}
                 />
               )}
