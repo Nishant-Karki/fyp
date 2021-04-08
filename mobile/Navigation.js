@@ -11,7 +11,7 @@ import Login from "./screens/Login/Login";
 import Profile from "./screens/Profile/Profile";
 import CustomDrawer from "./CustomDrawer";
 import { Feather, Entypo } from "@expo/vector-icons";
-import {Button} from 'react-native'
+import { Button } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Drawer = createDrawerNavigator();
@@ -58,9 +58,8 @@ const StackNavigation = ({ navigation }) => {
     <Stack.Navigator
       screenOptions={{
         headerTitleAlign: "center",
-       
-      
-        headerLeftContainerStyle: { marginLeft:30, marginTop: 3 },
+
+        headerLeftContainerStyle: { marginLeft: 30, marginTop: 3 },
         headerRightContainerStyle: { marginRight: 25, marginTop: 3 },
         headerStyle: {
           backgroundColor: "#e91e63",
@@ -69,6 +68,13 @@ const StackNavigation = ({ navigation }) => {
       }}
     >
       <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
         name="Services"
         component={Services}
         options={{
@@ -76,22 +82,22 @@ const StackNavigation = ({ navigation }) => {
           headerLeft: () => (
             <TouchableOpacity>
               <Feather
-              name="menu"
-              size={24}
-              color="white"
-              onPress={() => navigation.openDrawer()}
+                name="menu"
+                size={24}
+                color="white"
+                onPress={() => navigation.openDrawer()}
               />
-              </TouchableOpacity>
+            </TouchableOpacity>
           ),
           headerRight: () => (
             <TouchableOpacity>
-            <Entypo
-              name="shopping-cart"
-              size={24}
-              color="white"
-              onPress={() => navigation.navigate("Cart")}
-            />
-              </TouchableOpacity>
+              <Entypo
+                name="shopping-cart"
+                size={24}
+                color="white"
+                onPress={() => navigation.navigate("Cart")}
+              />
+            </TouchableOpacity>
           ),
           //   headerRight: () => (
           //     <MaterialCommunityIcons name="cart" style={{marginLeft:20}} size={20} />
