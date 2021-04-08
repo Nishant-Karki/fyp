@@ -5,8 +5,8 @@ import { Container } from "react-bootstrap";
 
 const useStyles = makeStyles((theme) => ({
   imgSize: {
-    width: theme.spacing(16),
-    height: theme.spacing(16),
+    width: theme.spacing(13),
+    height: theme.spacing(13),
   },
   container: {
     marginTop: "10%",
@@ -14,23 +14,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Client = () => {
+const reviews = [
+  {
+    id: 1,
+    name: "Saladaas",
+    review:
+      "Thank you so much for the wonderful work you do! I love my cut and color. And best of all, I know I can always depend on walking out of your salon feeling and looking my best!",
+    image: "client1",
+  },
+  {
+    id: 2,
+    name: "No name",
+    review:
+      "Excellent service. They are so experienced for every individuals problems/ concerns and deal accordingly. The treatment is awesome, feel like heaven. Recommended to have all the treatments here",
+    image: "client2",
+  },
+  {
+    id: 3,
+    name: "Name",
+    review:
+      "This was my first time and everything was great, the service was lovely.",
+    image: "client3",
+  },
+];
+
+const Client = ({ item }) => {
   const classes = useStyles();
   return (
-    <Grid item xs={12} sm={6} md={4}>
-      <Box display="flex" justifyContent="center">
-        <Avatar
-          className={classes.imgSize}
-          src="https://images.unsplash.com/photo-1464863979621-258859e62245?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1866&q=80"
-        ></Avatar>
+    <div>
+      <Box marginBottom="1rem">
+        <Box display="flex" justifyContent="center">
+          <Avatar
+            className={classes.imgSize}
+            src={require(`../../images/other/${item.image}.png`).default}
+          ></Avatar>
+        </Box>
+        <Box textAlign="center" style={{ marginTop: "1rem" }}>
+          <Typography variant="subtitle">{item.review}</Typography>
+        </Box>
       </Box>
-      <Box textAlign="center" style={{ marginTop: "1rem" }}>
-        <Typography variant="body1">
-          Everthing about this place is simply great. I loved the atmosphere and
-          friendly staff. Incredible job, I wish you luck.
-        </Typography>
-      </Box>
-    </Grid>
+    </div>
   );
 };
 
@@ -43,9 +66,11 @@ function ClientReview() {
         WHAT CLIENTS SAY
       </Typography>
       <Grid container spacing={4} component="div" style={{ padding: "2rem" }}>
-        <Client />
-        <Client />
-        <Client />
+        {reviews.map((item) => (
+          <Grid item key={item.id} xs={12} sm={6} md={4}>
+            <Client item={item} />
+          </Grid>
+        ))}
       </Grid>
     </Container>
   );

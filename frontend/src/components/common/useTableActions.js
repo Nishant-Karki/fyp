@@ -21,7 +21,7 @@ import axios from "axios";
 export default function useTableActions() {
   const { CustomTextField } = useCustomForm();
   const dispatch = useDispatch();
-  const updatedService = useSelector((state) => state.booking.services);
+  // const updatedService = useSelector((state) => state.booking.services);
   const updatedProduct = useSelector((state) => state.store.products);
 
   const EditItem = (props) => {
@@ -188,9 +188,9 @@ export default function useTableActions() {
       } else {
         dispatch(deleteProduct(item));
         axios.get("/addProducts").then((res) => setRecords(res.data.result));
+        setRecords(updatedProduct);
         setTimeout(() => {
           setIsLoading(false);
-          //  setRecords(updatedService);
         }, 1500);
         // setRecords(updatedProduct);
       }

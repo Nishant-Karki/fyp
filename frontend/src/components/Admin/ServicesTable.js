@@ -64,19 +64,20 @@ export default function ProductsTable() {
   const [isLoading, setIsLoading] = useState(false);
 
   const services = useSelector((state) => state.booking.services);
-
+  console.log(services);
   const dispatch = useDispatch();
   //store array from database
-  const [records, setRecords] = useState(services);
+  const [records, setRecords] = useState();
 
   useEffect(() => {
     setIsLoading(true);
     dispatch(fetchServices());
-    setIsLoading(false);
-    // setTimeout(() => {
-    //   console.log(services);
-    // }, 1500);
-  }, [records]);
+    // axios.get("/addServices").then((res) => setRecords(res.data.result));
+    setTimeout(() => {
+      setIsLoading(false);
+      console.log(services);
+    }, 1500);
+  }, []);
   const { DeleteItem, EditItem } = useTableActions();
   return (
     <AdminDashboard>

@@ -12,6 +12,7 @@ import { Container } from "react-bootstrap";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import useCustomForm from "../common/useCustomForm";
+import axios from "axios";
 
 const useStyles = makeStyles({
   contactContainer: { marginTop: "10%", marginBottom: "10%" },
@@ -30,15 +31,11 @@ const useStyles = makeStyles({
   },
 });
 
-const onSubmit = (values) => {
-  console.log(values);
-};
-
 const ContactSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
-  phone: Yup.number().min(10).max(13).required("Number is required"),
+  phone: Yup.number().min(10).required("Number is required"),
   email: Yup.string().email().required("Email is required"),
-  message: Yup.string().required("Feedback is appreciated"),
+  message: Yup.string().required("Feedbacks are appreciated"),
 });
 
 const initialValues = {
@@ -53,6 +50,10 @@ function Contact() {
 
   const { CustomTextField } = useCustomForm();
 
+  const onSubmit = (values) => {
+    console.log(values.message);
+    axios.post("/contactForm", values).then((res) => console.log(res));
+  };
   return (
     <>
       <div id="contact" style={{ marginBottom: "5rem" }}></div>
@@ -107,10 +108,12 @@ function Contact() {
                       <Grid item xs={12}>
                         {" "}
                         <CustomTextField
+                          label="Message"
                           name="message"
-                          label="Your Message"
+                          type="text"
                           multiline
                           rows={4}
+                          onChange={handleChange}
                           error={errors.message && touched.message}
                           errortext={errors.message}
                         />

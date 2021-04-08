@@ -22,7 +22,7 @@ import {
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { IoIosMenu } from "react-icons/io";
 
-import { connect, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import useWindowScrollPosition from "@rehooks/window-scroll-position";
 
@@ -30,7 +30,7 @@ import "../scss/navbar.scss";
 import MenuDropdown from "../common/MenuDropdown";
 import { logout, userData } from "../../redux/Login/login-actions";
 
-function Navbar({ cart, userData }) {
+function Navbar() {
   const [open, setOpen] = useState(false);
   const [change, setChange] = useState(false);
   const changePosition = 80;
@@ -49,6 +49,12 @@ function Navbar({ cart, userData }) {
 
   const [cartCount, setCartCount] = useState(null);
   //hook to show number of item in cart
+  const userData = useSelector((state) => state.login.userData);
+  const storeCart = useSelector((state) => state.store.cart);
+
+  const [userId] = userData.map((item) => item.user_id);
+
+  const cart = storeCart.filter((item) => item.userId === userId);
   useEffect(() => {
     let count = 0;
     cart.forEach((item) => (count += item.qty));
@@ -271,11 +277,4 @@ function Navbar({ cart, userData }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    cart: state.store.cart,
-    userData: state.login.userData,
-  };
-};
-
-export default connect(mapStateToProps)(Navbar);
+export default Navbar;

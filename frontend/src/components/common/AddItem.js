@@ -10,7 +10,10 @@ import axios from "axios";
 import useCustomForm from "./useCustomForm";
 import { addService, fetchServices } from "../../redux/Booking/booking-actions";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../redux/Ecommerce/eStore-actions";
+import {
+  addProduct,
+  fetchProducts,
+} from "../../redux/Ecommerce/eStore-actions";
 
 export default function AddItem(props) {
   const { postRoute, title, setRecords, setIsLoading } = props;
@@ -18,8 +21,8 @@ export default function AddItem(props) {
   const dispatch = useDispatch();
   const [openPopup, setOpenPopup] = useState(false);
 
-  const services = useSelector((state) => state.booking.services);
-  const products = useSelector((state) => state.booking.products);
+  // const services = useSelector((state) => state.booking.services);
+  // const products = useSelector((state) => state.booking.products);
 
   const Schema = Yup.object().shape({
     name: Yup.string().required("Name is required!"),
@@ -34,7 +37,7 @@ export default function AddItem(props) {
     image: null,
   };
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     setOpenPopup(false);
     //to send image file and values to the backend
     let data = new FormData();
@@ -45,22 +48,27 @@ export default function AddItem(props) {
     data.append("image", values.image);
 
     setIsLoading(true);
-    axios.post(`/${postRoute}`, data).then((res) => {
-      if (postRoute === "addServices") {
-        // dispatch(addService());
-        setTimeout(() => {
-          axios.get("/addServices").then((res) => setRecords(res.data.result));
-          // dispatch(fetchServices());
-          setIsLoading(false);
-        }, 2000);
-      } else {
-        setTimeout(() => {
-          axios.get("/addProducts").then((res) => setRecords(res.data.result));
-          // dispatch(fetchProducts());
-          setIsLoading(false);
-        }, 2000);
-      }
-    });
+    // await axios.post(`/${postRoute}`, data).then((res) => {
+    if (postRoute === "addServices") {
+      dispatch(addService(data));
+      // dispatch(fetchServices());
+      setTimeout(() => {
+        axios.get("/addServices").then((res) => setRecords(res.data.result));
+        setIsLoading(false);
+      }, 2000);
+    } else {
+      // dispatch(fetchProducts());
+      setTimeout(() => {
+        dispatch(addProduct(data));
+        setRecords(dispatch(fetchProducts()));
+        // axios.get("/addProducts").then((res) => setRecords(res.data.result));
+        // await axios
+        //   .get("/addProducts")
+        //   .then((res) => setRecords(res.data.result));
+        setIsLoading(false);
+      }, 2000);
+    }
+    // });
   };
   return (
     <Container>

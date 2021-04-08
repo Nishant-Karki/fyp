@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Container,
@@ -11,7 +11,12 @@ import "../scss/payment.scss";
 import { Link, useHistory } from "react-router-dom";
 import useKhaltiCheckout from "./useKhaltiCheckout";
 import { useSelector, useDispatch } from "react-redux";
-import { handlePayment } from "../../redux/Booking/booking-actions";
+import {
+  fetchAppointment,
+  fetchServices,
+  handlePayment,
+} from "../../redux/Booking/booking-actions";
+import CustomSnackbar from "../common/CustomSnackbar";
 
 export default function Payment() {
   const { checkout } = useKhaltiCheckout();
@@ -19,12 +24,24 @@ export default function Payment() {
   const userData = useSelector((state) => state.login.userData);
   const userId = userData.map((item) => item.user_id);
 
-  const offline = "offline";
-  const online = "online";
+  const [response, setResponse] = useState();
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackType, setSnackType] = useState();
+
+  const offline = "Offline";
+  const online = "Online";
 
   let history = useHistory();
   return (
     <Container maxWidth="md" style={{ marginTop: "9rem" }}>
+      {response && response.length > 0 && (
+        <CustomSnackbar
+          snackbarOpen={snackbar}
+          setSnackbar={setSnackbar}
+          snackType={snackType}
+          snackContent={response}
+        />
+      )}
       <Typography align="center" variant="h5">
         Choose your preferred payment method{" "}
       </Typography>
@@ -39,10 +56,15 @@ export default function Payment() {
           <Paper
             className="paper"
             onClick={() => {
-              handlePayment(userId, offline);
+              dispatch(handlePayment(userId, offline));
+              dispatch(fetchAppointment());
+              // dispatch(fetchServices());
+              setSnackbar(true);
+              setSnackType("success");
+              setResponse("Thankyou for choosing us");
               setTimeout(() => {
-                // history.goBack("/#services");
-              }, 1500);
+                history.push("/#services");
+              }, 2500);
             }}
           >
             <img
@@ -61,10 +83,14 @@ export default function Payment() {
             className="paper"
             onClick={() => {
               checkout();
-              handlePayment(userId, offline);
+              dispatch(handlePayment(userId, online));
+              setSnackbar(true);
+              setSnackType("success");
+              setResponse("Thankyou for choosing us");
+              dispatch(fetchAppointment());
               setTimeout(() => {
-                // history.push("/#services");
-              }, 1500);
+                history.push("/#services");
+              }, 2500);
             }}
           >
             <img

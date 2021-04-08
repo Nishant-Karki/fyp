@@ -14,20 +14,25 @@ export const fetchProducts = () => async (dispatch) => {
   }
 };
 
-export const addToCart = (itemID, value, userId) => {
-  return {
+export const addToCart = (itemID, value, userId) => async (dispatch) => {
+  // axios.post("/bookProduct", (itemID, value, userId));
+  // console.log(itemID);
+  dispatch({
     type: actionTypes.ADD_TO_CART,
     payload: {
       itemId: itemID,
       qty: value,
       userId: userId,
     },
-  };
+  });
 };
 
 export const removeFromCart = (itemID) => {
   console.log(itemID);
-  return { type: actionTypes.REMOVE_FROM_CART, payload: { id: itemID } };
+  return {
+    type: actionTypes.REMOVE_FROM_CART,
+    payload: { id: itemID },
+  };
 };
 
 export const loadCurrentItem = (item) => {
@@ -37,21 +42,43 @@ export const loadCurrentItem = (item) => {
   };
 };
 
-export const deleteProduct = (item) => {
+export const addProduct = (data) => async (dispatch) => {
+  try {
+    await axios.post("/addProducts", data);
+    // const res = await axios.get("/addProducts");
+    dispatch({
+      type: actionTypes.ADD_PRODUCT,
+      payload: data,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const deleteProduct = (item) => async (dispatch) => {
   const id = item.product_id;
-  axios.post("/deleteProduct", { items: item });
-  return { type: actionTypes.DELETE_PRODUCT, payload: { id: id } };
+  await axios.post("/deleteProduct", { items: item });
+  const res = await axios.get("/addProducts");
+  dispatch({ type: actionTypes.DELETE_PRODUCT, payload: res.data.result });
 };
 
 export const updateProduct = (values, productId) => async (dispatch) => {
   console.log(values);
-  axios.post("/updateProduct", {
+  await axios.post("/updateProduct", {
     id: productId,
     values: values,
   });
   const res = await axios.get("/addServices");
-  return {
+  dispatch({
     type: actionTypes.UPDATE_PRODUCT,
     payload: res.data.result,
-  };
+  });
+};
+
+export const handleStorePayment = (itemId, userId, qty, price) => async (
+  dispatch
+) => {
+  console.log(qty);
+  dispatch({
+    type: actionTypes.STORE_PAYMENT,
+  });
 };

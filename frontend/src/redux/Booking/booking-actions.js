@@ -109,13 +109,14 @@ export const fetchUserAppointment = (id) => async (dispatch) => {
   }
 };
 
-export const addService = (item, image) => async (dispatch) => {
+export const addService = (data) => async (dispatch) => {
   try {
+    await axios.post("/addServices", data);
     const res = await axios.get("/addServices");
-    return {
+    dispatch({
       type: ADD_SERVICE,
       payload: res.data.result,
-    };
+    });
   } catch (err) {
     console.log(err);
   }
@@ -162,15 +163,15 @@ export const deleteAppointment = (itemID, userId) => async (dispatch) => {
 
 export const deleteService = (item) => async (dispatch) => {
   const id = item.service_id;
-  axios.post("/deleteService", { items: item, id: id });
-  // const res = await axios.get("/addServices");
+  await axios.post("/deleteService", { items: item, id: id });
+  const res = await axios.get("/addServices");
   // console.log(res);
   // console.log(id);
   // return { type: DELETE_SERVICE, payload: id };
-  return {
+  dispatch({
     type: DELETE_SERVICE,
-    payload: { id: id },
-  };
+    payload: res.data.result,
+  });
 };
 
 export const loadCurrentService = (item) => {
@@ -186,11 +187,11 @@ export const updateService = (values, serviceId) => async (dispatch) => {
   await axios.post("/updateService", { values: values, id: serviceId });
 
   const res = await axios.get("/addServices");
-  return {
+  dispatch({
     type: UPDATE_SERVICE,
     // payload: { values: values, id: serviceId },
     payload: res.data.result,
-  };
+  });
   // const res = await axios.get("/addServices");
   // console.log(res);
   // return{
@@ -202,8 +203,18 @@ export const updateService = (values, serviceId) => async (dispatch) => {
   // });
 };
 
+// export const handlePayment = (id, option) => async (dispatch) => {
+//   console.log(id);
+//   console.log("here");
+//   await axios.post("/payment", { id: id, option: option });
+//   return { type: HANDLE_PAYMENT, payload: { id: id, option: option } };
+// };
+
 export const handlePayment = (id, option) => async (dispatch) => {
-  console.log(id);
-  await axios.post("/payment", { id: id, option: option });
-  return { type: HANDLE_PAYMENT };
+  axios.post("/payment", { id: id, option: option });
+  // const res = axios.get("/getAppointment");
+  dispatch({
+    type: HANDLE_PAYMENT,
+    // payload: res.data.result,
+  });
 };

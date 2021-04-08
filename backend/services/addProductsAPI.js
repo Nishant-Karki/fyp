@@ -37,7 +37,8 @@ module.exports = addProductPOST = (req, res) => {
 
 module.exports = addProductGET = (req, res) => {
   db.query(dbQueryGET, (err, result) => {
-    err && console.log(err);
-    result && res.json({ result });
+    if (!err) {
+      res.json({ result: result });
+    }
   });
 };

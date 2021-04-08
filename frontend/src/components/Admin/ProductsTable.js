@@ -69,10 +69,11 @@ export default function ProductsTable() {
   useEffect(() => {
     setIsLoading(true);
     dispatch(fetchProducts());
-    setIsLoading(false);
-    // setTimeout(() => {
-    // }, 1500);
-  }, [records]);
+    // axios.get("/addProducts").then((res) => setRecords(res.data.result));
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }, []);
 
   const { DeleteItem, EditItem } = useTableActions();
   return (

@@ -100,6 +100,12 @@ app.use(ecommerceDetailsRouter);
 const cancelAppointmentRouter = require("./routes/cancelAppointment");
 app.use(cancelAppointmentRouter);
 
+const paymentRouter = require("./routes/payment");
+app.use(paymentRouter);
+
+const contactForm = require("./routes/contactFormEmail");
+app.use(contactForm);
+
 app.get("/", (req, res) => {
   res.json({ result: "Working fine" });
 });

@@ -34,7 +34,7 @@ module.exports = addServicePOST = (req, res) => {
 
 module.exports = addServiceGET = (req, res) => {
   db.query(dbQueryGET, (err, result) => {
-    err && console.log(err);
-    result && res.json({ result });
+    err && res.json({ err: err });
+    result && res.json({ result: result });
   });
 };

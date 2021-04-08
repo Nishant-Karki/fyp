@@ -15,7 +15,7 @@ function index() {
       <OurServices id="services" />
       <About />
       <ClientReview />
-      <OurTeam />
+      {/* <OurTeam /> */}
       <Contact />
     </>
   );

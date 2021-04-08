@@ -56,7 +56,8 @@ export default function EcommerceTable() {
 
   const appointments = useSelector((state) => state.booking.appointments);
   //store array from database
-  const [records, setRecords] = useState(appointments);
+  let newAppointment = appointments.filter((item) => item.payment !== null);
+  const [records, setRecords] = useState(newAppointment);
   const dispatch = useDispatch();
 
   console.log(records);
@@ -65,8 +66,8 @@ export default function EcommerceTable() {
   useEffect(() => {
     setIsLoading(true);
     dispatch(fetchAppointment());
+    dispatch(fetchProducts());
     setTimeout(() => {
-      dispatch(fetchProducts());
       setIsLoading(false);
     }, 1500);
   }, [records]);

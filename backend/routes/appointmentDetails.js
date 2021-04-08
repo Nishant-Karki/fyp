@@ -3,7 +3,7 @@ const db = require("../database");
 
 module.exports = router.get("/getAppointment", (req, res) => {
   db.query(
-    "SELECT appointment.staff_name as staff_name,appointment.appointment_id as appointment_id, users.user_id as user_id, users.fname as client,service.service_id, service.name as serviceName,service.price as servicePrice, date, time FROM appointment JOIN service ON appointment.service_id = service.service_id JOIN users ON appointment.user_id = users.user_id ",
+    "SELECT appointment.staff_name as staff_name,appointment.appointment_id as appointment_id, users.user_id as user_id, users.fname as client,service.service_id, service.name as serviceName,service.price as servicePrice, date, time,payment FROM appointment JOIN service ON appointment.service_id = service.service_id JOIN users ON appointment.user_id = users.user_id ",
     (err, result) => {
       if (!err) {
         res.json({ result: result });

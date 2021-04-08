@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 
 //redux
-import { connect, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/Ecommerce/eStore-actions";
 
 //sass
@@ -24,15 +24,18 @@ const useStyles = makeStyles({
   },
 });
 
-function ShowItem({ addToCart, currentItem }) {
-  const { product_id, name, price, image, description } = currentItem;
+function ShowItem() {
   const classes = useStyles();
 
-  const [count, setCount] = useState(1);
+  const dispatch = useDispatch();
+
+  const currentItem = useSelector((state) => state.store.currentItem);
+  const { product_id, name, price, image, description } = currentItem;
 
   const userData = useSelector((state) => state.login.userData);
   const [userId] = userData.map((item) => item.user_id);
 
+  const [count, setCount] = useState(1);
   const handleAdd = () => {
     setCount(count + 1);
   };
@@ -82,7 +85,7 @@ function ShowItem({ addToCart, currentItem }) {
               </Box>
               <Box>
                 <Button
-                  onClick={() => addToCart(product_id, count, userId)}
+                  onClick={() => dispatch(addToCart(product_id, count, userId))}
                   style={{ marginTop: "1.3rem", marginLeft: "1.7rem" }}
                 >
                   <Typography color="teal" variant="body1">
@@ -98,16 +101,4 @@ function ShowItem({ addToCart, currentItem }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    currentItem: state.store.currentItem,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addToCart: (id, qty) => dispatch(addToCart(id, qty)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ShowItem);
+export default ShowItem;

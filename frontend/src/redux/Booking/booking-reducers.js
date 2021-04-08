@@ -109,9 +109,11 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
     case DELETE_SERVICE:
       return {
         ...state,
-        services: state.services.filter(
-          (item) => item.service_id !== action.payload.id
-        ),
+        // services: state.services.filter(
+        //   (item) => item.service_id !== action.payload.id
+        // ),
+
+        services: action.payload,
       };
 
     case UPDATE_SERVICE:
@@ -151,6 +153,15 @@ const bookingReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         // bookingCart: action.payload,
+      };
+
+    case HANDLE_PAYMENT:
+      // let appointment = state.appointments.find((item) =>
+      //   item.user_id === action.payload.id ? true : false
+      // );
+      return {
+        ...state,
+        appointments: action.payload,
       };
     default:
       return state;

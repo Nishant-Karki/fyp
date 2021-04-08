@@ -12,9 +12,10 @@ import React from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
-import { useSelector, useDispatch, connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "../../redux/Ecommerce/eStore-actions";
 import { useEffect, useState } from "react";
+import { handleStorePayment } from "../../redux/Ecommerce/eStore-actions";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -43,9 +44,13 @@ function Cart() {
   const userData = useSelector((state) => state.login.userData);
   const [userId] = userData.map((item) => item.user_id);
 
-  console.log(storeCart);
   const newCart = storeCart.filter((item) => item.userId === userId);
 
+  const [click, setClick] = useState(false);
+
+  useEffect(() => {
+    setCart(newCart);
+  }, [click]);
   // let newCart = cart.filter((item) => item.userId === userId);
   // console.log(newCart);
   const [cart, setCart] = useState(newCart);
@@ -108,9 +113,10 @@ function Cart() {
                         color="error"
                         variant="body2"
                         className={classes.deleteBtn}
-                        onClick={() =>
-                          dispatch(removeFromCart(item.product_id))
-                        }
+                        onClick={() => {
+                          dispatch(removeFromCart(item.product_id));
+                          setClick(!click);
+                        }}
                       >
                         Remove
                         <AiFillDelete
@@ -172,11 +178,25 @@ function Cart() {
                   marginBottom="-0.4rem"
                   textAlign="center"
                 >
-                  <Link className={classes.link} to="/payment">
-                    <Button style={{ backgroundColor: "teal" }}>
-                      Checkout
-                    </Button>
-                  </Link>
+                  {/* <Link className={classes.link} to="/payment"> */}
+                  <Button
+                    style={{ backgroundColor: "teal" }}
+                    onClick={() => {
+                      cart.map((item) =>
+                        dispatch(
+                          handleStorePayment(
+                            item.product_id,
+                            userId,
+                            item.qty,
+                            item.price
+                          )
+                        )
+                      );
+                    }}
+                  >
+                    Checkout
+                  </Button>
+                  {/* </Link> */}
                 </Box>
               </Box>
             </Paper>

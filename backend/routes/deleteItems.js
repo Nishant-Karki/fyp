@@ -27,18 +27,18 @@ module.exports = router.post("/deleteService", (req, res) => {
 module.exports = router.post("/deleteProduct", (req, res) => {
   const { product_id, name, image } = req.body.items;
   db.query(deleteProductQuery, product_id, (err, result) => {
-    err && res.json({ message: `Failed to delete ${name} data` });
+    // err && res.json({ message: `Failed to delete ${name} data` });
     if (!err) {
-      result &&
-        fs.unlink(`../frontend/src/images/products/${image}`, (err) => {
-          if (err) {
-            res.json(err);
-          } else {
-            res.json({
-              message: `${name} is successfully removed from the database.`,
-            });
-          }
-        });
+      // result &&
+      fs.unlink(`../frontend/src/images/products/${image}`, (err) => {
+        if (err) {
+          res.json(err);
+        } else {
+          res.json({
+            message: `${name} is successfully removed from the database.`,
+          });
+        }
+      });
     }
   });
 });
