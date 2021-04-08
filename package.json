@@ -1,0 +1,22 @@
+{
+  "name": "nepa-salon",
+  "version": "1.0.0",
+  "description": "Salon App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "web": "cd frontend && npm start",
+    "back": "cd backend && npm start",
+    "mobile": "cd mobile && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nishant-Karki/fyp.git"
+  },
+  "author": "Nishant Karki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nishant-Karki/fyp/issues"
+  },
+  "homepage": "https://github.com/Nishant-Karki/fyp#readme"
+}
