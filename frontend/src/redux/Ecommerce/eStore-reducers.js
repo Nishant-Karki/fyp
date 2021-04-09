@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   products: [],
   cart: [],
   currentItem: null,
+  bookedProducts: [],
 };
 
 const shopReducer = (state = INITIAL_STATE, action) => {

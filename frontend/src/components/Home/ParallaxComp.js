@@ -26,7 +26,11 @@ function ParallaxComp() {
           <div style={{ textAlign: "center", marginBotton: "-4rem" }}>
             <Typography variant="h2">Make Time For Yourself</Typography>
             <Typography variant="h5">Get Glowing and Natural looks</Typography>
-            <Button>BOOK APPOINTMENT</Button>
+            <Button>
+              <Link to="/booking" className="link">
+                BOOK APPOINTMENT
+              </Link>
+            </Button>
           </div>
         </div>
       </Parallax>

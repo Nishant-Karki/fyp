@@ -8,6 +8,7 @@ import {
   Paper,
   Grid,
   Toolbar,
+  ListItemAvatar,
 } from "@material-ui/core";
 import useCustomForm from "../common/useCustomForm";
 
@@ -23,7 +24,7 @@ import useSettings from "./useSettings";
 import { withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CustomSnackbar from "../common/CustomSnackbar";
-
+import moment from "moment";
 const useStyles = makeStyles((theme) => ({
   profileName: {
     marginTop: "0.7rem",
@@ -40,6 +41,7 @@ function UserProfile() {
   const [deletePopUp, setDeletePopUp] = useState(false);
 
   const data = useSelector((state) => state.login.userData);
+  const appointments = useSelector((state) => state.booking.appointments);
 
   const [userData, setUserData] = useState(data);
 
@@ -199,18 +201,23 @@ function UserProfile() {
       </PopUp> */}
 
             {/* recent activities */}
-            {item.role === "C" && (
-              <Paper style={{ marginTop: "2rem" }}>
-                <CustomToolbar title="Recent Activities" />
-                <Toolbar>No Recent Activities</Toolbar>
-              </Paper>
-            )}
-            {item.role === "S" && (
-              <Paper style={{ marginTop: "2rem" }}>
-                <CustomToolbar title="Recent Activities" />
-                <Toolbar>No Recent Activities</Toolbar>
-              </Paper>
-            )}
+            <Paper style={{ marginTop: "2rem" }}>
+              <CustomToolbar title="Recent Activities" />
+              {item.role === "C" &&
+                appointments
+                  ?.filter(
+                    (appointment) => appointment.user_id === item.user_id
+                  )
+                  .map((item) => (
+                    <Toolbar>
+                      Booked {item.serviceName} with {item.staff_name} on{" "}
+                      {moment(item.date).format("YYYY/MM/DD")} {item.time}.{" "}
+                      {item.payment === "offline" || item.payment === "offline"
+                        ? "Payment not done."
+                        : `Choosen Payment method is ${item.payment}`}
+                    </Toolbar>
+                  ))}
+            </Paper>
           </div>
         ))}
     </Container>

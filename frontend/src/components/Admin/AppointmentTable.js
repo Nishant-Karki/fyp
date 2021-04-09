@@ -56,7 +56,7 @@ export default function EcommerceTable() {
 
   const appointments = useSelector((state) => state.booking.appointments);
   //store array from database
-  let newAppointment = appointments.filter((item) => item.payment !== null);
+  let newAppointment = appointments?.filter((item) => item.payment !== null);
   const [records, setRecords] = useState(newAppointment);
   const dispatch = useDispatch();
 

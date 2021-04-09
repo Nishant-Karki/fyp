@@ -1,6 +1,5 @@
-import { Typography, Box } from "@material-ui/core";
+import { Typography, Box, Container } from "@material-ui/core";
 import React from "react";
-import { Container } from "react-bootstrap";
 
 import { FaFacebook, FaInstagram, FaGoogle } from "react-icons/fa";
 import { FiTwitter } from "react-icons/fi";
@@ -10,8 +9,8 @@ import "../scss/footer.scss";
 
 function Footer() {
   return (
-    <Container className="container">
-      <div className="root">
+    <Container maxWidth="lg" style={{ marginTop: "3rem" }}>
+      <div>
         <Box display="flex" justifyContent="center" height="3rem">
           <img
             src={require("../../images/other/logo-white.png").default}

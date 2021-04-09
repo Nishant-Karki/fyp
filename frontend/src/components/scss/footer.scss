@@ -1,12 +1,7 @@
 .footer {
   display: flex;
-  min-width: 65rem;
   justify-content: space-between;
   @media (max-width: 400px) {
     display: block;
   }
-}
-.root {
-  position: absolute;
-  bottom: -10rem;
 }

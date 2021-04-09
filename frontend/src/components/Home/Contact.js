@@ -6,23 +6,20 @@ import {
   Grid,
   Button,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { Container } from "react-bootstrap";
-
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import useCustomForm from "../common/useCustomForm";
-import axios from "axios";
+import ContactForm from "../common/ContactForm";
+import CustomSnackbar from "../common/CustomSnackbar";
 
 const useStyles = makeStyles({
-  contactContainer: { marginTop: "10%", marginBottom: "10%" },
   paper: {
     width: "40rem",
     padding: "2.5rem",
+    height: "24rem",
   },
   box: {
     display: "flex",
-    justifyContent: "center",
+
     marginTop: "2rem",
   },
   submitBtn: {
@@ -31,33 +28,24 @@ const useStyles = makeStyles({
   },
 });
 
-const ContactSchema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
-  phone: Yup.number().min(10).required("Number is required"),
-  email: Yup.string().email().required("Email is required"),
-  message: Yup.string().required("Feedbacks are appreciated"),
-});
-
-const initialValues = {
-  name: "",
-  phone: "",
-  email: "",
-  message: "",
-};
-
 function Contact() {
   const classes = useStyles();
 
-  const { CustomTextField } = useCustomForm();
+  const [response, setResponse] = useState();
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackType, setSnackType] = useState();
 
-  const onSubmit = (values) => {
-    console.log(values.message);
-    axios.post("/contactForm", values).then((res) => console.log(res));
-  };
   return (
     <>
       <div id="contact" style={{ marginBottom: "5rem" }}></div>
-
+      {response && response.length > 0 && (
+        <CustomSnackbar
+          snackbarOpen={snackbar}
+          setSnackbar={setSnackbar}
+          snackType={snackType}
+          snackContent={response}
+        />
+      )}
       {/* for smooth scrolling */}
       <div style={{ marginBottom: "5rem" }}></div>
       <Box>
@@ -67,71 +55,28 @@ function Contact() {
           </Typography>
           <Box className={classes.box}>
             <Paper className={classes.paper}>
-              <Formik
-                initialValues={initialValues}
-                validationSchema={ContactSchema}
-                onSubmit={onSubmit}
-              >
-                {({ errors, handleChange, touched }) => (
-                  <Form autoComplete="off">
-                    <Grid container component="div" spacing={4}>
-                      <Grid item xs={12} sm={6}>
-                        <CustomTextField
-                          label="Your Name"
-                          name="name"
-                          type="text"
-                          error={errors.name && touched.name}
-                          onChange={handleChange}
-                          errortext={errors.name}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <CustomTextField
-                          label="Phone"
-                          name="phone"
-                          type="tel"
-                          error={errors.phone && touched.phone}
-                          errortext={errors.phone}
-                          onChange={handleChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <CustomTextField
-                          label="Your E-mail"
-                          name="email"
-                          type="email"
-                          onChange={handleChange}
-                          error={errors.email && touched.email}
-                          errortext={errors.email}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        {" "}
-                        <CustomTextField
-                          label="Message"
-                          name="message"
-                          type="text"
-                          multiline
-                          rows={4}
-                          onChange={handleChange}
-                          error={errors.message && touched.message}
-                          errortext={errors.message}
-                        />
-                      </Grid>
-                    </Grid>
-                    <Box textAlign="center">
-                      <Button
-                        type="submit"
-                        size="large"
-                        className={classes.submitBtn}
-                      >
-                        Submit
-                      </Button>
-                    </Box>
-                  </Form>
-                )}
-              </Formik>
+              <ContactForm
+                subject="Feedback By"
+                staff="false"
+                setResponse={setResponse}
+                setSnackType={setSnackType}
+                setSnackbar={setSnackbar}
+              />
             </Paper>
+            <iframe
+              title="map"
+              src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1249.3886581548336!2d85.43926011041071!3d27.661511338019178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2snp!4v1617938896437!5m2!1sen!2snp"
+              width="400"
+              height="300"
+              style={{
+                border: 0,
+                borderRadius: "10px",
+                marginTop: "3rem",
+                marginLeft: "4rem",
+              }}
+              allowfullscreen=""
+              loading="lazy"
+            ></iframe>
           </Box>
         </Container>
       </Box>

@@ -17,6 +17,7 @@ import OrderPage from "../components/Booking/OrderPage";
 import BookingCart from "../components/Booking/BookingCart";
 import { Typography } from "@material-ui/core";
 import BookingHover from "../components/common/BookingHover";
+import Footer from "../components/Footer/Footer";
 
 export default function RoutesWithNavbar() {
   const token = useSelector((state) => state.login.authToken);
@@ -42,6 +43,7 @@ export default function RoutesWithNavbar() {
         <Route exact path="/booking" component={BookService} />
         <ProtectedRoute path="/user" isAuth={token} component={UserProfile} />
       </Switch>
+      <Footer />
     </div>
   );
 }

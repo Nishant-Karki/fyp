@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import PopUp from "../common/PopUp";
 import {
   Container,
   Grid,
@@ -19,8 +19,14 @@ import {
   fetchUserAppointment,
   loadCurrentService,
 } from "../../redux/Booking/booking-actions";
+import ContactForm from "../common/ContactForm";
+import CustomSnackbar from "../common/CustomSnackbar";
 
 function BookService() {
+  const [response, setResponse] = useState();
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackType, setSnackType] = useState();
+
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.login.userData);
   useEffect(() => {
@@ -34,9 +40,41 @@ function BookService() {
 
   const services = useSelector((state) => state.booking.services);
 
+  //for popup
+  const [openPopUp, setOpenPopUp] = useState(false);
   return (
     <>
-      <Container maxWidth="lg" style={{ marginTop: "10rem" }}>
+      <Container maxWidth="lg" style={{ marginTop: "8rem" }}>
+        {response && response.length > 0 && (
+          <CustomSnackbar
+            snackbarOpen={snackbar}
+            setSnackbar={setSnackbar}
+            snackType={snackType}
+            snackContent={response}
+          />
+        )}
+        <Box
+          display="flex"
+          marginBottom="2rem"
+          padding="0.3rem"
+          width="40rem"
+          borderRadius="5px"
+          float="right"
+        >
+          <Typography>Need Staffs for event?</Typography>
+          <Button
+            onClick={() => setOpenPopUp(true)}
+            style={{
+              marginTop: -3,
+              backgroundColor: "teal",
+              height: 30,
+              marginLeft: 15,
+              width: 200,
+            }}
+          >
+            Book Staffs
+          </Button>
+        </Box>
         <Box>
           <Grid container spacing={2}>
             {services?.map((item) => (
@@ -80,6 +118,19 @@ function BookService() {
             ))}
           </Grid>
         </Box>
+        <PopUp
+          title="Staffs For Event"
+          openPopup={openPopUp}
+          setOpenPopup={setOpenPopUp}
+        >
+          <ContactForm
+            subject="Staffs Required for Events --"
+            staff="true"
+            setResponse={setResponse}
+            setSnackType={setSnackType}
+            setSnackbar={setSnackbar}
+          />
+        </PopUp>
       </Container>
     </>
   );
