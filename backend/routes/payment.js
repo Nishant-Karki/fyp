@@ -4,7 +4,6 @@ const db = require("../database");
 module.exports = router.post("/payment", (req, res) => {
   const id = req.body.id;
   const option = req.body.option;
-  console.log(option);
   db.query(
     "UPDATE appointment SET payment=? WHERE user_id=?",
     [option, id],

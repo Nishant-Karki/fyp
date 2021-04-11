@@ -51,10 +51,11 @@ const Signup = ({ navigation }) => {
   const [snackContent, setSnackContent] = useState("");
   const [snackType, setSnackType] = useState("blue");
 
-  const handleOnSignup = async (values) => {
+  const [date, setDate] = useState();
+  const handleOnSignup = async (values, { resetForm }) => {
     Keyboard.dismiss();
     axios
-      .post("http://192.168.0.106:3001/register", {
+      .post("http://192.168.0.104:3001/register", {
         values,
       })
       .then((res) => {
@@ -63,11 +64,14 @@ const Signup = ({ navigation }) => {
         setSnackIsVisible(true);
         setTimeout(() => {
           setSnackIsVisible(false);
-          snackContent === "success" && navigation.goBack();
+          if (res.data.type === "success") {
+            resetForm();
+            setDate();
+            navigation.navigate("Login");
+          }
         }, 2500);
       });
   };
-  const [date, setDate] = useState();
 
   const data = [
     {
@@ -100,7 +104,7 @@ const Signup = ({ navigation }) => {
           confirmPassword: "",
           dob: "",
         }}
-        onSubmit={(values) => handleOnSignup(values)}
+        onSubmit={handleOnSignup}
         validationSchema={validationSchema}
       >
         {({

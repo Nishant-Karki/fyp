@@ -20,6 +20,7 @@ import { handleStorePayment } from "../../redux/Ecommerce/eStore-actions";
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: "6rem",
+    height: "60vh",
   },
   paper: {
     marginTop: "2rem",
@@ -182,16 +183,7 @@ function Cart() {
                   <Button
                     style={{ backgroundColor: "teal" }}
                     onClick={() => {
-                      cart.map((item) =>
-                        dispatch(
-                          handleStorePayment(
-                            item.product_id,
-                            userId,
-                            item.qty,
-                            item.price
-                          )
-                        )
-                      );
+                      dispatch(handleStorePayment(cart));
                     }}
                   >
                     Checkout

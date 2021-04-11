@@ -17,12 +17,16 @@ import {
   handlePayment,
 } from "../../redux/Booking/booking-actions";
 import CustomSnackbar from "../common/CustomSnackbar";
+import axios from "axios";
 
 export default function Payment() {
   const { checkout } = useKhaltiCheckout();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.login.userData);
   const userId = userData.map((item) => item.user_id);
+
+  const cart = useSelector((state) => state.store.cart);
+  const bookingCart = useSelector((state) => state.booking.bookingCart);
 
   const [response, setResponse] = useState();
   const [snackbar, setSnackbar] = useState(false);
@@ -58,12 +62,16 @@ export default function Payment() {
             onClick={() => {
               dispatch(handlePayment(userId, offline));
               dispatch(fetchAppointment());
-              // dispatch(fetchServices());
+              axios.post("/confirmation", {
+                email: userData.map((item) => item.email),
+                cart: cart,
+                bookingCart: bookingCart,
+              });
               setSnackbar(true);
               setSnackType("success");
               setResponse("Thankyou for choosing us");
               setTimeout(() => {
-                history.push("/#services");
+                // history.push("/#services");
               }, 2500);
             }}
           >

@@ -103,8 +103,14 @@ app.use(cancelAppointmentRouter);
 const paymentRouter = require("./routes/payment");
 app.use(paymentRouter);
 
-const contactForm = require("./routes/contactFormEmail");
-app.use(contactForm);
+const contactFormRouter = require("./routes/contactFormEmail");
+app.use(contactFormRouter);
+
+const bookedProductRouter = require("./routes/bookedProducts");
+app.use(bookedProductRouter);
+
+const emailUserRouter = require("./routes/emailUser");
+app.use(emailUserRouter);
 
 app.get("/", (req, res) => {
   res.json({ result: "Working fine" });

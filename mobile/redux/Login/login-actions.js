@@ -8,6 +8,9 @@ import {
 import axios from "axios";
 
 export const userData = (data) => {
+  alert(data);
+  console.log("here");
+  console.log(data);
   return {
     type: USER_DATA,
     payload: data,
@@ -28,14 +31,14 @@ export const logout = () => {
 };
 
 export const deleteAccount = (id) => {
-  axios.post("/deleteAccount", { id: id });
+  axios.post("http://192.168.0.104:3001/deleteAccount", { id: id });
   return {
     type: DELETE_ACCOUNT,
   };
 };
 
 export const updateProfile = (data) => async (dispatch) => {
-  const res = await axios.post(`/profileImage`, data);
+  const res = await axios.post(`http://192.168.0.104:3001/profileImage`, data);
   console.log(res);
   dispatch({
     type: UPDATE_PROFILE,

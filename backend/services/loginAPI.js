@@ -7,7 +7,6 @@ const dbQuery = "SELECT * FROM users WHERE email=?";
 
 module.exports = loginPOST = (req, res) => {
   const { email, password } = req.body.values;
-
   db.query(dbQuery, email, (err, result) => {
     if (err) {
       res.send({ err: err });

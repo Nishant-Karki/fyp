@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/Nishant-Karki/fyp/issues"
   },
-  "homepage": "https://github.com/Nishant-Karki/fyp#readme"
+  "homepage": "https://github.com/Nishant-Karki/fyp#readme",
+  "dependencies": {
+    "react-native-datepicker": "^1.7.2"
+  }
 }

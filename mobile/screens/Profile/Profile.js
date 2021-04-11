@@ -12,14 +12,16 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
 
 export default function Profile() {
+  const userData = useSelector((state) => state.login.userData);
   return (
     <View style={{ flex: 1 }}>
       <StatusBar translucent backgroundColor="transparent" />
       <View style={{ backgroundColor: "black", height: 120 }}>
         <Image
-          source={require("../../logo.png")}
+          source={require("../../logo-white.png")}
           style={{ width: "100%", height: "100%", paddingBottom: 10 }}
         />
       </View>

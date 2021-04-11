@@ -13,6 +13,7 @@ import {
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/Ecommerce/eStore-actions";
+import { useHistory } from "react-router-dom";
 
 //sass
 import "../scss/showItem.scss";
@@ -25,6 +26,7 @@ const useStyles = makeStyles({
 });
 
 function ShowItem() {
+  let history = useHistory();
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -45,6 +47,15 @@ function ShowItem() {
       setCount(count - 1);
     }
   };
+
+  const onSubmit = (product_id, count, userId) => {
+    if (userData.length > 0) {
+      dispatch(addToCart(product_id, count, userId));
+    } else {
+      history.push("/login");
+    }
+  };
+
   return (
     <>
       <Container maxWidth="md" className={classes.container}>
@@ -85,7 +96,7 @@ function ShowItem() {
               </Box>
               <Box>
                 <Button
-                  onClick={() => dispatch(addToCart(product_id, count, userId))}
+                  onClick={() => onSubmit(product_id, count, userId)}
                   style={{ marginTop: "1.3rem", marginLeft: "1.7rem" }}
                 >
                   <Typography color="teal" variant="body1">

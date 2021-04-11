@@ -12,7 +12,7 @@ import {
 } from "react-native-paper";
 import DropDownPicker from "react-native-dropdown-picker";
 import DatePicker from "react-native-datepicker";
-import moment from 'moment'
+import moment from "moment";
 
 export default function ServiceDetail({ navigation }) {
   Feather.loadFont();
@@ -37,8 +37,8 @@ export default function ServiceDetail({ navigation }) {
   const tommorowDate = moment.utc(tommorowMoment._d).format("YYYY-MM-DD");
 
   const [selectedStaff, setSelectedStaff] = useState();
-const [selectedTime, setSelectedTime] = useState()
- 
+  const [selectedTime, setSelectedTime] = useState();
+
   return (
     <View style={{ flex: 1 }}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -66,72 +66,72 @@ const [selectedTime, setSelectedTime] = useState()
           <Paragraph>Description</Paragraph>
         </View>
       </Surface>
-        <Surface
-          style={{
-            margin: 10,
-            padding: 12,
-            borderRadius: 10,
-            elevation: 5,
-            height: 210,
-          }}
-        >
-          <View>
-            <Caption>Choose Specialist</Caption>
+      <Surface
+        style={{
+          margin: 10,
+          padding: 12,
+          borderRadius: 10,
+          elevation: 5,
+          height: 210,
+        }}
+      >
+        <View>
+          <Caption>Choose Specialist</Caption>
+          <DropDownPicker
+            items={staff}
+            placeholder="Select Specialist"
+            containerStyle={{ height: 40 }}
+            onChangeItem={(item) => setSelectedStaff(item)}
+          />
+        </View>
+        <View style={{ flex: 1, flexDirection: "row", marginTop: 10 }}>
+          <View style={{ flex: 1 }}>
+            <Caption>Choose Time</Caption>
             <DropDownPicker
-              items={staff}
-              placeholder="Select Specialist"
+              items={TimeAvailable}
+              placeholder="Select Time"
               containerStyle={{ height: 40 }}
-              onChangeItem={(item) => setSelectedStaff(item)}
+              onChangeItem={(item) => setSelectedTime(item)}
             />
           </View>
-          <View style={{ flex: 1, flexDirection: "row", marginTop: 10 }}>
-            <View style={{ flex: 1 }}>
-              <Caption>Choose Time</Caption>
-              <DropDownPicker
-                items={TimeAvailable}
-                placeholder="Select Time"
-                containerStyle={{ height: 40 }}
-                onChangeItem={(item) => setSelectedTime(item)}
-              />
-            </View>
-            <View style={{ flex: 2 }}>
-              <Caption style={{ marginLeft: 34 }}>Choose Date</Caption>
-              <DatePicker
-                style={styles.datePickerStyle}
-                date={date} //initial date from state
-                mode="date" //The enum of date, datetime and time
-                placeholder="Appointment Date"
-                format="YYYY-MM-DD"
-                minDate={tommorowDate}
-                showIcon={false}
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    // display: 'none',
-                    position: "absolute",
-                    left: 0,
-                    top: 4,
-                    marginLeft: 0,
-                  },
-                  dateInput: {
-                    marginLeft: 36,
-                  },
-                }}
-                onDateChange={(date) => {
-                  setDate(date);
-                }}
-              />
-            </View>
+          <View style={{ flex: 2 }}>
+            <Caption style={{ marginLeft: 34 }}>Choose Date</Caption>
+            <DatePicker
+              style={styles.datePickerStyle}
+              date={date} //initial date from state
+              mode="date" //The enum of date, datetime and time
+              placeholder="Appointment Date"
+              format="YYYY-MM-DD"
+              minDate={tommorowDate}
+              showIcon={false}
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  // display: 'none',
+                  position: "absolute",
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                },
+              }}
+              onDateChange={(date) => {
+                setDate(date);
+              }}
+            />
           </View>
+        </View>
 
-          <Button
-            onPress={() => navigation.navigate("Services")}
-            style={{ width: 220, alignSelf: "center" }}
-          >
-            Book Appointment
-          </Button>
-        </Surface>
+        <Button
+          onPress={() => navigation.navigate("Services")}
+          style={{ width: 220, alignSelf: "center" }}
+        >
+          Book Appointment
+        </Button>
+      </Surface>
 
       {/* <Button title="ss" onPress={() => navigation.goBack()} /> */}
     </View>

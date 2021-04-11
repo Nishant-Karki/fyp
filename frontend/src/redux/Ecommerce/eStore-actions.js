@@ -74,10 +74,8 @@ export const updateProduct = (values, productId) => async (dispatch) => {
   });
 };
 
-export const handleStorePayment = (itemId, userId, qty, price) => async (
-  dispatch
-) => {
-  console.log(qty);
+export const handleStorePayment = (cart) => async (dispatch) => {
+  axios.post("/productBooking", { cart: cart });
   dispatch({
     type: actionTypes.STORE_PAYMENT,
   });

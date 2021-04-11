@@ -25,6 +25,7 @@ import Payment from "../Payment/Payment";
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: "6rem",
+    height: "60vh",
   },
   paper: {
     marginTop: "2rem",

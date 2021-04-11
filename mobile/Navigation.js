@@ -13,13 +13,17 @@ import CustomDrawer from "./CustomDrawer";
 import { Feather, Entypo } from "@expo/vector-icons";
 import { Button } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
+import AboutUs from "./screens/About Us/AboutUs";
 
 const Drawer = createDrawerNavigator();
 const DrawerNavigation = () => {
+  const userData = useSelector((state) => state.login.userData);
   return (
     <Drawer.Navigator drawerContent={(props) => <CustomDrawer {...props} />}>
       <Drawer.Screen name="Booking" component={StackNavigation} />
       <Drawer.Screen name="Profile" component={Profile} />
+      <Drawer.Screen name="About Us" component={AboutUs} />
       <Drawer.Screen name="Login" component={Login} />
       <Drawer.Screen name="Signup" component={Signup} />
     </Drawer.Navigator>
@@ -67,13 +71,6 @@ const StackNavigation = ({ navigation }) => {
         headerTintColor: "white",
       }}
     >
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{
-          headerTransparent: true,
-        }}
-      />
       <Stack.Screen
         name="Services"
         component={Services}

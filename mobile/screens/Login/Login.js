@@ -21,6 +21,7 @@ import { Surface } from "react-native-paper";
 import axios from "axios";
 import CustomSnackbar from "../../components/CustomSnackbar";
 import { useDispatch, useSelector } from "react-redux";
+import { userData as user, authToken } from "../../redux/Login/login-actions";
 
 LogBox.ignoreAllLogs();
 const validationSchema = Yup.object().shape({
@@ -43,35 +44,39 @@ export default Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const Token = useSelector((state) => state.login.authToken);
   const userData = useSelector((state) => state.login.userData);
-
   const goToSignup = () => navigation.navigate("Signup");
 
-  const handleOnLogin = async (values) => {
+  const handleOnLogin = async (values, { resetForm }) => {
     Keyboard.dismiss();
     userAuthenticated();
     axios
-      .post("http://192.168.0.106:3001/login", { values: values })
+      .post("http://192.168.0.104:3001/login", { values: values })
       .then((res) => {
         setSnackContent(res.data.message);
         setSnackType(res.data.type);
         setSnackIsVisible(true);
         setTimeout(() => {
           setSnackIsVisible(false);
+          if (res.data.type === "success") {
+            // resetForm();
+            // navigation.navigate("Services");
+          }
         }, 2500);
         if (snackType === "success") {
-          dispatch(userData(res.data.result));
+          dispatch(user(res.data.result));
           dispatch(authToken(res.data.token));
           let id;
           userData !== undefined && userData.map((item) => (id = item.user_id));
           dispatch(fetchUserAppointment(id));
         }
-      });
+      })
+      .catch((err) => console.log(err));
   };
+
   const userAuthenticated = async () => {
     await axios
-      .post("/isUserAuth")
+      .post("http://192.168.0.104:3001/isUserAuth")
       .then((response) => {
-        console.log("was herer");
         response.data.auth === true && navigation.navigate("Services");
       })
       .catch((err) => console.log(err));
@@ -92,9 +97,7 @@ export default Login = ({ navigation }) => {
 
         <Formik
           initialValues={{ email: "", password: "" }}
-          onSubmit={(values) => {
-            handleOnLogin(values);
-          }}
+          onSubmit={handleOnLogin}
           validationSchema={validationSchema}
         >
           {({

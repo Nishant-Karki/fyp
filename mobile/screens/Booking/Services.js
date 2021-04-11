@@ -6,28 +6,53 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchServices,
+  fetchUserAppointment,
+  fetchAppointment,
+  fetchStaffs,
+} from "../../redux/Booking/booking-actions";
 
 const Cardss = ({ navigation }) => {
+  const userData = useSelector((state) => state.login.userData);
+  const services = useSelector((state) => state.booking.services);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchServices());
+    let id;
+    userData !== undefined && userData.map((item) => (id = item.user_id));
+    dispatch(fetchUserAppointment(id));
+    dispatch(fetchStaffs());
+    dispatch(fetchAppointment());
+  }, []);
   return (
     <View style={{ margin: 20, borderRadius: 10, overflow: "hidden" }}>
-      <Card>
-        <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
-        <Card.Actions
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
-          <Text style={{ marginLeft: 8, fontSize: 18 }}>Service Name</Text>
-          <TouchableOpacity>
-            <Button onPress={() => navigation.navigate("Item Detail")}>
-              Book Now
-            </Button>
-          </TouchableOpacity>
-        </Card.Actions>
-      </Card>
+      {services.map((item) => (
+        <Card>
+          <Card.Cover />
+          <Card.Actions
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <Text style={{ marginLeft: 8, fontSize: 18 }}>Service Name</Text>
+            <TouchableOpacity>
+              <Button
+                onPress={() =>
+                  userData?.length > 0
+                    ? navigation.navigate("Item Detail")
+                    : navigation.navigate("Login")
+                }
+              >
+                Book Now
+              </Button>
+            </TouchableOpacity>
+          </Card.Actions>
+        </Card>
+      ))}
     </View>
   );
 };
 export default function Services({ navigation }) {
-  
   // const navigation = useNavigation();
 
   // function navigateToDetail() {

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import {
   useTheme,
   Avatar,
@@ -7,6 +7,7 @@ import {
   Caption,
   Paragraph,
   Drawer,
+  StatusBar,
   Text,
   TouchableRipple,
   Switch,
@@ -20,20 +21,33 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useSelector } from "react-redux";
 
 export default function CustomDrawer(props) {
+  const userData = useSelector((state) => state.login.userData);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
-          <TouchableRipple
+          {/* <TouchableRipple
             style={{
               borderBottomColor: "lightgrey",
               paddingBottom: 20,
               borderBottomWidth: 1,
             }}
-          >
-            <View style={styles.userInfoSection}>
+          > */}
+          <View style={{ margin: 10 }}>
+            <Image
+              source={require("./logo.png")}
+              style={{
+                width: 250,
+                height: 78,
+                marginLeft: 10,
+                paddingBottom: 10,
+              }}
+            />
+          </View>
+          {/* <View style={styles.userInfoSection}>
               <View style={{ flexDirection: "row", marginTop: 15 }}>
                 <View
                   style={{
@@ -56,18 +70,13 @@ export default function CustomDrawer(props) {
                   <Caption style={styles.caption}>Email</Caption>
                 </View>
               </View>
-            </View>
-          </TouchableRipple>
+            </View> */}
+          {/* </TouchableRipple> */}
 
           <Drawer.Section style={styles.drawerSection}>
-            <DrawerItem
-              labelStyle={{ fontSize: 16, color: "black" }}
-              icon={({ color, size }) => (
-                <FontAwesome name="user" size={size} color={color} />
-              )}
-              label="Profile"
-              onPress={() => props.navigation.navigate("Profile")}
-            />
+            <View
+              style={{ borderTopColor: "#f4f4f4", borderTopWidth: 2 }}
+            ></View>
 
             <DrawerItem
               labelStyle={{ fontSize: 16, color: "black" }}
@@ -79,6 +88,25 @@ export default function CustomDrawer(props) {
                 props.navigation.navigate("Booking");
               }}
             />
+
+            {userData?.length > 0 && (
+              <DrawerItem
+                labelStyle={{ fontSize: 16, color: "black" }}
+                icon={({ color, size }) => (
+                  <FontAwesome name="user" size={size} color={color} />
+                )}
+                label="Profile"
+                onPress={() => props.navigation.navigate("Profile")}
+              />
+            )}
+            <DrawerItem
+              labelStyle={{ fontSize: 16, color: "black" }}
+              icon={({ color, size }) => (
+                <Entypo name="info-with-circle" color={color} size={size} />
+              )}
+              label="About Us"
+              onPress={() => props.navigation.navigate("About Us")}
+            />
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>
@@ -88,7 +116,7 @@ export default function CustomDrawer(props) {
           icon={({ color, size }) => (
             <AntDesign name="login" color={color} size={size} />
           )}
-          label="Log In"
+          label={userData?.length > 0 ? "Log Out" : "Log In"}
           onPress={() => props.navigation.navigate("Login")}
         />
       </Drawer.Section>
