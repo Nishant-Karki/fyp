@@ -14,10 +14,27 @@ module.exports = router.post("/payment", (req, res) => {
         //   [id, option],
         //   (err, result) => {}
         // );
-        res.json({ result: result });
+        console.log(result);
       } else {
-        res.json({ err: err });
+        console.log(err);
       }
     }
   );
+  db.query(
+    "UPDATE orderdetails SET payment=? WHERE user_id=?",
+    [option, id],
+    (err, result) => {
+      if (!err) {
+        // db.query(
+        //   "INSERT INTO appointment (payment) VALUES (?) WHERE user_id=?",
+        //   [id, option],
+        //   (err, result) => {}
+        // );
+        console.log(result);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+  res.json({ message: "Payment Complete" });
 });

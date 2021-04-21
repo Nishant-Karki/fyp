@@ -22,6 +22,7 @@ import axios from "axios";
 import CustomSnackbar from "../../components/CustomSnackbar";
 import { useDispatch, useSelector } from "react-redux";
 import { userData as user, authToken } from "../../redux/Login/login-actions";
+import { fetchUserAppointment } from "../../redux/Booking/booking-actions";
 
 LogBox.ignoreAllLogs();
 const validationSchema = Yup.object().shape({
@@ -50,32 +51,35 @@ export default Login = ({ navigation }) => {
     Keyboard.dismiss();
     userAuthenticated();
     axios
-      .post("http://192.168.0.104:3001/login", { values: values })
+      .post("http://192.168.0.103:3001/login", { values: values })
       .then((res) => {
         setSnackContent(res.data.message);
         setSnackType(res.data.type);
         setSnackIsVisible(true);
-        setTimeout(() => {
-          setSnackIsVisible(false);
-          if (res.data.type === "success") {
-            // resetForm();
-            // navigation.navigate("Services");
-          }
-        }, 2500);
         if (snackType === "success") {
           dispatch(user(res.data.result));
+          console.log(res.data.result);
           dispatch(authToken(res.data.token));
           let id;
           userData !== undefined && userData.map((item) => (id = item.user_id));
-          dispatch(fetchUserAppointment(id));
+          dispatch(fetchUserAppointment());
+          setTimeout(() => {
+            setSnackIsVisible(false);
+          }, 1500);
         }
+        setTimeout(() => {
+          if (res.data.type === "success") {
+            resetForm();
+            navigation.navigate("Home");
+          }
+        }, 1500);
       })
       .catch((err) => console.log(err));
   };
 
   const userAuthenticated = async () => {
     await axios
-      .post("http://192.168.0.104:3001/isUserAuth")
+      .post("http://192.168.0.103:3001/isUserAuth")
       .then((response) => {
         response.data.auth === true && navigation.navigate("Services");
       })

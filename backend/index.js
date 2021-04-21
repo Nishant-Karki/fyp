@@ -112,6 +112,12 @@ app.use(bookedProductRouter);
 const emailUserRouter = require("./routes/emailUser");
 app.use(emailUserRouter);
 
+const userReviewRouter = require("./routes/userReview");
+app.use(userReviewRouter);
+
+const userDataRouter = require("./routes/userData");
+app.use(userDataRouter);
+
 app.get("/", (req, res) => {
   res.json({ result: "Working fine" });
 });

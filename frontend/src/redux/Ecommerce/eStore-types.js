@@ -7,3 +7,5 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const ADD_PRODUCT = "ADD_PRODUCT";
 
 export const STORE_PAYMENT = "STORE_PAYMENT";
+export const FETCH_ORDER = "FETCH_ORDER";
+export const FETCH_USER_ORDER = "FETCH_USER_ORDER";

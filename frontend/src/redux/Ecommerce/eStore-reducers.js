@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   products: [],
   cart: [],
   currentItem: null,
-  bookedProducts: [],
+  orderDetails: [],
 };
 
 const shopReducer = (state = INITIAL_STATE, action) => {
@@ -80,6 +80,23 @@ const shopReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         // products: action.payload,
+      };
+    case actionTypes.FETCH_ORDER:
+      return {
+        ...state,
+        orderDetails: action.payload,
+      };
+
+    case actionTypes.FETCH_USER_ORDER:
+      return {
+        ...state,
+        // bookingCart: action.payload,
+      };
+
+    case actionTypes.STORE_PAYMENT:
+      return {
+        ...state,
+        bookedProducts: action.payload,
       };
     default:
       return state;

@@ -1,89 +1,174 @@
-import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, Image, Linking } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Button, Surface } from "react-native-paper";
+import {
+  Button,
+  Headline,
+  Subheading,
+  Surface,
+  Title,
+} from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteAppointment } from "../../redux/Booking/booking-actions";
+import { fetchAppointment } from "../../redux/Booking/booking-actions";
+import { fetchProducts } from "../../redux/Ecommerce/eStore-actions";
 
 export default function Cart({ navigation }) {
+  const dispatch = useDispatch();
+
+  const cart = useSelector((state) => state.booking.bookingCart);
+
+  // const [open, setOpen] = useState(false);
+  const userData = useSelector((state) => state.login.userData);
+  const [userId] = userData.map((item) => item.user_id);
+
+  const newCart = cart.filter((item) => item.userId === userId);
+
+  const [bookingCart, setBookingCart] = useState(newCart);
+  let totalPrice;
+  let withVAT;
+
+  if (bookingCart && bookingCart?.length > 0) {
+    let array = bookingCart.map((item) => item.price);
+    totalPrice = array.reduce((a, b) => a + b);
+    withVAT = totalPrice + Math.round(totalPrice * (13 / 100));
+  }
+
+  const OpenWEB = () => {
+    Linking.openURL("http:localhost:3000/payment");
+  };
   return (
     <View style={styles.topDesign}>
-      <View
-        style={{
-          height: 35,
-          display: "flex",
-          flexDirection: "row",
-          marginLeft: 10,
-          marginTop: 10,
-        }}
-      >
-        <Surface
-          style={{
-            elevation: 5,
-            height: 60,
-            borderRadius: 10,
-            margin: 5,
-            elevation: 5,
-            padding: 10,
-          }}
-        >
-          <Text style={{ color: "black", fontSize: 15 }}>
-            Total Amount with 13% VAT
-          </Text>
-          <Text style={{ color: "black", fontSize: 22 }}>Rs 2000000 /-</Text>
-        </Surface>
-        <TouchableOpacity
-          style={{
-            elevation: 5,
-            backgroundColor: "white",
-            width: 120,
-            marginTop: 17,
-            marginLeft: 25,
-            borderRadius: 10,
-          }}
-        >
-          <Button onPress={() => alert("CHECKOUT")}>Checkout</Button>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.cartElevated}>
-        <ScrollView style={styles.scrollView}>
+      <View>
+        {bookingCart && bookingCart?.length > 0 && (
           <View
             style={{
-              height: 80,
-              borderRadius: 8,
-              overflow: "hidden",
-              flex: 4,
+              height: 35,
+              display: "flex",
               flexDirection: "row",
-              backgroundColor: "#F4F4F4",
+              marginLeft: 10,
+              marginTop: 10,
             }}
           >
-            <Image
-              source={{ uri: "https://picsum.photos/700" }}
-              style={{ flex: 1 }}
-            />
-            <View style={{ flex: 2, padding: 8 }}>
-              <View style={{ flex: 3, flexDirection: "row" }}>
-                <View style={{ flex: 2 }}>
-                  <Text style={{ fontSize: 18 }}>Service Name</Text>
-                  <Text>Rs. 200</Text>
-                  <Text>Date and Time</Text>
-                </View>
-
+            <Surface
+              style={{
+                elevation: 5,
+                height: 65,
+                borderRadius: 10,
+                margin: 5,
+                elevation: 5,
+                padding: 10,
+              }}
+            >
+              <Text style={{ color: "black", fontSize: 15 }}>
+                Total Amount with 13% VAT
+              </Text>
+              <Text style={{ color: "black", fontSize: 22 }}>
+                Rs. {withVAT}
+              </Text>
+            </Surface>
+            <TouchableOpacity
+              style={{
+                elevation: 5,
+                backgroundColor: "white",
+                width: 120,
+                marginTop: 17,
+                marginLeft: 25,
+                borderRadius: 10,
+              }}
+            >
+              <Button onPress={() => OpenWEB}>Checkout</Button>
+            </TouchableOpacity>
+          </View>
+        )}
+        <View style={styles.cartElevated}>
+          <ScrollView style={styles.scrollView}>
+            {bookingCart && bookingCart?.length > 0 ? (
+              bookingCart.map((item) => (
                 <View
+                  key={item.serviceId}
                   style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
+                    height: 100,
+                    borderRadius: 8,
+                    overflow: "hidden",
+                    flex: 4,
+                    flexDirection: "row",
+                    backgroundColor: "#F4F4F4",
                   }}
                 >
-                  <TouchableOpacity>
-                    <MaterialIcons name="delete" size={25} color="red" />
-                  </TouchableOpacity>
+                  <Image
+                    source={{ uri: "https://picsum.photos/700" }}
+                    style={{ flex: 1 }}
+                  />
+                  <View style={{ flex: 2, padding: 8 }}>
+                    <View style={{ flex: 3, flexDirection: "row" }}>
+                      <View style={{ flex: 2 }}>
+                        <View style={{ flex: 1, fontSize: 18 }}>
+                          <Text>{item.name}</Text>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                          <Text>Rs. {item.price}</Text>
+                        </View>
+                        <Text>Date: {item.date}</Text>
+                        <Text>Time: {item.time}</Text>
+                      </View>
+
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() => {
+                            dispatch(
+                              deleteAppointment(item.serviceId, item.userId)
+                            );
+                            setBookingCart(
+                              bookingCart.filter(
+                                (filterItem) =>
+                                  filterItem.serviceId !== item.serviceId &&
+                                  filterItem !== item.serviceId
+                              )
+                            );
+                            dispatch(fetchAppointment());
+                            dispatch(fetchProducts());
+                          }}
+                        >
+                          <MaterialIcons name="delete" size={25} color="red" />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
                 </View>
+              ))
+            ) : (
+              <View
+                style={{
+                  marginTop: 100,
+                  display: "flex",
+                  flexDirection: "row",
+                  padding: 20,
+                  marginLeft: 10,
+                }}
+              >
+                <Subheading style={{ alignItems: "center" }}>
+                  No current bookings
+                </Subheading>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Services")}
+                >
+                  <Button style={{ width: 200, marginTop: 3, marginLeft: -20 }}>
+                    Book Now
+                  </Button>
+                </TouchableOpacity>
               </View>
-            </View>
-          </View>
-        </ScrollView>
+            )}
+          </ScrollView>
+        </View>
       </View>
     </View>
   );
@@ -91,14 +176,14 @@ export default function Cart({ navigation }) {
 
 const styles = StyleSheet.create({
   topDesign: {
-    backgroundColor: "#e91e63",
+    backgroundColor: "teal",
     height: 160,
     borderBottomEndRadius: 80,
     borderBottomLeftRadius: 80,
   },
   cartElevated: {
     backgroundColor: "white",
-    elevation:5,
+    elevation: 5,
     marginTop: 45,
     height: 420,
     margin: 15,

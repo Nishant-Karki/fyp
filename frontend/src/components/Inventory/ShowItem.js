@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //ui
 import {
@@ -8,15 +8,24 @@ import {
   Button,
   makeStyles,
   Container,
+  ListItem,
+  Avatar,
+  Paper,
+  TextField,
 } from "@material-ui/core";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../redux/Ecommerce/eStore-actions";
+import { addToCart, fetchOrder } from "../../redux/Ecommerce/eStore-actions";
 import { useHistory } from "react-router-dom";
+
+import CustomToolbar from "../common/CustomToolbar";
 
 //sass
 import "../scss/showItem.scss";
+
+import axios from "axios";
+import { AiFillDelete } from "react-icons/ai";
 
 const useStyles = makeStyles({
   container: { marginTop: "15%", marginBottom: "10%" },
@@ -54,6 +63,53 @@ function ShowItem() {
     } else {
       history.push("/login");
     }
+  };
+
+  const [productFeedback, setProductFeedback] = useState([]);
+  const [trigger, setTrigger] = useState(false);
+
+  useEffect(() => {
+    fetchFeedback();
+    fetchOrder();
+    console.log(productFeedback);
+  }, [trigger]);
+
+  const fetchFeedback = async () => {
+    await axios
+      .get("/userProductReview")
+      .then((res) => setProductFeedback(res.data.result));
+  };
+
+  const deleteFeedback = (id) => {
+    axios.post("/deleteFeedback", { id: id });
+    setProductFeedback(productFeedback.filter((value) => value.fed_id !== id));
+    setTrigger(true);
+  };
+
+  const [feedback, setFeedback] = useState("");
+
+  const onFeedbackSubmit = () => {
+    console.log(userId);
+    if (feedback?.length !== 0) {
+      axios.post("/userReview", {
+        feedback: feedback,
+        userId: userId,
+        type: "product",
+        serviceId: product_id,
+      });
+      setFeedback("");
+    }
+    setTrigger(true);
+    fetchFeedback();
+    // setBookingFeedback([
+    //   ...bookingFeedback,
+    //   {
+    //     feedback: feedback,
+    //     user_id: userId,
+    //     service_type: "booking",
+    //     service_number: item.service_id,
+    //   },
+    // ]);
   };
 
   return (
@@ -97,7 +153,11 @@ function ShowItem() {
               <Box>
                 <Button
                   onClick={() => onSubmit(product_id, count, userId)}
-                  style={{ marginTop: "1.3rem", marginLeft: "1.7rem" }}
+                  style={{
+                    marginTop: "1.3rem",
+                    backgroundColor: "teal",
+                    width: "12rem",
+                  }}
                 >
                   <Typography color="teal" variant="body1">
                     ADD TO CART
@@ -107,6 +167,89 @@ function ShowItem() {
             </Box>
           </Grid>
         </Grid>
+
+        <Container maxWidth="md">
+          <Paper style={{ marginTop: "4rem" }}>
+            <CustomToolbar variant="dense" title="Reviews and Feedback" />
+            <Box>
+              <ListItem>
+                <Grid container style={{ marginLeft: "0.5rem" }}>
+                  <Grid item xs={1} style={{ marginTop: 5 }}>
+                    <Avatar style={{ height: 35, width: 35 }} />
+                  </Grid>
+                  <Grid item xs={11} style={{ marginLeft: "-1rem" }}>
+                    <Grid container>
+                      <Grid item xs={9}>
+                        <TextField
+                          fullWidth
+                          onChange={(e) => setFeedback(e.target.value)}
+                          color="secondary"
+                          disabled={userData?.length > 0 ? false : true}
+                          placeholder={
+                            userData?.length > 0
+                              ? "Any reviews or feedback?"
+                              : "Login To Give Feedback"
+                          }
+                          value={feedback}
+                        />
+                      </Grid>
+                      <Grid item xs={3}>
+                        {userData?.length > 0 && (
+                          <Button
+                            onClick={onFeedbackSubmit}
+                            style={{
+                              backgroundColor: "teal",
+                              width: "8rem",
+                              marginLeft: "1rem",
+                              height: "1.8rem",
+                              marginTop: "0.2rem",
+                            }}
+                          >
+                            Submit
+                          </Button>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              {productFeedback
+                .filter(
+                  (filterItem) => filterItem.service_number === product_id
+                )
+                .map((item) => (
+                  <ListItem key={item.fed_id}>
+                    <Grid container style={{ marginLeft: "0.5rem" }}>
+                      <Grid item xs={1} style={{ marginTop: 5 }}>
+                        <Avatar style={{ height: 35, width: 35 }} />
+                      </Grid>
+                      <Grid item xs={10} style={{ marginLeft: "-1rem" }}>
+                        <Typography
+                          variant="subtitle2"
+                          style={{ marginTop: "-0.1rem" }}
+                        >
+                          {item.client} {item.lastname}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          style={{ marginTop: "-0.2rem" }}
+                        >
+                          {item.feedback}
+                        </Typography>
+                      </Grid>
+                      {item.user_id === userId && (
+                        <Grid item xs={1}>
+                          <Button onClick={() => deleteFeedback(item.fed_id)}>
+                            <AiFillDelete color="red" />
+                          </Button>
+                        </Grid>
+                      )}
+                    </Grid>
+                  </ListItem>
+                ))}
+            </Box>
+          </Paper>
+        </Container>
       </Container>
     </>
   );

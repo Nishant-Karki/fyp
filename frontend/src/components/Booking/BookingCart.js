@@ -110,11 +110,18 @@ function BookingCart() {
                         color="error"
                         variant="body2"
                         className={classes.deleteBtn}
-                        onClick={() =>
+                        onClick={() => {
                           dispatch(
                             deleteAppointment(item.serviceId, item.userId)
-                          )
-                        }
+                          );
+                          setBookingCart(
+                            bookingCart.filter(
+                              (filterItem) =>
+                                filterItem.serviceId !== item.serviceId &&
+                                filterItem !== item.serviceId
+                            )
+                          );
+                        }}
                       >
                         Cancel
                         <AiFillDelete

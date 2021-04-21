@@ -179,16 +179,16 @@ function Cart() {
                   marginBottom="-0.4rem"
                   textAlign="center"
                 >
-                  {/* <Link className={classes.link} to="/payment"> */}
-                  <Button
-                    style={{ backgroundColor: "teal" }}
-                    onClick={() => {
-                      dispatch(handleStorePayment(cart));
-                    }}
-                  >
-                    Checkout
-                  </Button>
-                  {/* </Link> */}
+                  <Link className={classes.link} to="/payment">
+                    <Button
+                      style={{ backgroundColor: "teal" }}
+                      onClick={() => {
+                        dispatch(handleStorePayment(cart));
+                      }}
+                    >
+                      Checkout
+                    </Button>
+                  </Link>
                 </Box>
               </Box>
             </Paper>

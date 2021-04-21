@@ -12,6 +12,7 @@ import {
   fetchUserAppointment,
   fetchAppointment,
   fetchStaffs,
+  loadCurrentService,
 } from "../../redux/Booking/booking-actions";
 
 const Cardss = ({ navigation }) => {
@@ -26,29 +27,32 @@ const Cardss = ({ navigation }) => {
     dispatch(fetchStaffs());
     dispatch(fetchAppointment());
   }, []);
+
   return (
     <View style={{ margin: 20, borderRadius: 10, overflow: "hidden" }}>
-      {services.map((item) => (
-        <Card>
-          <Card.Cover />
-          <Card.Actions
-            style={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <Text style={{ marginLeft: 8, fontSize: 18 }}>Service Name</Text>
-            <TouchableOpacity>
-              <Button
-                onPress={() =>
-                  userData?.length > 0
-                    ? navigation.navigate("Item Detail")
-                    : navigation.navigate("Login")
-                }
-              >
-                Book Now
-              </Button>
-            </TouchableOpacity>
-          </Card.Actions>
-        </Card>
-      ))}
+      {services &&
+        services?.map((item) => (
+          <Card key={item.service_id}>
+            <Card.Cover />
+            <Card.Actions
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <Text style={{ marginLeft: 8, fontSize: 18 }}>{item.name}</Text>
+              <TouchableOpacity>
+                <Button
+                  onPress={() => {
+                    dispatch(loadCurrentService(item));
+                    userData?.length > 0
+                      ? navigation.navigate("Item Detail")
+                      : navigation.navigate("Login");
+                  }}
+                >
+                  Book Now
+                </Button>
+              </TouchableOpacity>
+            </Card.Actions>
+          </Card>
+        ))}
     </View>
   );
 };
@@ -62,10 +66,6 @@ export default function Services({ navigation }) {
   return (
     <ScrollView>
       <StatusBar translucent backgroundColor="transparent" />
-      <Cardss navigation={navigation} />
-      <Cardss navigation={navigation} />
-      <Cardss navigation={navigation} />
-      <Cardss navigation={navigation} />
       <Cardss navigation={navigation} />
     </ScrollView>
   );

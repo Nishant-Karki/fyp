@@ -23,7 +23,10 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import AdminDashboard from "./AdminDashboard";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../redux/Ecommerce/eStore-actions";
+import {
+  fetchOrder,
+  fetchProducts,
+} from "../../redux/Ecommerce/eStore-actions";
 import { fetchAppointment } from "../../redux/Booking/booking-actions";
 
 const tableIcons = {
@@ -55,18 +58,18 @@ const tableIcons = {
 export default function EcommerceTable() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const appointments = useSelector((state) => state.booking.appointments);
+  const orderDetails = useSelector((state) => state.store.orderDetails);
   //store array from database
   // let appointments = appointment.map(
   //   (item) => (item.date = moment(item.date).format("YYYY-MM-DD"))
   // );
-  const [records, setRecords] = useState(appointments);
+  const [records, setRecords] = useState(orderDetails);
   const dispatch = useDispatch();
 
-  console.log(appointments);
+  console.log(orderDetails);
   useEffect(() => {
     setIsLoading(true);
-    dispatch(fetchAppointment());
+    dispatch(fetchOrder());
     setTimeout(() => {
       dispatch(fetchProducts());
       setIsLoading(false);
@@ -76,7 +79,7 @@ export default function EcommerceTable() {
   return (
     <AdminDashboard>
       <MaterialTable
-        title="Ecommerce Table"
+        title="Order Overview"
         icons={tableIcons}
         isLoading={isLoading}
         columns={[

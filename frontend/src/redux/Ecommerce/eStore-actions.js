@@ -75,8 +75,37 @@ export const updateProduct = (values, productId) => async (dispatch) => {
 };
 
 export const handleStorePayment = (cart) => async (dispatch) => {
-  axios.post("/productBooking", { cart: cart });
+  await axios.post("/productBooking", { cart: cart });
+
   dispatch({
     type: actionTypes.STORE_PAYMENT,
   });
+};
+
+export const fetchOrder = () => async (dispatch) => {
+  try {
+    const res = await axios.get("/productBooking");
+    dispatch({
+      type: actionTypes.FETCH_ORDER,
+      payload: res.data.result,
+      // payload: res,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const fetchUserOrder = (id) => async (dispatch) => {
+  try {
+    if (id !== undefined) {
+      const res = await axios.post("/orderDetails", { id: id });
+      console.log(res);
+      dispatch({
+        type: actionTypes.FETCH_USER_ORDER,
+        payload: res.data.result,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };

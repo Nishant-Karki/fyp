@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 export default function BookingHover() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const bookingCart = useSelector((state) => state.bookingCart);
+  const bookingCart = useSelector((state) => state.booking.bookingCart);
   const [cartCount, setCartCount] = useState(null);
   useEffect(() => {
     dispatch(fetchUserAppointment());

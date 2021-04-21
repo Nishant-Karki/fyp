@@ -8,7 +8,8 @@ import {
   Paper,
   Grid,
   Toolbar,
-  ListItemAvatar,
+  ListItem,
+  Avatar,
 } from "@material-ui/core";
 import useCustomForm from "../common/useCustomForm";
 
@@ -25,6 +26,8 @@ import { withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CustomSnackbar from "../common/CustomSnackbar";
 import moment from "moment";
+import { fetchAppointment } from "../../redux/Booking/booking-actions";
+import { fetchProducts } from "../../redux/Ecommerce/eStore-actions";
 const useStyles = makeStyles((theme) => ({
   profileName: {
     marginTop: "0.7rem",
@@ -34,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 function UserProfile() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const { ChangePassword, DeleteAccount } = useSettings();
 
   const [DetailPopUp, setDetailPopUp] = useState(false);
@@ -43,13 +48,23 @@ function UserProfile() {
   const data = useSelector((state) => state.login.userData);
   const appointments = useSelector((state) => state.booking.appointments);
 
+  const [userId] = data.map((item) => item.user_id);
+
+  const recentActivities = appointments?.filter(
+    (appointment) => appointment.user_id === userId
+  );
+
   const [userData, setUserData] = useState(data);
 
   const [response, setResponse] = useState();
   const [snackbar, setSnackbar] = useState(false);
   const [snackType, setSnackType] = useState();
 
-  console.log(response);
+  useEffect(() => {
+    dispatch(fetchAppointment());
+    dispatch(fetchProducts());
+  }, []);
+
   const GridContent = ({ children, xs }) => {
     return (
       <Grid item xs={xs}>
@@ -81,7 +96,7 @@ function UserProfile() {
   };
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" style={{ minHeight: "60vh" }}>
       {response && response.length > 0 && (
         <CustomSnackbar
           snackbarOpen={snackbar}
@@ -202,21 +217,19 @@ function UserProfile() {
 
             {/* recent activities */}
             <Paper style={{ marginTop: "2rem" }}>
-              <CustomToolbar title="Recent Activities" />
+              {recentActivities?.length > 0 && (
+                <CustomToolbar title="Recent Activities" />
+              )}
               {item.role === "C" &&
-                appointments
-                  ?.filter(
-                    (appointment) => appointment.user_id === item.user_id
-                  )
-                  .map((item) => (
-                    <Toolbar>
-                      Booked {item.serviceName} with {item.staff_name} on{" "}
-                      {moment(item.date).format("YYYY/MM/DD")} {item.time}.{" "}
-                      {item.payment === "offline" || item.payment === "offline"
-                        ? "Payment not done."
-                        : `Choosen Payment method is ${item.payment}`}
-                    </Toolbar>
-                  ))}
+                recentActivities.map((item) => (
+                  <Toolbar>
+                    Booked {item.serviceName} with {item.staff_name} on{" "}
+                    {moment(item.date).format("YYYY/MM/DD")} at {item.time}{" "}
+                    {item.payment === "offline" || item.payment === " "
+                      ? `Choosen Payment method is ${item.payment}`
+                      : "Payment not done."}
+                  </Toolbar>
+                ))}
             </Paper>
           </div>
         ))}

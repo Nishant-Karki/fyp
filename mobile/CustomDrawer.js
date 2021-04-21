@@ -19,11 +19,16 @@ import {
   FontAwesome5,
   FontAwesome,
   MaterialIcons,
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "./redux/Login/login-actions";
+import { fetchAppointment } from "./redux/Booking/booking-actions";
+import { fetchProducts } from "./redux/Ecommerce/eStore-actions";
 
 export default function CustomDrawer(props) {
+  const dispatch = useDispatch();
   const userData = useSelector((state) => state.login.userData);
   return (
     <View style={{ flex: 1 }}>
@@ -85,40 +90,87 @@ export default function CustomDrawer(props) {
               )}
               label="Home"
               onPress={() => {
-                props.navigation.navigate("Booking");
+                props.navigation.navigate("Home");
               }}
             />
 
             {userData?.length > 0 && (
               <DrawerItem
-                labelStyle={{ fontSize: 16, color: "black" }}
+                labelStyle={{ fontSize: 16, color: "black", marginLeft: 7 }}
                 icon={({ color, size }) => (
                   <FontAwesome name="user" size={size} color={color} />
                 )}
                 label="Profile"
-                onPress={() => props.navigation.navigate("Profile")}
+                onPress={() => {
+                  dispatch(fetchAppointment());
+                  dispatch(fetchProducts());
+                  props.navigation.navigate("Profile");
+                }}
               />
             )}
+
+            <DrawerItem
+              labelStyle={{ fontSize: 16, color: "black" }}
+              icon={({ color, size }) => (
+                <MaterialCommunityIcons
+                  name="hair-dryer"
+                  size={size}
+                  color={color}
+                />
+              )}
+              label="Booking"
+              onPress={() => {
+                props.navigation.navigate("Booking");
+              }}
+            />
+
+            <DrawerItem
+              labelStyle={{ fontSize: 16, color: "black" }}
+              icon={({ color, size }) => (
+                <Entypo name="shop" size={size} color={color} />
+              )}
+              label="Products"
+              onPress={() => {
+                props.navigation.navigate("Products");
+              }}
+            />
+
             <DrawerItem
               labelStyle={{ fontSize: 16, color: "black" }}
               icon={({ color, size }) => (
                 <Entypo name="info-with-circle" color={color} size={size} />
               )}
-              label="About Us"
+              label="Support"
               onPress={() => props.navigation.navigate("About Us")}
             />
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>
       <Drawer.Section style={styles.bottomDrawerSection}>
-        <DrawerItem
-          labelStyle={{ fontSize: 16, color: "black" }}
-          icon={({ color, size }) => (
-            <AntDesign name="login" color={color} size={size} />
-          )}
-          label={userData?.length > 0 ? "Log Out" : "Log In"}
-          onPress={() => props.navigation.navigate("Login")}
-        />
+        {userData && userData.length === 0 ? (
+          <DrawerItem
+            labelStyle={{ fontSize: 16, color: "black" }}
+            icon={({ color, size }) => (
+              <AntDesign name="login" color={color} size={size} />
+            )}
+            label="Log In"
+            onPress={() => props.navigation.navigate("Login")}
+          />
+        ) : (
+          <DrawerItem
+            labelStyle={{ fontSize: 16, color: "black" }}
+            icon={({ color, size }) => (
+              <AntDesign name="login" color={color} size={size} />
+            )}
+            label="Log Out"
+            onPress={() => {
+              dispatch(logout());
+              setTimeout(() => {
+                props.navigation.navigate("Login");
+              }, 1);
+            }}
+          />
+        )}
       </Drawer.Section>
     </View>
   );

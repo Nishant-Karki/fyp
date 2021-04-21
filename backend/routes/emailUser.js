@@ -1,35 +1,38 @@
 const router = require("express").Router();
 const transporter = require("../nodemailerSetup");
+const moment = require("moment");
 
 module.exports = router.post("/confirmation", (req, res) => {
-  console.log(req.body);
   const { email, cart, bookingCart } = req.body;
 
   let productDetails =
     cart?.length > 0
-      ? cart.map((item) => `Bought ${item.qty} * ${item.name}.`)
-      : "You have no current bookings.";
+      ? cart.map((item) => `Bought ${item.qty} * ${item.name}. \n`)
+      : "You have not booked any products yet.";
 
   let bookingDetails =
     bookingCart?.length > 0
       ? bookingCart.map(
           (item) =>
-            `Booked ${item.name} with staff ${item.specialist} on ${item.date} ${item.time}`
+            `Booked ${item.name} with staff ${item.specialist} on ${moment(
+              item.date
+            ).format("YYYY-MM-DD")} at ${item.time}. \n`
         )
-      : "You have not booked any products yet.";
+      : "You have no current bookings.";
 
   let reply = `Thankyou for choosing Us.
-  Your Bookings:
+
+  Your Products:
   ${productDetails}
   
-  Your Products:
+  Your Bookings:
   ${bookingDetails}
   `;
 
   let mail = {
-    from: `Nepa De Salon`,
-    to: `${email}`,
-    subject: `${subject} ${email}`,
+    from: `Nepa De Salon ${email}`,
+    to: `karkinishant14@gmail.com`,
+    subject: `Thankyou for connecting with us.`,
     text: reply,
   };
 
@@ -44,6 +47,7 @@ module.exports = router.post("/confirmation", (req, res) => {
       res.json({
         type: "success",
         message: "Mail sent.",
+        reply: reply,
       });
     }
   });

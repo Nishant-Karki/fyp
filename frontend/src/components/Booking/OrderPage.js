@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Container, Grid, Box, Typography, Button } from "@material-ui/core";
+import {
+  Container,
+  Grid,
+  Box,
+  Typography,
+  Button,
+  Paper,
+  ListItem,
+  MenuItem,
+  Avatar,
+  TextField,
+} from "@material-ui/core";
 import { FaCheckCircle } from "react-icons/fa";
 import { SiCashapp } from "react-icons/si";
 
 import "../scss/orderpage.scss";
 import useCustomForm from "../common/useCustomForm";
 import CustomSnackbar from "../common/CustomSnackbar";
+import CustomToolbar from "../common/CustomToolbar";
 
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,16 +27,29 @@ import {
 } from "../../redux/Booking/booking-actions";
 import axios from "axios";
 import moment from "moment";
+import { AiFillDelete } from "react-icons/ai";
 
 function OrderPage() {
   const { DropdownSelect, CustomDatePicker } = useCustomForm();
 
+  const [bookingFeedback, setBookingFeedback] = useState([]);
+  const [trigger, setTrigger] = useState(false);
+
   useEffect(() => {
+    fetchFeedback();
     dispatch(fetchStaffs());
-  }, []);
+    console.log(bookingFeedback);
+  }, [trigger]);
+
+  const fetchFeedback = async () => {
+    await axios
+      .get("/userBookingReview")
+      .then((res) => setBookingFeedback(res.data.result));
+  };
 
   const item = useSelector((state) => state.booking.currentItem);
   const userData = useSelector((state) => state.login.userData);
+  const [userId] = userData.map((item) => item.user_id);
 
   const [choosenTime, setChoosenTime] = useState(null);
   const [choosenSpecialist, setChoosenSpecialist] = useState(null);
@@ -132,6 +157,37 @@ function OrderPage() {
     // axios.get("/getAppointment").then((res) => console.log("sadasd"));
   };
 
+  const deleteFeedback = (id) => {
+    axios.post("/deleteFeedback", { id: id });
+    setBookingFeedback(bookingFeedback.filter((value) => value.fed_id !== id));
+    setTrigger(true);
+  };
+
+  const [feedback, setFeedback] = useState("");
+
+  const onFeedbackSubmit = () => {
+    if (feedback?.length !== 0) {
+      axios.post("/userReview", {
+        feedback: feedback,
+        userId: userId,
+        type: "booking",
+        serviceId: item.service_id,
+      });
+      setFeedback("");
+    }
+    fetchFeedback();
+    setTrigger(true);
+    // setBookingFeedback([
+    //   ...bookingFeedback,
+    //   {
+    //     feedback: feedback,
+    //     user_id: userId,
+    //     service_type: "booking",
+    //     service_number: item.service_id,
+    //   },
+    // ]);
+  };
+
   return (
     <>
       {response && response.length > 0 && (
@@ -201,7 +257,7 @@ function OrderPage() {
                   disablePast
                   style={{ width: "18rem" }}
                   value={appointmentDate}
-                  onChange={(value) => console.log(value)}
+                  onChange={(value) => setappointmentDate(value)}
                 />
               </Box>
 
@@ -248,6 +304,89 @@ function OrderPage() {
             </Box>
           </Grid>
         </Grid>
+
+        <Container maxWidth="md">
+          <Paper style={{ marginTop: "3rem" }}>
+            <CustomToolbar variant="dense" title="Reviews and Feedback" />
+            <Box>
+              <ListItem>
+                <Grid container style={{ marginLeft: "0.5rem" }}>
+                  <Grid item xs={1} style={{ marginTop: 5 }}>
+                    <Avatar style={{ height: 35, width: 35 }} />
+                  </Grid>
+                  <Grid item xs={11} style={{ marginLeft: "-1rem" }}>
+                    <Grid container>
+                      <Grid item xs={9}>
+                        <TextField
+                          fullWidth
+                          onChange={(e) => setFeedback(e.target.value)}
+                          color="secondary"
+                          disabled={userData?.length > 0 ? false : true}
+                          placeholder={
+                            userData?.length > 0
+                              ? "Any reviews or feedback?"
+                              : "Login To Give Feedback"
+                          }
+                          value={feedback}
+                        />
+                      </Grid>
+                      <Grid item xs={3}>
+                        {userData?.length > 0 && (
+                          <Button
+                            onClick={onFeedbackSubmit}
+                            style={{
+                              backgroundColor: "teal",
+                              width: "8rem",
+                              marginLeft: "1rem",
+                              height: "1.8rem",
+                              marginTop: "0.2rem",
+                            }}
+                          >
+                            Submit
+                          </Button>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </ListItem>
+              {bookingFeedback
+                .filter(
+                  (filterItem) => filterItem.service_number === item.service_id
+                )
+                .map((item) => (
+                  <ListItem key={item.fed_id}>
+                    <Grid container style={{ marginLeft: "0.5rem" }}>
+                      <Grid item xs={1} style={{ marginTop: 5 }}>
+                        <Avatar style={{ height: 35, width: 35 }} />
+                      </Grid>
+                      <Grid item xs={10} style={{ marginLeft: "-1rem" }}>
+                        <Typography
+                          variant="subtitle2"
+                          style={{ marginTop: "-0.1rem" }}
+                        >
+                          {item.client} {item.lastname}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          style={{ marginTop: "-0.2rem" }}
+                        >
+                          {item.feedback}
+                        </Typography>
+                      </Grid>
+                      {item.user_id === userId && (
+                        <Grid item xs={1}>
+                          <Button onClick={() => deleteFeedback(item.fed_id)}>
+                            <AiFillDelete color="red" />
+                          </Button>
+                        </Grid>
+                      )}
+                    </Grid>
+                  </ListItem>
+                ))}
+            </Box>
+          </Paper>
+        </Container>
       </Container>
     </>
   );

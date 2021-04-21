@@ -15,16 +15,24 @@ import { Button } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import AboutUs from "./screens/About Us/AboutUs";
+import Home from "./screens/Home/Home";
+import Products from "./screens/Store/Products";
+import ProductDetail from "./screens/Store/ProductDetail";
+import ProductCart from "./screens/Store/ProductCart";
 
 const Drawer = createDrawerNavigator();
+
 const DrawerNavigation = () => {
   const userData = useSelector((state) => state.login.userData);
   return (
     <Drawer.Navigator drawerContent={(props) => <CustomDrawer {...props} />}>
+      <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Booking" component={StackNavigation} />
+      <Drawer.Screen name="Products" component={StoreNavigation} />
       <Drawer.Screen name="Profile" component={Profile} />
       <Drawer.Screen name="About Us" component={AboutUs} />
       <Drawer.Screen name="Login" component={Login} />
+      <Drawer.Screen name="Logout" component={Login} />
       <Drawer.Screen name="Signup" component={Signup} />
     </Drawer.Navigator>
   );
@@ -57,7 +65,8 @@ const DrawerNavigation = () => {
 // }
 
 const Stack = createStackNavigator();
-const StackNavigation = ({ navigation }) => {
+
+const HomeStack = ({ navigation }) => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -66,7 +75,113 @@ const StackNavigation = ({ navigation }) => {
         headerLeftContainerStyle: { marginLeft: 30, marginTop: 3 },
         headerRightContainerStyle: { marginRight: 25, marginTop: 3 },
         headerStyle: {
-          backgroundColor: "#e91e63",
+          backgroundColor: "teal",
+        },
+        headerTintColor: "white",
+      }}
+    >
+      <Stack.Screen
+        name="Services"
+        component={Home}
+        options={{
+          headerTitle: "Nepa De Salon",
+          headerLeft: () => (
+            <TouchableOpacity>
+              <Feather
+                name="menu"
+                size={24}
+                color="white"
+                onPress={() => navigation.openDrawer()}
+              />
+            </TouchableOpacity>
+          ),
+          //   headerRight: () => (
+          //     <MaterialCommunityIcons name="cart" style={{marginLeft:20}} size={20} />
+          //   ),
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const StoreNavigation = ({ navigation }) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleAlign: "center",
+        headerLeftContainerStyle: { marginLeft: 30, marginTop: 3 },
+        headerRightContainerStyle: { marginRight: 25, marginTop: 3 },
+        headerStyle: {
+          backgroundColor: "teal",
+        },
+        headerTintColor: "white",
+      }}
+    >
+      <Stack.Screen
+        name="Products"
+        component={Products}
+        options={{
+          headerTitle: "Salon Products",
+          headerLeft: () => (
+            <TouchableOpacity>
+              <Feather
+                name="menu"
+                size={24}
+                color="white"
+                onPress={() => navigation.openDrawer()}
+              />
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <TouchableOpacity>
+              <Entypo
+                name="shopping-cart"
+                size={24}
+                color="white"
+                onPress={() => navigation.navigate("Product Cart")}
+              />
+            </TouchableOpacity>
+          ),
+          //   headerRight: () => (
+          //     <MaterialCommunityIcons name="cart" style={{marginLeft:20}} size={20} />
+          //   ),
+        }}
+      />
+      <Stack.Screen
+        name="Product Detail"
+        component={ProductDetail}
+        options={{
+          headerTitle: "Product Detail",
+          //     headerRight: () => (
+          //     <Button title='cart' style={{backgroundColor:'red'}}/>
+          // //   <MaterialCommunityIcons name="cart" size={20} />
+          // ),
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="Product Cart"
+        component={ProductCart}
+        options={{
+          headerTitle: "Product Cart",
+          //     headerRight: () => (
+          //     <Button title='cart' style={{backgroundColor:'red'}}/>
+          // ),
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const StackNavigation = ({ navigation }) => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleAlign: "center",
+        headerLeftContainerStyle: { marginLeft: 30, marginTop: 3 },
+        headerRightContainerStyle: { marginRight: 25, marginTop: 3 },
+        headerStyle: {
+          backgroundColor: "teal",
         },
         headerTintColor: "white",
       }}
@@ -75,7 +190,7 @@ const StackNavigation = ({ navigation }) => {
         name="Services"
         component={Services}
         options={{
-          headerTitle: "Our Services",
+          headerTitle: "Salon Services",
           headerLeft: () => (
             <TouchableOpacity>
               <Feather

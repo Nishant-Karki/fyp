@@ -96,9 +96,14 @@ export default function Payment() {
               setSnackType("success");
               setResponse("Thankyou for choosing us");
               dispatch(fetchAppointment());
+              axios.post("/confirmation", {
+                email: userData.map((item) => item.email),
+                cart: cart,
+                bookingCart: bookingCart,
+              });
               setTimeout(() => {
                 history.push("/#services");
-              }, 2500);
+              }, 9500);
             }}
           >
             <img

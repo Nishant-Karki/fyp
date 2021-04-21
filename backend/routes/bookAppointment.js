@@ -10,11 +10,12 @@ const appointmentQuery =
 
 module.exports = router.post("/bookAppointment", (req, res) => {
   const { serviceId, userId, time, date, specialist } = req.body;
+  console.log(req.body);
   let booked;
   let reminder;
   if (specialist !== null && time !== null) {
     db.query(checkStaff, userId, (err, result) => {
-      if (result.length > 0) {
+      if (result?.length > 0) {
         res.json({
           message: "Sorry! Staffs are not permitted to book appointment.",
           type: "warning",

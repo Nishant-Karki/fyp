@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Nishant-Karki/fyp#readme",
   "dependencies": {
-    "react-native-datepicker": "^1.7.2"
+    "react-native-datepicker": "^1.7.2",
+    "react-rating-stars-component": "^2.2.0"
   }
 }

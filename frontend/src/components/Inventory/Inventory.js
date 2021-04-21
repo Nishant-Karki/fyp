@@ -23,7 +23,7 @@ function Inventory({ products, fetchProducts, loadCurrentItem }) {
   }, []);
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: "8rem" }}>
+    <Container maxWidth="lg" style={{ marginTop: "8rem", minHeight: "60vh" }}>
       <Grid container spacing={2}>
         {products.map((item) => (
           <Grid
@@ -57,7 +57,7 @@ function Inventory({ products, fetchProducts, loadCurrentItem }) {
                   <Button
                     style={{
                       marginBottom: "0.6rem",
-                      backgroundColor: "green",
+                      backgroundColor: "teal",
                       marginTop: "0.3rem",
                       width: "9rem",
                     }}

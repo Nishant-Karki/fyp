@@ -28,6 +28,7 @@ import {
   fetchAdmin,
   demoteAdmin,
 } from "../../redux/Booking/booking-actions";
+import UserDataTable from "./UserDataTable";
 
 export default function UserRoles() {
   //state for snackbar
@@ -354,6 +355,9 @@ export default function UserRoles() {
           </Paper>
         </Grid>
       </Grid>
+      <Box marginTop="5rem">
+        <UserDataTable />
+      </Box>
     </AdminDashboard>
   );
 }

@@ -55,7 +55,7 @@ const Signup = ({ navigation }) => {
   const handleOnSignup = async (values, { resetForm }) => {
     Keyboard.dismiss();
     axios
-      .post("http://192.168.0.104:3001/register", {
+      .post("http://192.168.0.103:3001/register", {
         values,
       })
       .then((res) => {
@@ -69,7 +69,7 @@ const Signup = ({ navigation }) => {
             setDate();
             navigation.navigate("Login");
           }
-        }, 2500);
+        }, 1500);
       });
   };
 

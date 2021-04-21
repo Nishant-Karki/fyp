@@ -13,12 +13,13 @@ import {
   FETCH_APPOINTMENT,
   FETCH_USER_APPOINTMENTS,
   HANDLE_PAYMENT,
+  FETCH_BOOKINGS,
 } from "./booking-types";
 import axios from "axios";
 
 export const fetchServices = () => async (dispatch) => {
   try {
-    const res = await axios.get("http://192.168.0.104:3001/addServices");
+    const res = await axios.get("http://192.168.0.103:3001/addServices");
     dispatch({
       type: FETCH_SERVICES,
       payload: res.data.result,
@@ -31,7 +32,7 @@ export const fetchServices = () => async (dispatch) => {
 
 export const fetchStaffs = () => async (dispatch) => {
   try {
-    const res = await axios.get("http://192.168.0.104:3001/getStaffs");
+    const res = await axios.get("http://192.168.0.103:3001/getStaffs");
 
     dispatch({
       type: FETCH_STAFFS,
@@ -45,7 +46,7 @@ export const fetchStaffs = () => async (dispatch) => {
 
 export const demoteStaff = (id) => async (dispatch) => {
   try {
-    await axios.post("http://192.168.0.104:3001/demoteStaff", { id: id });
+    await axios.post("http://192.168.0.103:3001/demoteStaff", { id: id });
     dispatch({
       type: DEMOTE_STAFFS,
       payload: id,
@@ -58,7 +59,7 @@ export const demoteStaff = (id) => async (dispatch) => {
 
 export const fetchAdmin = () => async (dispatch) => {
   try {
-    const res = await axios.get("http://192.168.0.104:3001/getAdmin");
+    const res = await axios.get("http://192.168.0.103:3001/getAdmin");
     dispatch({
       type: FETCH_ADMIN,
       payload: res.data.result,
@@ -71,7 +72,7 @@ export const fetchAdmin = () => async (dispatch) => {
 
 export const demoteAdmin = (id) => async (dispatch) => {
   try {
-    await axios.post("http://192.168.0.104:3001/demoteAdmin", { id: id });
+    await axios.post("http://192.168.0.103:3001/demoteAdmin", { id: id });
     dispatch({
       type: DEMOTE_ADMIN,
       payload: id,
@@ -83,7 +84,7 @@ export const demoteAdmin = (id) => async (dispatch) => {
 };
 export const fetchAppointment = () => async (dispatch) => {
   try {
-    const res = await axios.get("http://192.168.0.104:3001/getAppointment");
+    const res = await axios.get("http://192.168.0.103:3001/getAppointment");
     dispatch({
       type: FETCH_APPOINTMENT,
       payload: res.data.result,
@@ -97,10 +98,9 @@ export const fetchAppointment = () => async (dispatch) => {
 export const fetchUserAppointment = (id) => async (dispatch) => {
   try {
     if (id !== undefined) {
-      const res = await axios.post("http://192.168.0.104:3001/getAppointment", {
+      const res = await axios.post("http://192.168.0.103:3001/getAppointment", {
         id: id,
       });
-      console.log(res);
       dispatch({
         type: FETCH_USER_APPOINTMENTS,
         payload: res.data.result,
@@ -113,7 +113,7 @@ export const fetchUserAppointment = (id) => async (dispatch) => {
 
 export const addService = (item, image) => async (dispatch) => {
   try {
-    const res = await axios.get("http://192.168.0.104:3001/addServices");
+    const res = await axios.get("http://192.168.0.103:3001/addServices");
     return {
       type: ADD_SERVICE,
       payload: res.data.result,
@@ -155,7 +155,7 @@ export const bookAppointment = (
 };
 
 export const deleteAppointment = (itemID, userId) => async (dispatch) => {
-  await axios.post("http://192.168.0.104:3001/cancelAppointment", {
+  await axios.post("http://192.168.0.103:3001/cancelAppointment", {
     service: itemID,
     user: userId,
   });
@@ -167,7 +167,7 @@ export const deleteAppointment = (itemID, userId) => async (dispatch) => {
 
 export const deleteService = (item) => async (dispatch) => {
   const id = item.service_id;
-  axios.post("http://192.168.0.104:3001/deleteService", {
+  axios.post("http://192.168.0.103:3001/deleteService", {
     items: item,
     id: id,
   });
@@ -191,12 +191,12 @@ export const loadCurrentService = (item) => {
 export const updateService = (values, serviceId) => async (dispatch) => {
   // console.log(data);
 
-  await axios.post("http://192.168.0.104:3001/updateService", {
+  await axios.post("http://192.168.0.103:3001/updateService", {
     values: values,
     id: serviceId,
   });
 
-  const res = await axios.get("http://192.168.0.104:3001/addServices");
+  const res = await axios.get("http://192.168.0.103:3001/addServices");
   return {
     type: UPDATE_SERVICE,
     // payload: { values: values, id: serviceId },
@@ -215,7 +215,7 @@ export const updateService = (values, serviceId) => async (dispatch) => {
 
 export const handlePayment = (id, option) => async (dispatch) => {
   console.log(id);
-  await axios.post("http://192.168.0.104:3001/payment", {
+  await axios.post("http://192.168.0.103:3001/payment", {
     id: id,
     option: option,
   });
